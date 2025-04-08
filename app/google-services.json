@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "607535729454",
+    "project_id": "studin-492f3",
+    "storage_bucket": "studin-492f3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607535729454:android:f9c40b35406d45652608bf",
+        "android_client_info": {
+          "package_name": "com.example.studin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZUlXny14jZ2dIv5ghhwjmWyQlRiPKq6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
