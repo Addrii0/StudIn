@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+    <style name="BotonEmpresa" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/boton_empresa</item>
+    </style>
+</resources>
