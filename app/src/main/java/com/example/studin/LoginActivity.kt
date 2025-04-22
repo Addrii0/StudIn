@@ -76,8 +76,8 @@ class LoginActivity : AppCompatActivity() {
                     if (contrasenaBD == contrasenaUsuario) {
                         usuario.error = null
 
-                        val nombreBD = snapshot.child(nombreUsuario).child("nombre").getValue(String::class.java)
-                        val emailBD = snapshot.child(nombreUsuario).child("email").getValue(String::class.java)
+                        //val nombreBD = snapshot.child(nombreUsuario).child("nombre").getValue(String::class.java)
+                        //val emailBD = snapshot.child(nombreUsuario).child("email").getValue(String::class.java)
                         val usuarioBD = snapshot.child(nombreUsuario).child("usuario").getValue(String::class.java)
 
                         val intent = Intent(this@LoginActivity, InicioActivity::class.java)
