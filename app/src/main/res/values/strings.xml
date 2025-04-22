@@ -4,5 +4,15 @@
     <string name="search">Buscar</string>
     <string name="new_group">Nuevo grupo</string>
     <string name="settings">Configuración</string>
+    <string name="boton_empresa">boton_empresa</string>
+    <string name="icono_home">icono_home</string>
+    <string name="lupa">lupa</string>
+    <string name="persona">persona</string>
+    <string name="chat">chat</string>
+    <string name="nombre_del_chat">Nombre del chat</string>
+    <string name="ltimo_mensaje">Último mensaje</string>
+    <string name="ultimo_mensaje">ultimo mensaje</string>
+    <string name="calls_fragment">Fragmento llamadas</string>
+    <string name="status_fragment">Status fragment</string>
 
 </resources>

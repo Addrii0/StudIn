@@ -35,8 +35,8 @@ class ChatAdapter(private val chats: MutableList<Chat>) : RecyclerView.Adapter<C
     }
 
     // 5. Añadir items a la lista:
-    fun addItems(newItems: MutableList<Chat>){
-        chats.addAll(newItems)
-        notifyDataSetChanged()
+    fun addItems(newItem:Chat){
+        chats.add(newItem)
+        notifyItemInserted(chats.size-1)
     }
 }
