@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">StudIn</string>
     <string name="bienvenido">!Bienvenido!</string>
+    <string name="search">Buscar</string>
+    <string name="new_group">Nuevo grupo</string>
+    <string name="settings">Configuración</string>
+
 </resources>
