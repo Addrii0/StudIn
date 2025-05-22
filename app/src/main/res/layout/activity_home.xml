@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InicioActivity">
+    tools:context=".HomeActivity">
+
+
+    <!-- Ajusta el bias si es necesario -->
 
 
     <ImageView
@@ -12,12 +15,11 @@
         android:layout_width="51dp"
         android:layout_height="53dp"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="644dp"
+        android:layout_marginBottom="32dp"
         android:contentDescription="@string/boton_empresa"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/boton_empresa" />
 
     <ImageView

@@ -9,9 +9,20 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
-firebaseDatabaseKtx = "21.0.0"
+
+# ** Añade la versión para el Firebase BoM aquí **
+# Es crucial usar una versión 32.5.0 o superior
+# (La versión 33.1.0 es la que estábamos usando de ejemplo, puedes buscar la última estable)
+firebaseBom = "33.1.0"
+
+
+# Ya no necesitas versiones individuales para las bibliotecas de Firebase si usas el BoM
+# Estas líneas deben borrarse:
+# firebaseDatabaseKtx = "21.0.0" # <-- Borrar
+# firebaseDatabase = "21.0.0" # <-- Borrar
+
 googleGmsGoogleServices = "4.4.2"
-firebaseDatabase = "21.0.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -22,11 +33,32 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
-firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+
+
+# ** Añade la entrada para el FIREBASE BOM en libraries **
+# El alias que usaremos en build.gradle.kts es 'libs.firebase.bom'
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+
+
+# ** Añade la entrada para FIREBASE AUTHENTICATION en libraries **
+# El alias que usaremos en build.gradle.kts es 'libs.firebase.auth'
+# NO ESPECIFICAMOS LA VERSIÓN aquí porque el BoM la gestiona
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+
+
+# ** Modifica la entrada existente para REALTIME DATABASE **
+# El alias que usaremos en build.gradle.kts es 'libs.firebase.database'
+# NO ESPECIFICAMOS LA VERSIÓN aquí porque el BoM la gestiona
+# Elimina la referencia a la versión que tenías
+# También elimina la entrada firebase-database-ktx si existía
+firebase-database = { group = "com.google.firebase", name = "firebase-database" }
+
+
+# Elimina la entrada para firebase-database-ktx si existía:
+# firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" } # <-- Borrar
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
-

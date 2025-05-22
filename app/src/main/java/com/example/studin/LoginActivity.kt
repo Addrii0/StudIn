@@ -2,102 +2,129 @@ package com.example.studin
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log // Importar Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.*
+import com.google.firebase.auth.FirebaseAuth // Importar FirebaseAuth
+import com.google.firebase.auth.ktx.auth // Importar la extensión ktx para 'Firebase.auth'
+import com.google.firebase.ktx.Firebase // Importar Firebase principal
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var usuario: EditText
-    private lateinit var contrasena: EditText
+    private lateinit var emailEditText: EditText
+    private lateinit var contrasenaEditText: EditText
     private lateinit var botonLogin: Button
-    private lateinit var clickableText: TextView
+    private lateinit var clickableTextRegistro: TextView
+
+    private lateinit var auth: FirebaseAuth
+
+    private val TAG = "LoginActivity" // Constante para logging
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.pantalla_login)
+        setContentView(R.layout.activity_login)
 
-        usuario = findViewById(R.id.usuario)
-        contrasena = findViewById(R.id.contrasena)
-        botonLogin = findViewById(R.id.InicioBoton)
-        clickableText = findViewById(R.id.RegistroTexto)
+        // Inicializa Firebase Auth
+        auth = Firebase.auth
 
+        // Asocia las variables con los elementos de la UI
+        emailEditText = findViewById(R.id.usuario) // Asumiendo que el ID en pantalla_login.xml para el email es 'usuario'
+        contrasenaEditText = findViewById(R.id.contrasena) // Asumiendo que el ID en pantalla_login.xml para la contraseña es 'contrasena'
+        botonLogin = findViewById(R.id.InicioBoton) // Asumiendo que el ID en pantalla_login.xml para el botón es 'InicioBoton'
+        clickableTextRegistro = findViewById(R.id.RegistroTexto) // Asumiendo que el ID en pantalla_login.xml para el texto de registro es 'RegistroTexto'
+
+        // Listener para el botón de login
         botonLogin.setOnClickListener {
-            if (validarUsuario() && validarContrasena()) {
-                comprobarUsuario()
+            if (validarEmail() && validarContrasena()) {
+                iniciarSesionConFirebase()
             }
         }
 
-        clickableText.setOnClickListener {
-            Toast.makeText(this, "cargando", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, RegistroActivity::class.java)
+        // Listener para el texto "Registrarse"
+        clickableTextRegistro.setOnClickListener {
+            Toast.makeText(this, "Cargando...", Toast.LENGTH_SHORT).show()
+            // Asegúrate de que tienes una actividad llamada RegistroActivity y su layout correspondiente
+            val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun validarUsuario(): Boolean {
-        val usuarioTexto = usuario.text.toString()
-        return if (usuarioTexto.isEmpty()) {
-            usuario.error = "Usuario no puede estar vacío"
+    // Opcional: Verificar si el usuario ya está logueado al iniciar la actividad.
+    // Descomenta este bloque si quieres que la app salte el login si ya hay una sesión activa.
+    /*
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // Usuario ya logueado, navegar directamente a InicioActivity
+            Log.d(TAG, "Usuario ya logueado: ${currentUser.uid}. Navegando a Inicio.")
+            val intent = Intent(this, InicioActivity::class.java)
+            // Puedes pasar el UID si lo necesitas, aunque el SDK ya lo maneja
+            intent.putExtra("uid", currentUser.uid)
+            startActivity(intent)
+            finish() // Cierra LoginActivity para que el usuario no pueda volver atrás
+        } else {
+            Log.d(TAG, "Ningún usuario logueado.")
+        }
+    }
+    */
+
+    private fun validarEmail(): Boolean {
+        val emailTexto = emailEditText.text.toString().trim()
+        return if (emailTexto.isEmpty()) {
+            emailEditText.error = "El correo electrónico no puede estar vacío"
+            false
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailTexto).matches()) { // Validación básica de formato de email
+            emailEditText.error = "Introduce un correo electrónico válido"
             false
         } else {
-            usuario.error = null
+            emailEditText.error = null
             true
         }
     }
 
     private fun validarContrasena(): Boolean {
-        val contrasenaTexto = contrasena.text.toString()
+        val contrasenaTexto = contrasenaEditText.text.toString().trim()
         return if (contrasenaTexto.isEmpty()) {
-            contrasena.error = "Contraseña no puede estar vacía"
+            contrasenaEditText.error = "La contraseña no puede estar vacía"
             false
         } else {
-            contrasena.error = null
+            contrasenaEditText.error = null
             true
         }
     }
 
-    private fun comprobarUsuario() {
-        val nombreUsuario = usuario.text.toString().trim() // NombreUsuario == usuario, no es el nombre
-        val contrasenaUsuario = contrasena.text.toString().trim()
+    private fun iniciarSesionConFirebase() {
+        val email = emailEditText.text.toString().trim()
+        val password = contrasenaEditText.text.toString().trim()
 
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("usuarios")
-        val usuariosBD: Query = reference.orderByChild("usuario").equalTo(nombreUsuario)
+        Toast.makeText(baseContext, "Iniciando sesión...", Toast.LENGTH_SHORT).show()
 
-        usuariosBD.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    usuario.error = null
-                    val contrasenaBD = snapshot.child(nombreUsuario).child("contrasena").getValue(String::class.java)
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "signInWithEmailAndPassword:success")
+                    val user = auth.currentUser
+                    Toast.makeText(baseContext, "Inicio de sesión exitoso.",
+                        Toast.LENGTH_SHORT).show()
 
-                    if (contrasenaBD == contrasenaUsuario) {
-                        usuario.error = null
-
-                        //val nombreBD = snapshot.child(nombreUsuario).child("nombre").getValue(String::class.java)
-                        //val emailBD = snapshot.child(nombreUsuario).child("email").getValue(String::class.java)
-                        val usuarioBD = snapshot.child(nombreUsuario).child("usuario").getValue(String::class.java)
-
-                        val intent = Intent(this@LoginActivity, InicioActivity::class.java)
-                        intent.putExtra("usuario", usuarioBD) // Se lleva el dato a la siguente pantalla(Inicio)
-                        startActivity(intent)
-                    } else {
-                        contrasena.error = "Contraseña incorrecta"
-                        contrasena.requestFocus()
-                    }
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    intent.putExtra("uid", user?.uid) // Opcional, pero puede ser útil
+                    startActivity(intent)
+                    finish() // Cierra LoginActivity para que el usuario no pueda volver atrás
                 } else {
-                    usuario.error = "Usuario no existe"
-                    usuario.requestFocus()
+                    Log.w(TAG, "signInWithEmailAndPassword:failure", task.exception)
+                    // Proporciona un feedback más específico del error si es posible
+                    val mensajeError = when (task.exception) {
+                        is com.google.firebase.auth.FirebaseAuthInvalidUserException -> "El usuario no existe o ha sido deshabilitado."
+                        is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> "La contraseña es incorrecta."
+                        else -> "Error de inicio de sesión: ${task.exception?.message}"
+                    }
+                    Toast.makeText(baseContext, mensajeError, Toast.LENGTH_LONG).show()
                 }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle database error
-                println("Database error: ${error.message}")
-                // Toast.makeText(this@LoginActivity, "Database error: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }
