@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_vertical"
+    tools:context=".activities.CompanyRegisterActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registro de Empresa"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="32dp"/>
+
+    <EditText
+        android:id="@+id/company_registro_nombreEmpresa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la Empresa"
+        android:inputType="textCapWords"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/company_registro_localizacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ubicación"
+        android:inputType="textCapWords"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/company_registro_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Correo Electrónico"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/company_registro_contrasena"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:minHeight="48dp" />
+
+    <!-- Agrega aquí EditText para otros campos de perfil de empresa si los tienes -->
+    <EditText
+        android:id="@+id/company_repetir_contrasena"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Repetir Contraseña"
+        android:inputType="textPassword"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/company_registro_Boton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar Empresa"
+        android:layout_marginTop="24dp"/>
+
+    <TextView
+        android:id="@+id/company_loginTextoRedirigido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:text="¿Ya tienes cuenta? Iniciar Sesión"
+        android:textColor="@color/design_default_color_primary"
+        tools:ignore="TouchTargetSizeCheck" />
+
+</LinearLayout>

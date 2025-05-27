@@ -1,4 +1,4 @@
-package com.example.studin
+package com.example.studin.classes
 
 data class HelperClass(
     var nombre: String = "",

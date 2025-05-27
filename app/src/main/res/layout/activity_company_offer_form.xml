@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".activities.CreateOfferActivity">
+
+    <TextView
+        android:id="@+id/textViewCreateOfferTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Crear Nueva Oferta"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldLayoutTitle"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Título de la Oferta"
+        app:layout_constraintTop_toBottomOf="@id/textViewCreateOfferTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextOfferTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldLayoutDescription"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Descripción de la Oferta"
+        app:layout_constraintTop_toBottomOf="@id/textFieldLayoutTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextOfferDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="3"
+            android:gravity="top" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Para la localización con autocompletar -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldLayoutLocation"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Localización (ej: Madrid, Calle Falsa 123)"
+        app:layout_constraintTop_toBottomOf="@id/textFieldLayoutDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <!-- Usaremos AutoCompleteTextView para la funcionalidad de autocompletar -->
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextViewLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPostalAddress"
+            android:completionThreshold="2" /> <!-- Empieza a sugerir después de 2 caracteres -->
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonPublishOffer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Publicar Oferta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldLayoutLocation"
+        app:layout_constraintVertical_bias="0.0" /> <!-- Para que no se pegue abajo si hay mucho espacio -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

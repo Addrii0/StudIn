@@ -1,22 +1,22 @@
-package com.example.studin
+package com.example.studin.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log // Importar Log
+import android.util.Log
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth // Importar FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException // Importar esta excepción específica
-import com.google.firebase.auth.ktx.auth // Importar la extensión ktx para 'Firebase.auth'
-import com.google.firebase.database.DatabaseReference // Importar DatabaseReference
-import com.google.firebase.database.FirebaseDatabase // Importar FirebaseDatabase
-import com.google.firebase.ktx.Firebase // Importar Firebase principal
-
-// crear una clase de datos simple para guardar la información del perfil en la base de datos
-data class UserProfile(val nombre: String? = null, val usuario: String? = null)
+import com.example.studin.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
+import com.example.studin.classes.UserProfile
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -40,7 +40,7 @@ class RegisterActivity : AppCompatActivity() {
         // Inicializa Firebase Auth y Realtime Database
         auth = Firebase.auth
         database = FirebaseDatabase.getInstance() // Obtiene la instancia por defecto
-        databaseReference = database.getReference("usuarios") // Obtiene una referencia al nodo "usuarios"
+        databaseReference = database.getReference("users") // Obtiene una referencia al nodo "usuarios"
 
         // Asocia las variables con los elementos de la UI
         nombreRegistro = findViewById(R.id.registro_nombre)
@@ -81,7 +81,7 @@ class RegisterActivity : AppCompatActivity() {
         if (email.isEmpty()) {
             emailRegistro.error = "El correo electrónico no puede estar vacío"
             esValido = false
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailRegistro.error = "Introduce un correo electrónico válido"
             esValido = false
         } else {
@@ -140,7 +140,7 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.makeText(baseContext, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
 
                                 // Navegar a la actividad principal (por ejemplo, HomeActivity)
-                                val intent = Intent(this@RegisterActivity, HomeActivity::class.java)
+                                val intent = Intent(this@RegisterActivity, UserHomeActivity::class.java)
                                 // Puedes pasar el UID si lo necesitas, aunque el SDK ya lo maneja
                                 intent.putExtra("uid", uid)
                                 startActivity(intent)
@@ -156,7 +156,7 @@ class RegisterActivity : AppCompatActivity() {
                                 // Decide si navegas o no. Si no guardaste el perfil, quizás no deberías ir a HomeActivity.
                                 // Para mantener la consistencia con el flujo de login, vamos a HomeActivity,
                                 // pero la app debería manejar el caso de perfil incompleto.
-                                val intent = Intent(this@RegisterActivity, HomeActivity::class.java)
+                                val intent = Intent(this@RegisterActivity, UserHomeActivity::class.java)
                                 intent.putExtra("uid", uid)
                                 startActivity(intent)
                                 finish() // Cierra RegisterActivity

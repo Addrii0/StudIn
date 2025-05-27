@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="@android:color/white"
+    android:elevation="2dp"> <!-- Añade un poco de elevación para el efecto flotante -->
+
+    <TextView
+        android:id="@+id/textViewOfferTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:text="Título de la Oferta" />
+
+    <TextView
+        android:id="@+id/textViewOfferDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:text="Esta es una descripción corta de la oferta." />
+
+    <!-- Puedes añadir más elementos aquí, como una imagen, fecha, etc. -->
+
+</LinearLayout>

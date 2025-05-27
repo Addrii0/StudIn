@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    tools:context=".activities.UserHomeActivity">
 
 
     <!-- Ajusta el bias si es necesario -->
@@ -49,14 +49,14 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="42dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="332dp"
+        android:layout_width="29dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="356dp"
         android:contentDescription="@string/lupa"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.084"
+        app:layout_constraintVertical_bias="0.05"
         app:srcCompat="@drawable/icono_busqueda" />
 
     <ImageView
@@ -70,4 +70,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.068"
         tools:srcCompat="@tools:sample/avatars" />
+    <FrameLayout
+        android:id="@+id/offers_fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/rounded_corners_background"
+        android:elevation="8dp"
+        android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonExample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginBottom="352dp"
+        android:text="Mi Botón"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

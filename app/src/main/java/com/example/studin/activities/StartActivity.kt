@@ -1,4 +1,4 @@
-package com.example.studin
+package com.example.studin.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.studin.activities.LoginActivity
+import com.example.studin.R
 
 class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

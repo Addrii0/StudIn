@@ -14,5 +14,9 @@
     <string name="ultimo_mensaje">ultimo mensaje</string>
     <string name="calls_fragment">Fragmento llamadas</string>
     <string name="status_fragment">Status fragment</string>
+    <string name="offers_Text">Ofertas</string>
+    <string name="error_loading_offers">Error al cargar ofertas</string>
+    <string name="error_loading_offers_toast">Error al cargar ofertas: %s</string>
+    <string name="add_new_offer">add new offer</string>
 
 </resources>

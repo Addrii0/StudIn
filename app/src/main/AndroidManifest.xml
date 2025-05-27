@@ -15,7 +15,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".StartActivity" android:exported="true">
+            android:name=".activities.StartActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,17 +23,27 @@
         </activity>
 
         <activity
-            android:name=".HomeActivity" android:exported="true">
+            android:name=".activities.UserHomeActivity" android:exported="true">
         </activity>
 
-        <activity android:name=".LoginActivity"  android:exported="true">
+        <activity android:name=".activities.LoginActivity"  android:exported="true">
         </activity>
 
-        <activity android:name=".RegisterActivity"  android:exported="true">
+        <activity android:name=".activities.RegisterActivity"  android:exported="true">
         </activity>
 
-        <activity android:name=".MainChats" android:exported="true">
+        <activity android:name=".activities.MainChatsActivity" android:exported="true">
         </activity>
+
+        <activity android:name=".activities.CompanyHomeActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.CompanyRegisterActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.CompanyOffersActivity" android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>

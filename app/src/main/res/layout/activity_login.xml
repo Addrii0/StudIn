@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".activities.LoginActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -82,5 +82,18 @@
         android:text="¿No tienes cuenta? Regístrate"
         android:textAlignment="center"
         android:textColor="@color/blue"
+        android:textSize="14sp" />
+    <TextView
+        android:id="@+id/RegistroEmpresaTexto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:padding="8dp"
+        android:text="¿Eres una empresa? Regístrate aquí"
+        android:textAlignment="center"
+        android:textColor="@color/blue"
+        android:clickable="true"
+        android:focusable="true"
         android:textSize="14sp" />
 </LinearLayout>

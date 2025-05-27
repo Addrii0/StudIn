@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -17,7 +18,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures{
+        viewBinding = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -54,6 +57,7 @@ dependencies {
     // ** AÑADE ESTA LÍNEA PARA FIREBASE AUTHENTICATION **
     // La versión es gestionada por el BoM que importaste arriba
     implementation(libs.firebase.auth)
+    implementation(libs.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

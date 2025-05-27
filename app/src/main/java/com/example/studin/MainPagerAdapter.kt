@@ -2,8 +2,9 @@ package com.example.studin
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.studin.activities.MainChatsActivity
 
-class MainPagerAdapter(fragment: MainChats) : FragmentStateAdapter(fragment) {
+class MainPagerAdapter(fragment: MainChatsActivity) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
