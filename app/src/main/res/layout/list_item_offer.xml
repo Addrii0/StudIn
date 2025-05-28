@@ -15,7 +15,7 @@
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:text="Título de la Oferta" />
+        android:text="@string/t_tulo_de_la_oferta" />
 
     <TextView
         android:id="@+id/textViewOfferDescription"
@@ -24,7 +24,7 @@
         android:layout_marginTop="4dp"
         android:textSize="14sp"
         android:textColor="@android:color/darker_gray"
-        android:text="Esta es una descripción corta de la oferta." />
+        android:text="@string/esta_es_una_descripci_n_corta_de_la_oferta" />
 
     <!-- Puedes añadir más elementos aquí, como una imagen, fecha, etc. -->
 

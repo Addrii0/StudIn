@@ -6,16 +6,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
-// Importa la clase de ViewBinding generada para tu layout
 import com.example.studin.databinding.ActivityLoginBinding // Asegúrate que esta ruta es correcta
-
-// Importa las referencias correctas a tus actividades
-import com.example.studin.activities.UserHomeActivity
-import com.example.studin.activities.CompanyHomeActivity
-import com.example.studin.activities.RegisterActivity
-// La importación de R puede ser necesaria para acceder a recursos como strings, pero no para vistas con binding
-// import com.example.studin.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException

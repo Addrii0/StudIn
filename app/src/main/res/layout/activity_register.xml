@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registro"
+                android:text="@string/registro"
                 android:textSize="36sp"
                 android:textAlignment="center"
                 android:textStyle="bold"
@@ -37,8 +37,8 @@
                 android:background="@drawable/estilotexto"
                 android:layout_marginTop="40dp"
                 android:padding="8dp"
-                android:hint="Nombre"
-                android:drawableLeft="@drawable/icono_persona"
+                android:hint="@string/nombre"
+                android:drawableStart="@drawable/icono_persona"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"/>
             <EditText
@@ -48,8 +48,8 @@
                 android:background="@drawable/estilotexto"
                 android:layout_marginTop="20dp"
                 android:padding="8dp"
-                android:hint="Email"
-                android:drawableLeft="@drawable/icono_email"
+                android:hint="@string/email"
+                android:drawableStart="@drawable/icono_email"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"/>
             <EditText
@@ -59,8 +59,8 @@
                 android:background="@drawable/estilotexto"
                 android:layout_marginTop="20dp"
                 android:padding="8dp"
-                android:hint="Usuario"
-                android:drawableLeft="@drawable/icono_persona"
+                android:hint="@string/usuario"
+                android:drawableStart="@drawable/icono_persona"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"/>
             <EditText
@@ -70,15 +70,15 @@
                 android:background="@drawable/estilotexto"
                 android:layout_marginTop="20dp"
                 android:padding="8dp"
-                android:hint="Constraseña"
+                android:hint="@string/constrasena"
                 android:inputType="textPassword"
-                android:drawableLeft="@drawable/icono_candado"
+                android:drawableStart="@drawable/icono_candado"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Registrarse"
+                android:text="@string/registrarse"
                 android:id="@+id/registro_Boton"
                 android:textSize="18sp"
                 android:layout_marginTop="30dp"
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/loginTextoRedirigido"
-                android:text="Ya estás registrado? Inicia Sesión"
+                android:text="@string/ya_est_s_registrado_inicia_sesi_n"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:layout_marginTop="10dp"

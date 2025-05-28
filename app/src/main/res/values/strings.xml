@@ -18,5 +18,27 @@
     <string name="error_loading_offers">Error al cargar ofertas</string>
     <string name="error_loading_offers_toast">Error al cargar ofertas: %s</string>
     <string name="add_new_offer">add new offer</string>
+    <string name="registro_de_empresa">Registro de Empresa</string>
+    <string name="nombre_de_la_empresa">Nombre de la Empresa</string>
+    <string name="ubicacion">Ubicación</string>
+    <string name="correo_electronico">Correo Electrónico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="repetir_contrasena">Repetir Contraseña</string>
+    <string name="registrar_empresa">Registrar Empresa</string>
+    <string name="ya_tienes_cuenta_iniciar_sesi_n">¿Ya tienes cuenta? Iniciar Sesión</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="ofertas_especiales">Ofertas Especiales</string>
+    <string name="ofertas_de_la_empresa">Ofertas de la Empresa</string>
+    <string name="no_hay_ofertas_disponibles_en_este_momento">No hay ofertas disponibles en este momento.</string>
+    <string name="t_tulo_de_la_oferta">Título de la Oferta</string>
+    <string name="esta_es_una_descripci_n_corta_de_la_oferta">Esta es una descripción corta de la oferta.</string>
+    <string name="registro">Registro</string>
+    <string name="nombre">Nombre</string>
+    <string name="email">Email</string>
+    <string name="usuario">Usuario</string>
+    <string name="constrasena">Constraseña</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="ya_est_s_registrado_inicia_sesi_n">Ya estás registrado? Inicia Sesión</string>
+    <string name="mi_bot_n">Mi Botón</string>
 
 </resources>

@@ -2,12 +2,9 @@ package com.example.studin.activities // O el paquete de tu actividad
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView // Importa TextView si no usas ViewBinding directamente para el tipo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.studin.R // Asegúrate de importar tu clase R
 import com.example.studin.databinding.ActivityCompanyHomeBinding // Asume que este es tu binding
-// O el binding de la actividad donde esté tu TextView de logout
 import com.google.firebase.auth.FirebaseAuth
 
 class CompanyHomeActivity : AppCompatActivity() { // O tu Activity correspondiente

@@ -16,6 +16,7 @@ import com.google.firebase.database.ValueEventListener
 import com.example.studin.classes.Offer // Importa tu clase Offer
 import com.example.studin.ui.fragments.OffersOverlayFragment // Asegúrate de esta ruta
 import com.google.firebase.auth.FirebaseAuth
+import androidx.core.view.isGone
 
 class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverlayListener {
 
@@ -76,7 +77,7 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
 
                 Log.d(TAG, "Carga de ofertas completa. ${loadedOffersList.size} encontradas.")
 
-                if (loadedOffersList.isNotEmpty() && binding.offersFragmentContainer.visibility == View.GONE) {
+                if (loadedOffersList.isNotEmpty() && binding.offersFragmentContainer.isGone) {
                     showOffersOverlay(loadedOffersList)
                 } else if (loadedOffersList.isEmpty()) {
                     Log.d(TAG, "No se encontraron ofertas para mostrar.")

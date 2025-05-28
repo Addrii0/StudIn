@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registro de Empresa"
+        android:text="@string/registro_de_empresa"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center_horizontal"
@@ -22,7 +21,7 @@
         android:id="@+id/company_registro_nombreEmpresa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre de la Empresa"
+        android:hint="@string/nombre_de_la_empresa"
         android:inputType="textCapWords"
         android:minHeight="48dp" />
 
@@ -30,7 +29,7 @@
         android:id="@+id/company_registro_localizacion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ubicación"
+        android:hint="@string/ubicacion"
         android:inputType="textCapWords"
         android:minHeight="48dp" />
 
@@ -38,7 +37,7 @@
         android:id="@+id/company_registro_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Correo Electrónico"
+        android:hint="@string/correo_electronico"
         android:inputType="textEmailAddress"
         android:minHeight="48dp" />
 
@@ -46,7 +45,7 @@
         android:id="@+id/company_registro_contrasena"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Contraseña"
+        android:hint="@string/contrasena"
         android:inputType="textPassword"
         android:minHeight="48dp" />
 
@@ -55,7 +54,7 @@
         android:id="@+id/company_repetir_contrasena"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Repetir Contraseña"
+        android:hint="@string/repetir_contrasena"
         android:inputType="textPassword"
         android:minHeight="48dp" />
 
@@ -63,7 +62,7 @@
         android:id="@+id/company_registro_Boton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrar Empresa"
+        android:text="@string/registrar_empresa"
         android:layout_marginTop="24dp"/>
 
     <TextView
@@ -74,7 +73,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_horizontal"
-        android:text="¿Ya tienes cuenta? Iniciar Sesión"
+        android:text="@string/ya_tienes_cuenta_iniciar_sesi_n"
         android:textColor="@color/design_default_color_primary"
         tools:ignore="TouchTargetSizeCheck" />
 
