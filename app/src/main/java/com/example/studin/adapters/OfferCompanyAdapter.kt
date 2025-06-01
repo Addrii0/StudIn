@@ -14,7 +14,7 @@ class OffersAdapter(
     inner class OfferViewHolder(val binding: ItemOfferBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(offer: Offer) {
             binding.textViewOfferTitle.text = offer.title ?: "N/A"
-            binding.textViewCompanyName.text = offer.companyName ?: "N/A"
+            binding.textViewCompanyName.text = offer.companyId ?: "N/A"
             binding.textViewOfferLocation.text = offer.location ?: "N/A"
             binding.textViewOfferDescription.text = offer.description ?: "Sin descripción"
 

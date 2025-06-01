@@ -80,7 +80,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/buttonPublishOffer"
+        android:id="@+id/buttonSaveOffer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Publicar Oferta"

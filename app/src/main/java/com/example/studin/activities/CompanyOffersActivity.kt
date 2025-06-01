@@ -61,14 +61,14 @@ class CompanyOffersActivity : AppCompatActivity() {
             // Acción cuando se hace clic en una oferta
             Toast.makeText(this, "Oferta seleccionada: ${selectedOffer.title}", Toast.LENGTH_SHORT).show()
 
-            // Ejemplo: Iniciar una nueva Activity para mostrar los detalles de la oferta
+            // Inicia una nueva Activity para mostrar los detalles de la oferta
             // Asegúrate de que tu clase Offer implementa Parcelable para pasarla a través de un Intent.
-            // val intent = Intent(this, OfferDetailActivity::class.java).apply {
-            //     putExtra("SELECTED_OFFER_ID", selectedOffer.id) // Pasa el ID
-            //     // o podrías pasar el objeto entero si es Parcelable:
-            //     // putExtra("SELECTED_OFFER_OBJECT", selectedOffer)
-            // }
-            // startActivity(intent)
+             val intent = Intent(this, CompanyOfferInfoActivity::class.java).apply {
+                 putExtra("SELECTED_OFFER_ID", selectedOffer.id) // Pasa el ID
+                 // o podrías pasar el objeto entero si es Parcelable:
+                 // putExtra("SELECTED_OFFER_OBJECT", selectedOffer)
+             }
+             startActivity(intent)
         }
 
         // Configurar el RecyclerView

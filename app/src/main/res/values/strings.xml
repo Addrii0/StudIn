@@ -40,5 +40,13 @@
     <string name="registrarse">Registrarse</string>
     <string name="ya_est_s_registrado_inicia_sesi_n">Ya estás registrado? Inicia Sesión</string>
     <string name="mi_bot_n">Mi Botón</string>
+    <string name="titulo">Titulo</string>
+    <string name="descripcion">descripcion</string>
+    <string name="estudios">estudios</string>
+    <string name="requisitos">requisitos</string>
+    <string name="localizacion">localizacion</string>
+    <string name="pequena_descripcion">pequena descripcion</string>
+    <string name="telefono">telefono</string>
+    <string name="apellido">Apellido</string>
 
 </resources>

@@ -44,6 +44,20 @@
         <activity android:name=".activities.CompanyOffersActivity" android:exported="true">
         </activity>
 
+        <activity android:name=".activities.CompanyOfferInfoActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.CreateOfferActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.UserOfferActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.UserOfferInfoActivity" android:exported="true">
+        </activity>
+        <activity android:name=".activities.UserProfileActivity" android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@
         android:id="@+id/textViewActivityTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/ofertas_de_la_empresa"
+        android:text="Ofertas"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textAlignment="center"
         android:padding="16dp"
@@ -56,16 +56,16 @@
 
     <ImageView
         android:id="@+id/addOffers"
-        android:layout_width="49dp"
-        android:layout_height="52dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="40dp"
-        android:contentDescription="@string/add_new_offer"
+        android:contentDescription="buscar ofertas"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.137"
-        app:srcCompat="@drawable/ic_plus_square" />
+        app:srcCompat="@drawable/icono_busqueda" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/offerButtom"
         android:layout_width="51dp"
         android:layout_height="53dp"
         android:layout_marginStart="28dp"

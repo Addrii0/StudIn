@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
-    id("kotlin-parcelize")
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -41,8 +42,7 @@ android {
 
 dependencies {
 
-    // Importa el BoM de Firebase aquí.
-    // Esto le dice a Gradle que use el catálogo de versiones para las dependencias de Firebase.
+    // El BOM le dice a Gradle que use el catálogo de versiones para las dependencias de Firebase.
     implementation(platform(libs.firebase.bom))
 
     implementation(libs.androidx.core.ktx)
@@ -50,14 +50,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    // Ahora solo necesitas la dependencia principal de Realtime Database
-    // Ya no necesitas firebase-database-ktx si usas BoM 32.5.0+
-    // implementation(libs.firebase.database.ktx) // <-- BORRA ESTA LÍNEA en app/build.gradle.kts
     implementation(libs.firebase.database)
-    // ** AÑADE ESTA LÍNEA PARA FIREBASE AUTHENTICATION **
-    // La versión es gestionada por el BoM que importaste arriba
     implementation(libs.firebase.auth)
-    implementation(libs.constraintlayout)
+    implementation(libs.firebase.storage)
+
+    // Dependencias de Glide
+    implementation(libs.glide.core)
+    ksp(libs.glide.ksp)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
