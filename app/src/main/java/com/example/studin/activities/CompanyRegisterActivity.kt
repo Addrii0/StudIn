@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studin.R // Asegúrate de importar tu archivo R
-import com.example.studin.classes.CompanyProfile // Importa la nueva clase CompanyProfile
+import com.example.studin.classes.Company // Importa la nueva clase CompanyProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException // Importar esta excepción específica
 import com.google.firebase.auth.ktx.auth // Importar la extensión ktx para 'Firebase.auth'
@@ -145,10 +145,10 @@ class CompanyRegisterActivity : AppCompatActivity() {
 
                     if (uid != null) {
                         // 2. Si la cuenta de Auth se creó correctamente, guardar información adicional en Realtime Database
-                        val companyProfile = CompanyProfile(nombreEmpresa, localizacion)
+                        val company = Company(nombreEmpresa, localizacion)
 
                         // Guardar en el nodo 'companies' usando el UID como clave
-                        companiesReference.child(uid).setValue(companyProfile)
+                        companiesReference.child(uid).setValue(company)
                             .addOnSuccessListener {
                                 // 3. Información de empresa guardada exitosamente en RTDB, navegar a la pantalla de empresa
                                 Log.d(TAG, "Perfil de empresa guardado en RTDB bajo UID: $uid")

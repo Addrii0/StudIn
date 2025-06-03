@@ -55,8 +55,19 @@
 
         <activity android:name=".activities.UserOfferInfoActivity" android:exported="true">
         </activity>
+
         <activity android:name=".activities.UserProfileActivity" android:exported="true">
         </activity>
+
+        <activity android:name=".activities.EditUserProfileActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.EditCompanyProfileActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.CompanyProfileActivity" android:exported="true">
+        </activity>
+
 
     </application>
 

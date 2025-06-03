@@ -28,6 +28,9 @@ class UserOfferInfoActivity: AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     private val TAG = "UserOfferInfoActivity"
+    companion object {
+        const val EXTRA_OFFER_ID = "extra_offer_id"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

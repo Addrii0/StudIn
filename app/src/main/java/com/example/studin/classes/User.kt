@@ -11,6 +11,6 @@ data class User(
     val description: String? = null,
     val skills: List<String> = emptyList(),
     val email: String? = null,
-    val telefono: String? = null,
+    val phone: String? = null,
     var profileImageUrl: String? = null,
 ): Parcelable

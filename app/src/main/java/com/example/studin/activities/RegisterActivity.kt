@@ -248,7 +248,7 @@ class RegisterActivity : AppCompatActivity() {
             name = nombre,
             surName = apellido,
             email = email,
-            telefono = telefono,
+            phone = telefono,
             profileImageUrl = profileImageUrl
             // description y skills se inicializarán con sus valores por defecto (null y emptyList)
         )

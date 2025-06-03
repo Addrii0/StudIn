@@ -33,6 +33,10 @@ class CompanyHomeActivity : AppCompatActivity() { // O tu Activity correspondien
             val intent = Intent(this, MainChatsActivity::class.java)
             startActivity(intent)
         }
+        binding.companyProfile.setOnClickListener {
+            val intent = Intent(this, CompanyProfileActivity::class.java)
+            startActivity(intent)
+        }
         // ... resto de tu código de onCreate ...
     }
 

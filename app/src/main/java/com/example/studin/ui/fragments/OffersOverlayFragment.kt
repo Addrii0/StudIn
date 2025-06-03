@@ -102,9 +102,11 @@ class OffersOverlayFragment : Fragment() {
         // Log.d(TAG, "Configurando RecyclerView con ${offerList.size} elementos.") // Opcional: Log
         recyclerView.layoutManager =
             LinearLayoutManager(context) // Un layout manager lineal vertical
-        recyclerView.adapter = OfferAdapter(offerList) // Asigna tu adaptador con los datos
+        recyclerView.adapter = OfferAdapter(offerList) { offer ->
+            // No hacer nada o un Log si quieres saber que se hizo clic
+            Log.d(TAG, "Oferta clickeada en overlay: ${offer.title}, pero no se configuró acción.")
+        }
     }
-
     private fun setupCloseButton() {
         buttonClose.setOnClickListener {
             Log.d(TAG, "Botón de cerrar clickeado.") // Opcional: Log

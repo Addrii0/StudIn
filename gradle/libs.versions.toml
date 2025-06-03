@@ -11,12 +11,8 @@ material = "1.12.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 glide = "4.16.0"
-
 firebaseBom = "33.1.0"
-
-
 googleGmsGoogleServices = "4.4.2"
-constraintlayoutVersion = "2.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -27,13 +23,13 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+#librerias Gidle
 glide-core = {group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-ksp = {group ="com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
+#librerias Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
-
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }
-
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 
 [plugins]

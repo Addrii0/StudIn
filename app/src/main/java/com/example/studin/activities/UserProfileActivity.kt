@@ -1,5 +1,6 @@
 package com.example.studin.activities// En UserProfileActivity.kt
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -61,8 +62,8 @@ class UserProfileActivity : AppCompatActivity() {
             binding.buttonEditProfile.visibility = View.VISIBLE
             binding.buttonEditProfile.setOnClickListener {
                 // Lógica para ir a EditarPerfilActivity
-                // val intent = Intent(this, EditProfileActivity::class.java)
-                // startActivity(intent)
+                val intent = Intent(this, EditUserProfileActivity::class.java)
+                startActivity(intent)
                 Toast.makeText(this, "Ir a editar perfil", Toast.LENGTH_SHORT).show()
             }
         } else {
