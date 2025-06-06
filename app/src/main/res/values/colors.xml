@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#4CCDDC</color>
     <color name="transparente">#00000000</color>"
+    <color name="color_message_sent">#007AFF</color>
+    <color name="color_message_received">#E5E5EA</color>"
 </resources>

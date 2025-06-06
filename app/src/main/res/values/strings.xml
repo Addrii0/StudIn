@@ -48,5 +48,7 @@
     <string name="pequena_descripcion">pequena descripcion</string>
     <string name="telefono">telefono</string>
     <string name="apellido">Apellido</string>
+    <string name="cerrar_sesi_n">cerrar sesión</string>
+    <string name="perfil_empresa">perfil_empresa</string>
 
 </resources>

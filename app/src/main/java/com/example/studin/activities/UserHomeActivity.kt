@@ -1,31 +1,31 @@
-package com.example.studin.activities // Mantén tu paquete
+package com.example.studin.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View // Importar View para View.GONE/VISIBLE
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.studin.databinding.ActivityHomeBinding // Asegúrate que este es el nombre correcto
+import androidx.core.view.isGone
+import com.example.studin.databinding.ActivityUserHomeBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.example.studin.classes.Offer // Importa tu clase Offer
-import com.example.studin.ui.fragments.OffersOverlayFragment // Asegúrate de esta ruta
+import com.example.studin.classes.Offer
+import com.example.studin.ui.fragments.OffersOverlayFragment
 import com.google.firebase.auth.FirebaseAuth
-import androidx.core.view.isGone
-import com.bumptech.glide.Glide // Importa Glide
-import com.example.studin.R // Importa R para acceder a los drawables
-import com.example.studin.classes.User // Importa tu clase User
+import com.bumptech.glide.Glide
+import com.example.studin.R
+import com.example.studin.classes.User
 
 class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverlayListener {
 
-    private lateinit var binding: ActivityHomeBinding
+    private lateinit var binding: ActivityUserHomeBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var offersReference: DatabaseReference
-    private lateinit var userReference: DatabaseReference // Referencia para el usuario actual
+    private lateinit var userReference: DatabaseReference
     private lateinit var auth : FirebaseAuth
 
     private val TAG = "UserHomeActivity"
@@ -34,7 +34,7 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
+        binding = ActivityUserHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
@@ -45,14 +45,8 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
         val currentUserUid = auth.currentUser?.uid
         if (currentUserUid != null) {
             userReference = database.getReference("users").child(currentUserUid)
-            loadUserProfileImage() // Llama a la función para cargar la imagen
-        } else {
-            // Manejar el caso donde no hay usuario logueado (aunque no debería llegar aquí si UserHomeActivity requiere login)
-            Log.w(TAG, "Usuario no logueado, no se puede cargar imagen de perfil.")
-            // Puedes establecer una imagen por defecto si es necesario
-            binding.imageView5.setImageResource(R.drawable.icono_persona) // Asume que tienes un drawable 'icono_persona'
+            loadUserProfileImage()
         }
-
 
         binding.chat.setOnClickListener {
             val chatIntent = Intent(this, MainChatsActivity::class.java)
@@ -63,7 +57,7 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
             startActivity(offerIntent)
         }
 
-        binding.buttonExample.setOnClickListener {
+        binding.buttonLogout.setOnClickListener {
             logoutUser()
         }
         binding.imageView5.setOnClickListener {
@@ -84,14 +78,14 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
                     Log.d(TAG, "URL de imagen de perfil obtenida: ${user.profileImageUrl}")
                     Glide.with(this@UserHomeActivity)
                         .load(user.profileImageUrl)
-                        .placeholder(R.drawable.icono_persona) // Opcional: imagen mientras carga
-                        .error(R.drawable.icono_persona) // Opcional: imagen si hay error al cargar
-                        .circleCrop() // Opcional: para hacer la imagen circular
+                        .placeholder(R.drawable.icono_persona) // imagen mientras carga
+                        .error(R.drawable.icono_persona) //  imagen si hay error al cargar
+                        .circleCrop() // para hacer la imagen circular
                         .into(binding.imageView5)
                 } else {
                     Log.w(TAG, "No se encontró URL de imagen de perfil o está vacía.")
                     // Establecer una imagen por defecto si no hay URL
-                    binding.imageView5.setImageResource(R.drawable.icono_persona) // Asume que tienes un drawable 'icono_persona'
+                    binding.imageView5.setImageResource(R.drawable.icono_persona)
                 }
             }
 

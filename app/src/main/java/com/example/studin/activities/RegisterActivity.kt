@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.studin.databinding.ActivityRegisterBinding // Asegúrate que el nombre coincida con tu layout
+import com.example.studin.databinding.ActivityUserRegisterBinding // Asegúrate que el nombre coincida con tu layout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.ktx.auth
@@ -23,7 +23,7 @@ import com.google.firebase.storage.ktx.storage
 
 class RegisterActivity : AppCompatActivity() {
 
-        private lateinit var binding: ActivityRegisterBinding
+        private lateinit var binding: ActivityUserRegisterBinding
         private var selectedImageUri: Uri? = null
 
         private lateinit var auth: FirebaseAuth
@@ -37,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
-                binding = ActivityRegisterBinding.inflate(layoutInflater)
+                binding = ActivityUserRegisterBinding.inflate(layoutInflater)
                 setContentView(binding.root)
                 Log.d(TAG, "onCreate: Activity Creada")
 

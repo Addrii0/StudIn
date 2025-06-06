@@ -19,13 +19,13 @@
     android:textColor="@android:color/black"/>
 
 
-    <Button
-    android:id="@+id/buttonCloseOffers"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/cerrar"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="8dp"/>
+<!--    <Button-->
+<!--    android:id="@+id/buttonCloseOffers"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="@string/cerrar"-->
+<!--    android:layout_gravity="center_horizontal"-->
+<!--    android:layout_marginTop="8dp"/>-->
 
 
         <!-- El RecyclerView que mostrará la lista de ofertas -->

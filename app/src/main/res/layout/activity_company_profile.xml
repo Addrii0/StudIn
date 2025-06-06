@@ -51,10 +51,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Nombre de la Empresa (ya visible en la Toolbar colapsada) -->
-            <!-- Puedes añadir un TextView aquí si quieres repetir el nombre o añadir un logo pequeño -->
-
-
             <TextView
                 android:id="@+id/textViewCompanyIndustry"
                 android:layout_width="wrap_content"
@@ -172,19 +168,17 @@
                 tools:listitem="@layout/list_item_offer"
                 tools:itemCount="3"/>
             <!-- 'nestedScrollingEnabled="false"' es importante si el RecyclerView está
-                 dentro de un NestedScrollView para un desplazamiento suave.
-                 'tools:listitem' es para la vista previa del diseño. Necesitarás
-                 un layout 'item_offer_compact.xml' o similar. -->
+                 dentro de un NestedScrollView para un desplazamiento suave. -->
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-    <!-- Opcional: FloatingActionButton para alguna acción rápida, como "Seguir Empresa" -->
+    <!-- Opcional: FloatingActionButton para acciones rapidas (Seguir Empresa, Favoritos, etc.) -->
     <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabFollowCompany"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        app:srcCompat="@drawable/ic_favorite_border" /> --> <!-- Necesitarás este icono -->
+        app:srcCompat="@drawable/ic_favorite_border" /> -->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

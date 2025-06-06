@@ -1,16 +1,26 @@
-package com.example.studin.activities // O el paquete de tu actividad
-
+package com.example.studin.activities
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.studin.databinding.ActivityCompanyHomeBinding // Asume que este es tu binding
+import com.bumptech.glide.Glide
+import com.example.studin.R
+import com.example.studin.classes.Company
+import com.example.studin.databinding.ActivityCompanyHomeBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 
-class CompanyHomeActivity : AppCompatActivity() { // O tu Activity correspondiente
+class CompanyHomeActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCompanyHomeBinding // Reemplaza con tu clase de ViewBinding
+    private lateinit var binding: ActivityCompanyHomeBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var companyReference: DatabaseReference
+
+    private val TAG = "CompanyHomeActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,13 +28,16 @@ class CompanyHomeActivity : AppCompatActivity() { // O tu Activity correspondien
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        val companyUid = auth.currentUser?.uid
 
-        // Configurar el listener para el TextView de cerrar sesión
-        // Si usas ViewBinding, el ID del TextView se convierte en una propiedad:
+        if(companyUid != null){
+            loadUserProfileImage()
+        }
+
         binding.textViewLogout.setOnClickListener {
             logoutUser()
         }
-        binding.buttonExample.setOnClickListener {
+        binding.buttonLogout.setOnClickListener {
             val intent = Intent(this, CompanyOffersActivity::class.java)
             startActivity(intent)
         }
@@ -37,23 +50,40 @@ class CompanyHomeActivity : AppCompatActivity() { // O tu Activity correspondien
             val intent = Intent(this, CompanyProfileActivity::class.java)
             startActivity(intent)
         }
-        // ... resto de tu código de onCreate ...
+
     }
 
     private fun logoutUser() {
-        auth.signOut() // Cierra la sesión del usuario actual de Firebase
-
-        // Muestra un mensaje al usuario (opcional)
+        auth.signOut()
         Toast.makeText(this, "Has cerrado sesión.", Toast.LENGTH_SHORT).show()
-
-        // Redirige al usuario a la pantalla de Login
-        // Es importante limpiar el stack de actividades para que el usuario
-        // no pueda volver a esta actividad presionando el botón "Atrás".
-        val intent = Intent(this, LoginActivity::class.java) // Reemplaza LoginActivity con tu actividad de inicio de sesión
+        val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-        finish() // Cierra la actividad actual
+        finish()
     }
 
-    // ... resto de tus métodos de la Activity ...
+    private fun loadUserProfileImage() {
+        companyReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val company = snapshot.getValue(Company::class.java)
+                if (company != null && !company.profileImageUrl.isNullOrEmpty()) {
+                    Log.d(TAG, "URL de imagen de perfil obtenida: ${company.profileImageUrl}")
+                    Glide.with(this@CompanyHomeActivity)
+                        .load(company.profileImageUrl)
+                        .placeholder(R.drawable.icono_empresa)
+                        .error(R.drawable.icono_empresa)
+                        .circleCrop()
+                        .into(binding.companyProfile)
+                } else {
+                    Log.w(TAG, "No se encontró URL de imagen de perfil o está vacía.")
+                    binding.companyProfile.setImageResource(R.drawable.icono_persona)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Error al cargar datos del usuario para imagen: ", error.toException())
+                binding.companyProfile.setImageResource(R.drawable.ic_profile_person)
+            }
+        })
+    }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical">
+
+    <!-- Opcional: ImageView para el avatar/logo de la empresa -->
+    <ImageView
+        android:id="@+id/imageView_company_avatar_selectable"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:src="@mipmap/ic_launcher_round" /> <!-- Placeholder -->
+
+    <TextView
+        android:id="@+id/textView_company_name_selectable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Nombre de la Empresa" />
+
+</LinearLayout>

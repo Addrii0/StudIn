@@ -68,6 +68,11 @@
         <activity android:name=".activities.CompanyProfileActivity" android:exported="true">
         </activity>
 
+        <activity android:name=".activities.ChatMessageActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.SelectCompanyActivity" android:exported="true">
+        </activity>
 
     </application>
 

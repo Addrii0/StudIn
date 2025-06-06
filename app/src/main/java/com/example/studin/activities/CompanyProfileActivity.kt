@@ -5,16 +5,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.studin.R // Importa tu clase R
-import com.example.studin.adapters.OfferAdapter // Necesitarás un adaptador para las ofertas
-import com.example.studin.classes.Company // Tu clase Company
-import com.example.studin.classes.Offer // Tu clase Offer
-import com.example.studin.databinding.ActivityCompanyProfileBinding // ViewBinding
+import com.example.studin.R
+import com.example.studin.adapters.OfferAdapter
+import com.example.studin.classes.Company
+import com.example.studin.classes.Offer
+import com.example.studin.databinding.ActivityCompanyProfileBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class CompanyProfileActivity : AppCompatActivity() {
@@ -23,17 +23,14 @@ class CompanyProfileActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var companyReference: DatabaseReference
     private lateinit var offersReference: DatabaseReference
+    private lateinit var auth: FirebaseAuth
 
-    private lateinit var offerAdapter: OfferAdapter // Adaptador para el RecyclerView de ofertas
+    private lateinit var offerAdapter: OfferAdapter
     private val companyOffersList = mutableListOf<Offer>()
 
     private var companyId: String? = null
-
+    private var companyProfileImageUrl: String? = null
     private val TAG = "CompanyProfileActivity"
-
-    companion object {
-        const val EXTRA_COMPANY_ID = "company_id"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,40 +40,51 @@ class CompanyProfileActivity : AppCompatActivity() {
         // Configurar Toolbar
         setSupportActionBar(binding.toolbarCompanyProfile)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        // El título se establecerá dinámicamente con el nombre de la empresa
 
-        // Inicializar Firebase
         database = FirebaseDatabase.getInstance()
-
-        // Obtener el ID de la empresa del Intent
-        companyId = intent.getStringExtra(EXTRA_COMPANY_ID)
+        auth = FirebaseAuth.getInstance()
+        // Obtener el ID de la empresa del Intent si entra desde busqueda de empresas
+        companyId = intent.getStringExtra("COMPANY_ID")
+        companyProfileImageUrl = intent.getStringExtra("COMPANY_PROFILE_IMAGE_URL")
 
         if (companyId == null) {
-            Toast.makeText(this, "Error: No se proporcionó ID de la empresa.", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Error: No se proporcionó ID de la empresa.", Toast.LENGTH_LONG)
                 .show()
-            Log.e(TAG, "No se recibió companyId en el Intent.")
-            finish()
-            return
+                Log.e(TAG, "No se recibió companyId en el Intent.")
+                finish()
+                return
         }
-
         companyReference = database.getReference("companies").child(companyId!!)
-        offersReference = database.getReference("offers") // Referencia a todas las ofertas
+        offersReference = database.getReference("offers")
 
         setupRecyclerView()
         loadCompanyData()
         loadCompanyOffers()
 
+
         binding.buttonSendMessageToCompany.setOnClickListener {
-            //
-            // Por ahora, un placeholder:
-            Toast.makeText(this, "Funcionalidad de chat próximamente.", Toast.LENGTH_SHORT).show()
-            // Podrías pasar el companyId y companyName a una futura ChatActivity
-            // val intent = Intent(this, ChatActivity::class.java)
-            // intent.putExtra(ChatActivity.EXTRA_RECIPIENT_ID, companyId)
-            // intent.putExtra(ChatActivity.EXTRA_RECIPIENT_NAME, binding.collapsingToolbarCompany.title.toString())
-            // intent.putExtra(ChatActivity.EXTRA_RECIPIENT_TYPE, "company") // Para diferenciar
-            // startActivity(intent)
+            Toast.makeText(this, "Iniciando chat con la empresa...", Toast.LENGTH_SHORT).show()
+
+            val companyIdFromProfile = companyId // ID de la empresa actual
+            val companyNameFromProfile = binding.collapsingToolbarCompany.title.toString()
+            // companyProfileImageUrl ya lo tienes de cuando cargaste los datos de la empresa
+
+            if (companyIdFromProfile == null || companyIdFromProfile.isEmpty()) {
+                Toast.makeText(this, "ID de empresa no disponible.", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "companyId es nulo o vacío al intentar iniciar chat.")
+                return@setOnClickListener
+            }
+
+            // Iniciar MainChatsActivity para que maneje la creación/navegación del chat
+            val intent = Intent(this, MainChatsActivity::class.java)
+            intent.putExtra("ACTION_START_CHAT_WITH_USER_ID", companyIdFromProfile)
+            intent.putExtra("ACTION_START_CHAT_WITH_USER_NAME", companyNameFromProfile)
+            intent.putExtra("ACTION_START_CHAT_WITH_USER_AVATAR_URL", companyProfileImageUrl) // Pasa la URL del avatar
+            // Opcional: flags para manejar el back stack si es necesario
+            // intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
+
         binding.buttonEditCompanyProfile.setOnClickListener {
             val intent = Intent(this, EditCompanyProfileActivity::class.java)
             startActivity(intent)
@@ -86,8 +94,8 @@ class CompanyProfileActivity : AppCompatActivity() {
         binding.mapViewContainer.setOnClickListener {
             val companyAddress = binding.textViewCompanyAddress.text.toString()
             if (companyAddress.isNotEmpty()) {
-                // Intenta abrir la dirección en Google Maps (o cualquier app de mapas)
-                // Esto es un ejemplo simple, necesitarías lat/lon para una integración de mapa en la app
+                // Intenta abrir la dirección en Google Maps
+                // Necesito lat/lon para una integración de mapa en la app
                 val gmmIntentUri = Uri.parse("geo:0,0?q=${Uri.encode(companyAddress)}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                 mapIntent.setPackage("com.google.android.apps.maps")
@@ -113,8 +121,6 @@ class CompanyProfileActivity : AppCompatActivity() {
             }
             intent.putExtra(UserOfferInfoActivity.EXTRA_OFFER_ID, offer.id)
             startActivity(intent)
-            // El Toast aquí es opcional, ya que estás navegando
-            // Toast.makeText(this, "Clic en oferta: ${offer.title}", Toast.LENGTH_SHORT).show()
         }
         binding.recyclerViewCompanyOffers.apply {
             layoutManager = LinearLayoutManager(this@CompanyProfileActivity)
@@ -123,9 +129,6 @@ class CompanyProfileActivity : AppCompatActivity() {
         }
     }
     private fun loadCompanyData() {
-        // Opcional: Mostrar un ProgressBar mientras carga
-        // binding.progressBarCompany.visibility = View.VISIBLE
-
         companyReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 // binding.progressBarCompany.visibility = View.GONE
@@ -139,12 +142,10 @@ class CompanyProfileActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.w(TAG, "Empresa con ID $companyId no encontrada.")
-                    // Podrías cerrar la actividad o mostrar un estado de error más elaborado
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // binding.progressBarCompany.visibility = View.GONE
                 Toast.makeText(
                     this@CompanyProfileActivity,
                     "Error al cargar datos de la empresa: ${error.message}",
@@ -199,9 +200,6 @@ class CompanyProfileActivity : AppCompatActivity() {
         // Sin embargo, filtrar por 'companyId' en la colección "offers" suele ser más eficiente
         // si tienes muchos offers por empresa.
 
-        // Muestra un indicador de carga si lo deseas
-        // binding.progressBarOffers.visibility = View.VISIBLE
-
         val query = offersReference.orderByChild("companyId").equalTo(companyId)
 
         query.addValueEventListener(object : ValueEventListener {
@@ -219,17 +217,13 @@ class CompanyProfileActivity : AppCompatActivity() {
                     Log.d(TAG, "Se encontraron ${companyOffersList.size} ofertas para la empresa $companyId.")
                 } else {
                     Log.d(TAG, "No se encontraron ofertas para la empresa $companyId.")
-                    // Puedes mostrar un mensaje de "No hay ofertas publicadas" en la UI
-                    // binding.textViewNoOffers.visibility = View.VISIBLE
+
                 }
                 offerAdapter.notifyDataSetChanged()
-                // Oculta el indicador de carga
-                // binding.progressBarOffers.visibility = View.GONE
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Oculta el indicador de carga
-                // binding.progressBarOffers.visibility = View.GONE
+
                 Toast.makeText(this@CompanyProfileActivity, "Error al cargar ofertas: ${error.message}", Toast.LENGTH_LONG).show()
                 Log.e(TAG, "Error al cargar ofertas de la empresa: ", error.toException())
             }

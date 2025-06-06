@@ -11,7 +11,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
-        android:contentDescription="@string/persona"
+        android:contentDescription="@string/perfil_empresa"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,8 +30,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Aquí puedes añadir más elementos específicos de la UI de la empresa -->
-    <!-- Por ejemplo, un botón para "Crear Oferta", una lista de ofertas publicadas, etc. -->
+    <!-- Añadir graficas -->
+
     <TextView
         android:id="@+id/textViewLogout"
         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
         app:layout_constraintVertical_bias="0.94" />
 
     <Button
-        android:id="@+id/buttonExample"
+        android:id="@+id/buttonLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mi Botón"
