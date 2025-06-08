@@ -137,7 +137,7 @@
                 android:layout_marginTop="24dp"
                 android:text="Enviar Mensaje"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:icon="@drawable/icono_nuevo_chat" /> <!-- Necesitarás este icono -->
+                app:icon="@drawable/icono_nuevo_chat" />
 
             <Button
                 android:id="@+id/buttonEditCompanyProfile"

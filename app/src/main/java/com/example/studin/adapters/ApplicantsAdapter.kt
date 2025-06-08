@@ -1,9 +1,9 @@
-package com.example.studin.adapters // O tu paquete de adaptadores
+package com.example.studin.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.studin.classes.User // Tu clase User
+import com.example.studin.classes.User
 import com.example.studin.databinding.ListItemUserBinding
 
 class ApplicantsAdapter(
@@ -41,8 +41,6 @@ class ApplicantsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ApplicantViewHolder {
-        // Asegúrate que el nombre del binding coincida con tu archivo XML
-        // Si tu XML es item_applicant.xml, el binding generado será ItemApplicantBinding
         val binding = ListItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ApplicantViewHolder(binding)
     }
@@ -55,6 +53,6 @@ class ApplicantsAdapter(
 
     fun updateData(newApplicants: List<User>) {
         applicantsList = newApplicants
-        notifyDataSetChanged() // Para simplicidad. Usa DiffUtil para mejor rendimiento.
+        notifyDataSetChanged()
     }
 }

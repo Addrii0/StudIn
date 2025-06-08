@@ -1,4 +1,4 @@
-package com.example.studin.activities // Reemplaza con tu paquete
+package com.example.studin.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,16 +18,15 @@ import com.google.firebase.database.*
 
 class CompanyOffersActivity : AppCompatActivity() {
 
-    // ViewBinding: forma recomendada de acceder a las vistas
     private lateinit var binding: ActivityCompanyOffersBinding
 
     private lateinit var offersAdapter: OffersAdapter
-    private val offerList = mutableListOf<Offer>() // Lista para almacenar las ofertas
+    private val offerList = mutableListOf<Offer>()
 
     // Firebase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
-    private var valueEventListener: ValueEventListener? = null // Para poder remover el listener luego
+    private var valueEventListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +61,6 @@ class CompanyOffersActivity : AppCompatActivity() {
             Toast.makeText(this, "Oferta seleccionada: ${selectedOffer.title}", Toast.LENGTH_SHORT).show()
 
             // Inicia una nueva Activity para mostrar los detalles de la oferta
-            // Asegúrate de que tu clase Offer implementa Parcelable para pasarla a través de un Intent.
              val intent = Intent(this, CompanyOfferInfoActivity::class.java).apply {
                  putExtra("SELECTED_OFFER_ID", selectedOffer.id) // Pasa el ID
                  // o podrías pasar el objeto entero si es Parcelable:
@@ -73,9 +71,9 @@ class CompanyOffersActivity : AppCompatActivity() {
 
         // Configurar el RecyclerView
         binding.offersRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@CompanyOffersActivity) // 'this' aquí es el contexto de la Activity
+            layoutManager = LinearLayoutManager(this@CompanyOffersActivity)
             adapter = offersAdapter
-            // (Opcional) Puedes añadir ItemDecorations para espaciado, divisores, etc.
+            // Decoración entre lineas
             addItemDecoration(DividerItemDecoration(this@CompanyOffersActivity, LinearLayoutManager.VERTICAL))
         }
 
@@ -86,17 +84,16 @@ class CompanyOffersActivity : AppCompatActivity() {
     }
 
     private fun fetchOffers() {
-        // Mostrar ProgressBar y ocultar otros elementos mientras se cargan los datos
         binding.progressBar.visibility = View.VISIBLE
         binding.textViewNoOffers.visibility = View.GONE
         binding.offersRecyclerView.visibility = View.GONE
 
         // Define la consulta a Firebase.
         // Si necesitas filtrar (ej. por companyId dentro del objeto Offer):
-        // val companyIdToFilterBy = auth.currentUser?.uid
-        // val query = databaseReference.orderByChild("companyIdFieldInOffer").equalTo(companyIdToFilterBy)
+        val companyIdToFilterBy = auth.currentUser?.uid
+        val query = databaseReference.orderByChild("companyId").equalTo(companyIdToFilterBy)
         // Si quieres obtener todas las ofertas del 'databaseReference' actual:
-        val query: Query = databaseReference
+        //val query: Query = databaseReference
 
         valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -105,11 +102,11 @@ class CompanyOffersActivity : AppCompatActivity() {
                     for (offerSnapshot in snapshot.children) {
                         val offer = offerSnapshot.getValue(Offer::class.java)
                         offer?.let {
-                            // Si tu modelo Offer no incluye el 'id' de Firebase, puedes añadirlo aquí:
-                            val offerWithId = it.copy(id = offerSnapshot.key)
-                            offerList.add(offerWithId)
+//                            // Si tu modelo Offer no incluye el 'id' de Firebase, puedes añadirlo aquí:
+//                            val offerWithId = it.copy(id = offerSnapshot.key)
+//                            offerList.add(offerWithId)
                             // Si tu modelo Offer ya tiene un campo 'id' que se llena desde Firebase, usa:
-                            // offerList.add(it)
+                             offerList.add(it)
                         }
                     }
                 }
@@ -123,7 +120,7 @@ class CompanyOffersActivity : AppCompatActivity() {
                     binding.offersRecyclerView.visibility = View.VISIBLE
                 }
                 offersAdapter.updateOffers(offerList.toList()) // Actualizar el adaptador con la nueva lista
-                binding.progressBar.visibility = View.GONE // Ocultar ProgressBar
+                binding.progressBar.visibility = View.GONE
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -141,12 +138,9 @@ class CompanyOffersActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // IMPORTANTE: Remover el ValueEventListener para evitar fugas de memoria y
-        // callbacks inesperados cuando la Activity ya no existe.
         valueEventListener?.let {
             databaseReference.removeEventListener(it)
         }
-        // No necesitas limpiar `binding` aquí como en Fragments (_binding = null),
-        // ya que el ciclo de vida de la Activity se encarga de ello.
+
     }
 }

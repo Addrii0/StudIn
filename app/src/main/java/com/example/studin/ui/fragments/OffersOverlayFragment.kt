@@ -16,6 +16,7 @@ class OffersOverlayFragment : Fragment() {
 
     interface OffersOverlayListener {
         fun onOffersOverlayClose()
+        fun onOfferSelected(offer: Offer)
     }
 
     // Declara la variable de binding. Será nullable.
@@ -75,11 +76,13 @@ class OffersOverlayFragment : Fragment() {
         Log.d(TAG, "Configurando RecyclerView con ${offerList.size} elementos.")
         // Accede a las vistas a través del objeto binding
         binding.recyclerViewOffers.layoutManager = LinearLayoutManager(context)
-        binding.recyclerViewOffers.adapter = OfferAdapter(offerList) { offer ->
-            Log.d(TAG, "Oferta clickeada en overlay: ${offer.title}, pero no se configuró acción.")
+        val offerAdapter = OfferAdapter(offerList) { clickedOffer ->
+            // Esta lambda se ejecuta cuando el OfferAdapter notifica un clic en un ítem.
+            Log.d(TAG, "Oferta clickeada en overlay: ${clickedOffer.title}. Notificando al listener.")
+            listener?.onOfferSelected(clickedOffer) // <--- ¡AQUÍ ESTÁ LA PARTE CLAVE!
         }
+        binding.recyclerViewOffers.adapter = offerAdapter
     }
-
 
     override fun onDetach() {
         super.onDetach()

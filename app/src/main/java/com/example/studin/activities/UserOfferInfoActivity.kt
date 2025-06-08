@@ -165,7 +165,12 @@ class UserOfferInfoActivity: AppCompatActivity() {
         binding.textViewOfferTitleInfo.text = offer.title ?: "N/A"
         binding.textViewOfferDescriptionInfo.text = offer.description ?: "No hay descripción disponible."
         binding.textViewOfferLocationInfo.text = offer.location ?: "Ubicación no especificada."
-        binding.textViewOfferSkillsInfo.text = offer.skills ?: "No hay habilidades requeridas." // Asumiendo que Offer tiene 'skills'
+
+        if (offer.skills.isNotEmpty()) {
+            binding.textViewOfferSkillsInfo.text = offer.skills.joinToString(separator = ", ")
+        } else {
+            binding.textViewOfferSkillsInfo.text = "No hay habilidades requeridas."
+        }
         // binding.textViewOfferRequirementsInfo.text = offer.requirements ?: "No especificados" // Si tienes este campo
 
         offer.fechaPublicacion?.let { timestamp -> // Asegúrate que tu clase Offer tenga 'fechaPublicacion'

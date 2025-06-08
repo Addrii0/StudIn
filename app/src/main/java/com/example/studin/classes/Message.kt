@@ -1,11 +1,11 @@
-package com.example.studin // o com.example.studin.models
+package com.example.studin
 
-import android.os.Parcelable // Importar Parcelable
+import android.os.Parcelable
 import com.google.firebase.database.IgnoreExtraProperties
-import kotlinx.parcelize.Parcelize // Importar la anotación Parcelize
+import kotlinx.parcelize.Parcelize
 
 @IgnoreExtraProperties
-@Parcelize // <--- AÑADIR ESTA ANOTACIÓN
+@Parcelize
 data class Message(
     var messageId: String? = null,
     var senderId: String? = null,
@@ -13,10 +13,7 @@ data class Message(
     var timestamp: Long = 0L,
     // var imageUrl: String? = null,
     // var status: String? = null
-) : Parcelable { // <--- IMPLEMENTAR LA INTERFAZ Parcelable
+) : Parcelable {
     // Constructor vacío requerido por Firebase
     constructor() : this(null, null, null, 0L)
-
-    // El plugin kotlin-parcelize genera automáticamente el código de writeToParcel y el CREATOR.
-    // No necesitas escribirlos manualmente.
 }

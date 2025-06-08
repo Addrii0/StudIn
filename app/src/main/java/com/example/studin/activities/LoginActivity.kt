@@ -1,4 +1,4 @@
-package com.example.studin.activities // Mantén tu paquete actual
+package com.example.studin.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.studin.databinding.ActivityLoginBinding // Asegúrate que esta ruta es correcta
+import com.example.studin.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -19,41 +19,33 @@ import com.google.firebase.database.ValueEventListener
 
 class LoginActivity : AppCompatActivity() {
 
-    // Declara una única variable para el objeto de binding
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
 
-    private val TAG = "LoginActivity" // Constante para logging
+    private val TAG = "LoginActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Infla el layout usando el objeto de binding
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        // Establece la vista raíz del binding como el contenido de la actividad
         setContentView(binding.root)
 
-        // Inicializa Firebase Auth
         auth = Firebase.auth // o FirebaseAuth.getInstance()
 
-        // Listener para el botón de login
         binding.InicioBoton.setOnClickListener {
             if (validarEmail() && validarContrasena()) {
                 iniciarSesionConFirebase()
             }
         }
-        // Listener para el texto "Registrarse"
         binding.RegistroTexto.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        // Listener para el nuevo texto de registro de empresa
         binding.RegistroEmpresaTexto.setOnClickListener {
             val intent = Intent(this, CompanyRegisterActivity::class.java)
             startActivity(intent)
         }
 
-        // Verificar si el usuario ya está logueado
         val currentUser = auth.currentUser
         if (currentUser != null) {
             Log.d(TAG, "Usuario ya logueado: ${currentUser.uid}. Verificando tipo de usuario.")
@@ -125,23 +117,23 @@ class LoginActivity : AppCompatActivity() {
         val usersRef = database.getReference("users")
         val companiesRef = database.getReference("companies")
 
-        usersRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+        companiesRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    Log.d(TAG, "Usuario $uid es un usuario normal.")
-                    Toast.makeText(this@LoginActivity, "Bienvenido Usuario.", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@LoginActivity, UserHomeActivity::class.java)
+                    Log.d(TAG, "Usuario $uid es una empresa.")
+                    Toast.makeText(this@LoginActivity, "Bienvenido Empresa.", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@LoginActivity, CompanyHomeActivity::class.java)
                     intent.putExtra("uid", uid)
                     startActivity(intent)
                     finish()
                 } else {
-                    // No encontrado en 'users', intentar en 'companies'
-                    companiesRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+                    // No encontrado en users, busca en companies
+                    usersRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(companySnapshot: DataSnapshot) { // Renombrado snapshot para claridad
                             if (companySnapshot.exists()) {
-                                Log.d(TAG, "Usuario $uid es una empresa.")
-                                Toast.makeText(this@LoginActivity, "Bienvenida Empresa.", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(this@LoginActivity, CompanyHomeActivity::class.java)
+                                Log.d(TAG, "Usuario $uid es un usuario normal.")
+                                Toast.makeText(this@LoginActivity, "Bienvenida Usuario.", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@LoginActivity, UserHomeActivity::class.java)
                                 intent.putExtra("uid", uid)
                                 startActivity(intent)
                                 finish()
@@ -149,9 +141,6 @@ class LoginActivity : AppCompatActivity() {
                                 // El UID existe en Auth pero no en nuestros nodos de perfil
                                 Log.w(TAG, "UID $uid autenticado pero no encontrado en nodos 'users' o 'companies'.")
                                 Toast.makeText(this@LoginActivity, "Error: Perfil de usuario no encontrado. Contacta soporte.", Toast.LENGTH_LONG).show()
-                                // Opcional: Forzar cierre de sesión de Auth si el perfil no está completo
-                                // auth.signOut() // Descomentar si quieres forzar el logout en este caso
-                                // No navegamos, nos quedamos en LoginActivity o mostramos un mensaje de error claro
                             }
                         }
 

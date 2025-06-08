@@ -47,8 +47,13 @@ class CompanyProfileActivity : AppCompatActivity() {
         companyId = intent.getStringExtra("COMPANY_ID")
         companyProfileImageUrl = intent.getStringExtra("COMPANY_PROFILE_IMAGE_URL")
 
+        if(companyId == null){
+            companyId = auth.currentUser?.uid
+            Log.e(TAG, "No se recibió companyId en el Intent.")
+        }
+
         if (companyId == null) {
-                Toast.makeText(this, "Error: No se proporcionó ID de la empresa.", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Error: No se identificar a la empresa.", Toast.LENGTH_LONG)
                 .show()
                 Log.e(TAG, "No se recibió companyId en el Intent.")
                 finish()
@@ -56,6 +61,14 @@ class CompanyProfileActivity : AppCompatActivity() {
         }
         companyReference = database.getReference("companies").child(companyId!!)
         offersReference = database.getReference("offers")
+        val currentCompanyId = companyReference.key
+        if( currentCompanyId == auth.currentUser?.uid){
+            binding.buttonEditCompanyProfile.visibility = android.view.View.VISIBLE
+            Log.e(TAG, "Es la empresa actual.")
+        }else{
+            binding.buttonEditCompanyProfile.visibility = android.view.View.GONE
+            Log.e(TAG, "No es la empresa actual.")
+        }
 
         setupRecyclerView()
         loadCompanyData()
@@ -173,13 +186,13 @@ class CompanyProfileActivity : AppCompatActivity() {
             binding.imageViewCompanyProfileHeader.setImageResource(R.drawable.default_header_placeholder)
         }
 
-//        binding.textViewCompanyIndustry.text = if (!company.industry.isNullOrEmpty()) "Industria: ${company.industry}" else "Industria no especificada"
-//        binding.textViewCompanyDescription.text = company.description ?: "Descripción no disponible."
-//
-//        binding.textViewCompanyWebsite.text = company.website ?: "Sitio web no disponible"
-//        binding.textViewCompanyEmail.text = company.email ?: "Email no disponible"
-//        binding.textViewCompanyPhone.text = company.phone ?: "Teléfono no disponible"
-//
+        binding.textViewCompanyIndustry.text = if (!company.industry.isNullOrEmpty()) "Industria: ${company.industry}" else "Industria no especificada"
+        binding.textViewCompanyDescription.text = company.description ?: "Descripción no disponible."
+
+        binding.textViewCompanyWebsite.text = company.website ?: "Sitio web no disponible"
+        binding.textViewCompanyEmail.text = company.email ?: "Email no disponible"
+        binding.textViewCompanyPhone.text = company.phone ?: "Teléfono no disponible"
+
 //        val address = company.address
 //        if (address != null) {
 //            val fullAddress = listOfNotNull(address.street, address.city, address.state, address.postalCode, address.country)

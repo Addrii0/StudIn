@@ -146,6 +146,12 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
         Log.d(TAG, "Contenedor de ofertas oculto.")
     }
 
+    override fun onOfferSelected(offer: Offer) {
+        val offerDetailIntent = Intent(this, UserOfferInfoActivity::class.java)
+        offerDetailIntent.putExtra("SELECTED_OFFER_ID", offer.id)
+        startActivity(offerDetailIntent)
+
+    }
     private fun logoutUser() {
         auth.signOut()
         val intent = Intent(this, LoginActivity::class.java)

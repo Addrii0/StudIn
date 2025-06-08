@@ -193,8 +193,8 @@ class RegisterActivity : AppCompatActivity() {
         uid: String,
         nombre: String,
         apellido: String,
-        email: String, // Añadido email
-        telefono: String, // Añadido telefono
+        email: String,
+        telefono: String,
         imageUri: Uri
     ) {
         Log.d(TAG, "uploadProfileImage: Iniciando subida para UID: $uid")
@@ -238,8 +238,8 @@ class RegisterActivity : AppCompatActivity() {
         uid: String,
         nombre: String,
         apellido: String,
-        email: String,      // Añadido email
-        telefono: String,   // Añadido telefono
+        email: String,
+        telefono: String,
         profileImageUrl: String?
     ) {
         Log.d(TAG, "saveUserDetailsToDatabase: Preparando para guardar datos para UID: $uid")

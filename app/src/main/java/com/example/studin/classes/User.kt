@@ -1,9 +1,9 @@
 package com.example.studin.classes
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize // Asegúrate de tener el plugin kotlin-parcelize
+import kotlinx.parcelize.Parcelize
 
-// Clase de datos para guardar la información del perfil
+
 @Parcelize
 data class User(
     val name: String? = null,

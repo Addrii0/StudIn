@@ -23,8 +23,7 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var userReference: DatabaseReference
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
-    private var userIdToLoad: String? = null // Carga el perfil de un usuario específico o el actual
-
+    private var userIdToLoad: String? = null
     private val TAG = "UserProfileActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,8 +83,8 @@ class UserProfileActivity : AppCompatActivity() {
                         if (!user.profileImageUrl.isNullOrEmpty()) {
                             Glide.with(this@UserProfileActivity)
                                 .load(user.profileImageUrl)
-                                .placeholder(R.drawable.ic_profile_person) // El placeholder
-                                .error(R.drawable.ic_profile_person) // Imagen de error
+                                .placeholder(R.drawable.ic_profile_person)
+                                .error(R.drawable.ic_profile_person)
                                 .circleCrop() // Para hacerla redonda
                                 .into(binding.imageViewUserProfile)
                         } else {

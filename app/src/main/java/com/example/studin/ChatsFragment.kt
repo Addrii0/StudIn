@@ -22,14 +22,10 @@ class ChatsFragment : Fragment() {
     // Declarar una variable para el binding. Debe ser nullable y gestionada
     // cuidadosamente durante el ciclo de vida del fragment.
     private var _binding: FragmentChatsBinding? = null
-    // Esta propiedad es solo válida entre onCreateView y onDestroyView.
     private val binding get() = _binding!! // !! es seguro aquí debido al ciclo de vida
 
     private lateinit var chatAdapter: ChatAdapter
-    // Ya no necesitas las propiedades individuales para RecyclerView, ProgressBar, TextViewNoChats
-    // private lateinit var recyclerView: RecyclerView
-    // private lateinit var progressBar: ProgressBar
-    // private lateinit var textViewNoChats: TextView
+
 
     private lateinit var auth: FirebaseAuth
     private var currentUser: FirebaseUser? = null
@@ -48,10 +44,9 @@ class ChatsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View { // Cambiado a View (no nullable) porque siempre devolveremos binding.root
-        // Inflar el layout usando View Binding
+    ): View {
         _binding = FragmentChatsBinding.inflate(inflater, container, false)
-        return binding.root // Devuelve la vista raíz del binding
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,8 +86,6 @@ class ChatsFragment : Fragment() {
         binding.progressBarChats.visibility = View.VISIBLE
         binding.textViewNoChats.visibility = View.GONE
         chatList.clear()
-        // No es estrictamente necesario notificar al adapter aquí si lo vas a hacer en updateUIBasedOnChatList
-        // chatAdapter.notifyDataSetChanged() // Puedes quitarla o dejarla
 
         val currentUid = currentUser?.uid ?: return
 
@@ -153,20 +146,18 @@ class ChatsFragment : Fragment() {
                         return@forEach // Sale del bucle forEach
                     }
                 }
-                // ChatsFragment.kt
-// ... (código anterior en fetchChatRoomDetails) ...
 
                 if (otherUserId == null) {
                     Log.e(TAG, "No se pudo determinar el otherUserId para chatRoomId: $chatRoomId")
                     removeChatFromList(chatRoomId)
-                    updateUIBasedOnChatList() // Llamada correcta a la función
+                    updateUIBasedOnChatList()
                     return
                 }
 
-                fetchUserDetails(otherUserId!!) { otherUserName, otherUserAvatarUrl -> // !! es seguro aquí por la verificación anterior
+                fetchUserDetails(otherUserId) { otherUserName, otherUserAvatarUrl ->
                     val chat = Chat(
                         chatRoomId = chatRoomId,
-                        otherUserId = otherUserId!!, // ya verificado
+                        otherUserId = otherUserId,
                         otherUserName = otherUserName,
                         otherUserAvatarUrl = otherUserAvatarUrl,
                         lastMessage = lastMessageText,

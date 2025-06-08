@@ -15,7 +15,8 @@ import com.google.firebase.database.*
 
 class MainChatsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityChatBinding // Declara la variable de binding
+    private lateinit var binding: ActivityChatBinding
+    private val TAG = "MainChatsActivity"
 
     private val selectCompanyLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -39,23 +40,10 @@ class MainChatsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Infla el layout usando la clase de binding y establece el contenido de la vista
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Accede a las vistas a través del objeto binding
         setSupportActionBar(binding.toolbar)
-
-        val adapter = MainPagerAdapter(this)
-        binding.viewPager.adapter = adapter // Usa binding.viewPager
-
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position -> // Usa binding.tabLayout y binding.viewPager
-            when (position) {
-                0 -> tab.text = "Chats"
-                1 -> tab.text = "Status"
-                2 -> tab.text = "Calls"
-            }
-        }.attach()
 
         binding.fab.setOnClickListener {
             val intent = Intent(this, SelectCompanyActivity::class.java)
@@ -76,8 +64,6 @@ class MainChatsActivity : AppCompatActivity() {
             return
         }
 
-        // val progressDialog = ProgressDialog.show(this, "", "Iniciando chat...", true)
-
         val chatRoomId = if (currentUserId < otherUserId) {
             "${currentUserId}_${otherUserId}"
         } else {
@@ -88,7 +74,6 @@ class MainChatsActivity : AppCompatActivity() {
 
         chatRoomRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // progressDialog.dismiss()
                 if (snapshot.exists()) {
                     Log.d("MainChatsActivity", "Chat room $chatRoomId ya existe. Navegando...")
                     updateUserChatEntries(currentUserId, otherUserId, otherUserName, chatRoomId, snapshot.child("lastMessage/timestamp").getValue(Long::class.java) ?: System.currentTimeMillis(),otherUserAvatarUrl)
@@ -100,74 +85,90 @@ class MainChatsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // progressDialog.dismiss()
                 Log.e("MainChatsActivity", "Error al comprobar chat_room: ${error.message}")
                 Toast.makeText(this@MainChatsActivity, "Error al iniciar chat: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun createNewChatRoom(currentUserId: String, otherUserId: String, otherUserName: String, chatRoomId: String , otherUserAvatarUrl: String? ) {
-        val participants = mapOf(
-            currentUserId to true,
-            otherUserId to true
-        )
-        val createdAt = System.currentTimeMillis()
-        var currentUserNameFromDB = FirebaseAuth.getInstance().currentUser?.displayName ?: "Usuario"
-        var currentUserAvatarFromDB: String? = null
+    private fun createNewChatRoom(
+        currentUserId: String,
+        otherUserId: String,
+        otherUserName: String,
+        chatRoomId: String,
+        otherUserAvatarUrl: String?
+    ) {
+        val currentUserRef = FirebaseDatabase.getInstance().getReference("users").child(currentUserId)
 
-        val newChatRoomData = mapOf(
-            "participants" to participants,
-            "createdAt" to createdAt
-        )
+        currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(userSnapshot: DataSnapshot) {
+                val currentUserNameFromDB = userSnapshot.child("name").getValue(String::class.java) ?: // Ojo aquí, el nombre de tu user
+                FirebaseAuth.getInstance().currentUser?.displayName ?: "Usuario"
+                val currentUserAvatarFromDB = userSnapshot.child("profileImageUrl").getValue(String::class.java) // Avatar del usuario actual
 
-        val currentUserChatEntry = mapOf(
-            "otherUserId" to otherUserId,
-            "otherUserName" to otherUserName,
-            "otherUserAvatarUrl" to otherUserAvatarUrl,
-            "lastMessageTimestamp" to createdAt
-        )
+                Log.d(TAG, "Datos del usuario actual para chat: Nombre='$currentUserNameFromDB', AvatarURL='$currentUserAvatarFromDB'")
 
-        val otherUserChatEntry = mapOf(
-            "otherUserId" to currentUserId,
-            "otherUserName" to currentUserNameFromDB,
-            "otherUserAvatarUrl" to currentUserAvatarFromDB,
-            "lastMessageTimestamp" to createdAt
-        )
+                val participants = mapOf(
+                    currentUserId to true,
+                    otherUserId to true
+                )
+                val createdAt = System.currentTimeMillis()
 
-        val rootRef = FirebaseDatabase.getInstance().reference
-        val updates = hashMapOf<String, Any?>(
-            "/chat_rooms/$chatRoomId" to newChatRoomData,
-            "/users/$currentUserId/userChats/$chatRoomId" to currentUserChatEntry,
-            "/users/$otherUserId/userChats/$chatRoomId" to otherUserChatEntry
-        )
+                val newChatRoomData = mapOf(
+                    "participants" to participants,
+                    "createdAt" to createdAt
 
-        // val progressDialog = ProgressDialog.show(this, "", "Creando chat...", true)
-        rootRef.updateChildren(updates)
-            .addOnSuccessListener {
-                // progressDialog.dismiss()
-                Log.d("MainChatsActivity", "Chat room $chatRoomId y userChats creados.")
-                navigateToChatMessageActivity(chatRoomId, otherUserId, otherUserName , otherUserAvatarUrl )
+                )
+
+                val currentUserChatEntry = mapOf(
+                    "otherUserId" to otherUserId,
+                    "otherUserName" to otherUserName,
+                    "otherUserAvatarUrl" to otherUserAvatarUrl,
+                    "lastMessageTimestamp" to createdAt
+                )
+
+                val otherUserChatEntry = mapOf(
+                    "otherUserId" to currentUserId,
+                    "otherUserName" to currentUserNameFromDB,
+                    "otherUserAvatarUrl" to currentUserAvatarFromDB,
+                    "lastMessageTimestamp" to createdAt
+                )
+
+                val rootRef = FirebaseDatabase.getInstance().reference
+                val updates = hashMapOf<String, Any?>(
+                    "/chat_rooms/$chatRoomId" to newChatRoomData,
+                    "/users/$currentUserId/userChats/$chatRoomId" to currentUserChatEntry,
+                    "/users/$otherUserId/userChats/$chatRoomId" to otherUserChatEntry
+                )
+
+                rootRef.updateChildren(updates)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Chat room $chatRoomId y userChats creados.")
+                        navigateToChatMessageActivity(chatRoomId, otherUserId, otherUserName, otherUserAvatarUrl)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e(TAG, "Error al crear chat room y userChats: ${e.message}")
+                        Toast.makeText(this@MainChatsActivity, "Error al crear chat: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
             }
-            .addOnFailureListener { e ->
-                // progressDialog.dismiss()
-                Log.e("MainChatsActivity", "Error al crear chat room y userChats: ${e.message}")
-                Toast.makeText(this, "Error al crear chat: ${e.message}", Toast.LENGTH_LONG).show()
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Error al obtener datos del usuario actual ($currentUserId) para crear chat: ${error.message}")
+                Toast.makeText(this@MainChatsActivity, "Error al obtener tus datos para el chat.", Toast.LENGTH_SHORT).show()
             }
+        })
     }
 
-    // Función para actualizar las entradas de userChats si el chat ya existe (opcional pero bueno para mantener consistencia)
+    // Función para actualizar las entradas de userChats si el chat ya existe
     private fun updateUserChatEntries(currentUserId: String, otherUserId: String, otherUserName: String, chatRoomId: String, lastTimestamp: Long , otherUserAvatarUrl: String? ) {
-        // Obtener nombre y avatar del usuario actual (si los guardas en /users)
-        // Esto es un ejemplo, necesitarás tu propia lógica para obtener estos datos si los quieres
-        var currentUserNameFromDB = FirebaseAuth.getInstance().currentUser?.displayName ?: "Usuario"
+         var currentUserNameFromDB = FirebaseAuth.getInstance().currentUser?.displayName ?: "Usuario"
         var currentUserAvatarFromDB: String? = null // Lógica para obtener tu avatar
 
         val currentUserChatData = mapOf(
             "otherUserId" to otherUserId,
-            "otherUserName" to otherUserName, // Nombre de la empresa
+            "otherUserName" to otherUserName,
             "otherUserAvatarUrl" to otherUserAvatarUrl,
-            "lastMessageTimestamp" to lastTimestamp // Usa el timestamp existente o el nuevo si es más reciente
+            "lastMessageTimestamp" to lastTimestamp
         )
 
         val otherUserChatData = mapOf(
@@ -182,7 +183,6 @@ class MainChatsActivity : AppCompatActivity() {
             "/users/$currentUserId/userChats/$chatRoomId" to currentUserChatData,
             "/users/$otherUserId/userChats/$chatRoomId" to otherUserChatData
         )
-        // Actualiza sin esperar un callback necesariamente, ya que es más una tarea de "mantenimiento"
         rootRef.updateChildren(updates)
             .addOnSuccessListener { Log.d("MainChatsActivity", "UserChats actualizados para $chatRoomId") }
             .addOnFailureListener { e -> Log.w("MainChatsActivity", "Fallo al actualizar userChats para $chatRoomId: ${e.message}")}
@@ -192,7 +192,7 @@ class MainChatsActivity : AppCompatActivity() {
             putExtra("CHAT_ROOM_ID", chatRoomId)
             putExtra("OTHER_USER_ID", otherUserId)
             putExtra("OTHER_USER_NAME", otherUserName)
-            putExtra("OTHER_USER_AVATAR_URL", otherUserAvatarUrl) // Si lo tienes y lo usas
+            putExtra("OTHER_USER_AVATAR_URL", otherUserAvatarUrl)
         }
         startActivity(intent)
     }
@@ -206,12 +206,12 @@ class MainChatsActivity : AppCompatActivity() {
                 "MainChatsActivity",
                 "Intención recibida para iniciar chat con: $targetUserName ($targetUserId)"
             )
-            // Asegúrate de que las claves aquí coincidan con las que usas para poner los extras
             intent.removeExtra("ACTION_START_CHAT_WITH_USER_ID")
             intent.removeExtra("ACTION_START_CHAT_WITH_USER_NAME")
             intent.removeExtra("ACTION_START_CHAT_WITH_USER_AVATAR_URL")
 
             getOrCreateChatRoomAndNavigate(targetUserId, targetUserName, targetUserAvatarUrl)
         }
+
     }
 }

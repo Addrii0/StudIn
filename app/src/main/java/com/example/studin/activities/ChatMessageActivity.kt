@@ -17,9 +17,9 @@ import java.util.*
 class ChatMessageActivity : AppCompatActivity() {
 
 
-    private lateinit var binding: ActivityChatMessageBinding // ViewBinding
-    private lateinit var messageAdapter: MessageAdapter // Lo crearemos después
-    private val messageList = ArrayList<Message>() // Lista para los mensajes
+    private lateinit var binding: ActivityChatMessageBinding
+    private lateinit var messageAdapter: MessageAdapter
+    private val messageList = ArrayList<Message>()
     private val TAG = "ChatMessageActivity"
 
     private lateinit var auth: FirebaseAuth
@@ -74,8 +74,8 @@ class ChatMessageActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbarChatMessage)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Mostrar botón de atrás
-        supportActionBar?.title = otherUserName ?: "Chat" // Nombre del otro usuario
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = otherUserName ?: "Chat"
     }
 
     private fun setupRecyclerView() {

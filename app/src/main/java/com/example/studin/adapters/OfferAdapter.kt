@@ -10,17 +10,19 @@ import com.example.studin.R
 
 class OfferAdapter(
     private val offerList: List<Offer>,
-    private val onItemClicked: (Offer) -> Unit // Nuevo parámetro: lambda para el clic
+    private val onItemClicked: (Offer) -> Unit
 ) : RecyclerView.Adapter<OfferAdapter.OfferViewHolder>() {
 
-    class OfferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    inner class OfferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.textViewOfferTitle)
         val descriptionTextView: TextView = itemView.findViewById(R.id.textViewOfferDescription)
-        // Añade aquí referencias a otros elementos si los agregaste al layout list_item_offer.xml
 
-        // Función para vincular el listener de clic
-        fun bind(offer: Offer, onItemClicked: (Offer) -> Unit) {
-            itemView.setOnClickListener { onItemClicked(offer) }
+
+        fun bindData(offer: Offer) {
+            titleTextView.text = offer.title
+            descriptionTextView.text = offer.description
+            // Actualiza aquí otros elementos con los datos de offer
         }
     }
 
@@ -32,12 +34,11 @@ class OfferAdapter(
 
     override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
         val currentOffer = offerList[position]
-        holder.titleTextView.text = currentOffer.title
-        holder.descriptionTextView.text = currentOffer.description
-        // Actualiza aquí otros elementos con los datos de currentOffer
+        holder.bindData(currentOffer) // Llama a la función para establecer los datos
 
-        // Llama a bind para configurar el listener de clic para este ítem
-        holder.bind(currentOffer, onItemClicked)
+        holder.itemView.setOnClickListener {
+            onItemClicked(currentOffer) // Llama directamente a la lambda del constructor del Adapter
+        }
     }
 
     override fun getItemCount() = offerList.size

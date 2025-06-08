@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class CompanyHomeActivity : AppCompatActivity() {
@@ -19,7 +20,7 @@ class CompanyHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCompanyHomeBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var companyReference: DatabaseReference
-
+    private lateinit var database: FirebaseDatabase
     private val TAG = "CompanyHomeActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +29,11 @@ class CompanyHomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
         val companyUid = auth.currentUser?.uid
 
         if(companyUid != null){
+            companyReference = database.getReference("companies").child(companyUid)
             loadUserProfileImage()
         }
 

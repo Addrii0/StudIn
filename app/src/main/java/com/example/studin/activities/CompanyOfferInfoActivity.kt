@@ -19,10 +19,9 @@ import java.util.Locale
 class CompanyOfferInfoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCompanyOfferInfoBinding
     private lateinit var database: FirebaseDatabase
-    private lateinit var offersReference: DatabaseReference // Para la oferta
-    private lateinit var offerApplicationsRef: DatabaseReference // Para los aplicantes de ESTA oferta
-    private lateinit var usersReference: DatabaseReference // Para obtener perfiles de usuario
-
+    private lateinit var offersReference: DatabaseReference
+    private lateinit var offerApplicationsRef: DatabaseReference
+    private lateinit var usersReference: DatabaseReference
     private lateinit var applicantsAdapter: ApplicantsAdapter
     private val applicantProfilesList = mutableListOf<User>()
     // Para mapear userId a detalles de aplicación si es necesario (ej. estado)
@@ -52,10 +51,6 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
         offerApplicationsRef = database.getReference("offerApplications").child(offerId)
 
         Log.d(TAG, "Cargando datos para la oferta ID: $offerId")
-        // Asume que tienes un ProgressBar para los detalles de la oferta
-        // binding.progressBarOfferDetails.visibility = View.VISIBLE
-        // Asume que tienes un ProgressBar para la lista de aplicantes
-        // binding.progressBarApplicants.visibility = View.VISIBLE
 
 
         loadOfferDetails(offerId)
@@ -110,8 +105,11 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
         binding.textViewOfferTitleInfo.text = offer.title ?: "N/A"
         binding.textViewOfferDescriptionInfo.text = offer.description ?: "No hay descripción disponible."
         binding.textViewOfferLocationInfo.text = offer.location ?: "Ubicación no especificada."
-        binding.textViewOfferSkillsInfo.text = offer.skills ?: "No hay habilidades requeridas." // Asumiendo que Offer tiene 'skills'
-        // binding.textViewOfferRequirementsInfo.text = offer.requirements ?: "No especificados" // Si tienes este campo
+        if (offer.skills.isNotEmpty()) {
+            binding.textViewOfferSkillsInfo.text = offer.skills.joinToString(separator = ", ")
+        } else {
+            binding.textViewOfferSkillsInfo.text = "No hay habilidades requeridas."
+        }        // binding.textViewOfferRequirementsInfo.text = offer.requirements ?: "No especificados" // Si tienes este campo
 
         offer.fechaPublicacion?.let { timestamp -> // Asegúrate que tu clase Offer tenga 'fechaPublicacion'
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
@@ -200,17 +198,13 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
                         tempList.add(userProfile)
                     } else {
                         Log.w(TAG, "No se encontró perfil para el UID: $userId")
-                        // Podrías añadir un usuario placeholder o simplemente omitirlo
                     }
 
                     lookupsRemaining--
                     if (lookupsRemaining == 0) {
-                        // Todas las búsquedas de perfiles han terminado
-                        // binding.progressBarApplicants.visibility = View.GONE
                         applicantProfilesList.clear()
                         applicantProfilesList.addAll(tempList)
-                        applicantsAdapter.notifyDataSetChanged() // O usar applicantsAdapter.updateData(tempList)
-
+                        applicantsAdapter.notifyDataSetChanged()
                         if (applicantProfilesList.isEmpty() && uids.isNotEmpty()) {
                             Log.d(TAG, "No se cargaron perfiles aunque se encontraron UIDs.")
                             binding.textViewNoApplicantsMessage.visibility = View.VISIBLE
@@ -227,9 +221,8 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
                     Log.e(TAG, "Error al cargar perfil para UID $userId: ${error.message}")
                     lookupsRemaining--
                     if (lookupsRemaining == 0) {
-                        // binding.progressBarApplicants.visibility = View.GONE
                         applicantProfilesList.clear()
-                        applicantProfilesList.addAll(tempList) // Añadir los que sí se cargaron
+                        applicantProfilesList.addAll(tempList)
                         applicantsAdapter.notifyDataSetChanged()
 
                         if (applicantProfilesList.isEmpty()) {
@@ -238,9 +231,8 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
                             binding.textViewNoApplicantsMessage.visibility = View.GONE
                         }
                     }
-                    // Considera mostrar un mensaje de error parcial
                 }
             })
         }
     }
-} // Fin de la clase CompanyOfferInfoActivity
+}

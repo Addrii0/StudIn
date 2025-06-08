@@ -9,7 +9,5 @@ data class Offer(
     val fechaPublicacion: Long? = null, // Podrías usar un timestamp
     val companyId: String? = null,
     val location: String? = null,
-    val skills: String? = null,
-    // Otros campos de la oferta
-    // Agrega otros campos que necesites, como URL de imagen, etc.
+    val skills: List<String> = emptyList(),
 ) : Parcelable
