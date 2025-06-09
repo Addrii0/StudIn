@@ -21,11 +21,11 @@ class StartActivity : AppCompatActivity() {
             insets
         }
 
-        // Handler para retrasar el inicio de la LoginActivity
+
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish() // Cierra la MainActivity para que el usuario no pueda volver atrás fácilmente
-        }, 5000) // 5000 milisegundos = 5 segundos
+        }, 5000) //  5 segundos
     }
 }

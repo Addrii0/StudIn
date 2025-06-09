@@ -14,9 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.studin.R
-import com.example.studin.classes.Company // Asumo que Company tiene todos estos campos
-// Si tienes una clase Address separada dentro de Company, necesitarás manejarla también.
-// import com.example.studin.classes.Address // Si lo usas
+import com.example.studin.classes.Company
 import com.example.studin.databinding.ActivityCompanyEditProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -40,7 +38,7 @@ class EditCompanyProfileActivity : AppCompatActivity() {
                 imageUri = result.data!!.data
                 Glide.with(this)
                     .load(imageUri)
-                    .circleCrop() // Aplicar CircleCrop aquí también si lo deseas en la preview
+                    .circleCrop()
                     .placeholder(R.drawable.default_header_placeholder)
                     .into(binding.imageViewEditCompanyProfilePicture)
             }
@@ -101,7 +99,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this@EditCompanyProfileActivity, "No se encontraron datos del perfil.", Toast.LENGTH_SHORT).show()
                     Log.w(TAG, "No se encontró la empresa con ID: $companyId")
-                    // Podrías inicializar algunos campos si es un perfil nuevo, o manejarlo como error.
                 }
             }
 
@@ -121,9 +118,7 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         binding.editTextCompanyEmail.setText(company.email ?: "")
         binding.editTextCompanyPhone.setText(company.phone ?: "")
 
-        // Asumiendo que `address` es un objeto dentro de `Company`
-        // Si no es un objeto, y son campos directos en Company, ajusta esto.
-        // Ejemplo si `address` es un objeto Company.Address:
+
 //        company.address?.let { addr ->
 //            binding.editTextCompanyAddressStreet.setText(addr.street ?: "")
 //            binding.editTextCompanyAddressCity.setText(addr.city ?: "")
@@ -180,7 +175,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
 //        val latitudeStr = binding.editTextCompanyLatitude.text.toString().trim()
 //        val longitudeStr = binding.editTextCompanyLongitude.text.toString().trim()
 
-        // --- VALIDACIONES BÁSICAS (PUEDES EXPANDIRLAS) ---
         var isValid = true
         if (companyName.isEmpty()) {
             binding.textInputLayoutCompanyName.error = "El nombre de la empresa es obligatorio."
@@ -197,9 +191,7 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         }
 
         if (website.isNotEmpty() && !Patterns.WEB_URL.matcher(website).matches()) {
-            // Para una validación más robusta de URL, considera usar expresiones regulares más completas
-            // o simplemente verificar que empiece con http/https.
-            // Patterns.WEB_URL es una validación básica.
+
             binding.textInputLayoutCompanyWebsite.error = "Formato de sitio web inválido."
             isValid = false
         } else {
@@ -232,8 +224,8 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         binding.progressBarEditCompanyProfile.visibility = View.VISIBLE
         binding.buttonSaveCompanyProfileChanges.isEnabled = false
 
-        // Crear el objeto Address si tu clase Company lo usa así
-        // Si no, pasarás street, city, etc., directamente a updateCompanyData.
+
+
 //        val addressData = Company.Address( // Asumiendo que Company.Address es una data class
 //            street = street.ifEmpty { null },
 //            city = city.ifEmpty { null },

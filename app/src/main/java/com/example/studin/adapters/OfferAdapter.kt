@@ -1,12 +1,10 @@
-package com.example.studin.adapters
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.studin.classes.Offer
 import com.example.studin.R
+import com.example.studin.classes.Offer
 
 class OfferAdapter(
     private val offerList: List<Offer>,
@@ -14,32 +12,37 @@ class OfferAdapter(
 ) : RecyclerView.Adapter<OfferAdapter.OfferViewHolder>() {
 
 
-    inner class OfferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    // ViewHolder que contiene las vistas de list_item_offer.xml
+    class OfferViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.textViewOfferTitle)
+        val companyTextView: TextView = itemView.findViewById(R.id.textViewCompanyName)
+        val locationTextView: TextView = itemView.findViewById(R.id.textViewOfferLocation)
         val descriptionTextView: TextView = itemView.findViewById(R.id.textViewOfferDescription)
 
-
-        fun bindData(offer: Offer) {
+        fun bind(offer: Offer, onItemClicked: (Offer) -> Unit) {
             titleTextView.text = offer.title
+            companyTextView.text = offer.companyName
+            locationTextView.text = offer.location
             descriptionTextView.text = offer.description
-            // Actualiza aquí otros elementos con los datos de offer
+
+            itemView.setOnClickListener {
+                onItemClicked(offer)
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item_offer, parent, false)
-        return OfferViewHolder(itemView)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_offer, parent, false)
+        return OfferViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
-        val currentOffer = offerList[position]
-        holder.bindData(currentOffer) // Llama a la función para establecer los datos
-
-        holder.itemView.setOnClickListener {
-            onItemClicked(currentOffer) // Llama directamente a la lambda del constructor del Adapter
-        }
+        val offer = offerList[position]
+        holder.bind(offer, onItemClicked)
     }
 
-    override fun getItemCount() = offerList.size
+    override fun getItemCount(): Int {
+        return offerList.size
+    }
 }

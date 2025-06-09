@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studin.adapters.ApplicantsAdapter
 import com.example.studin.classes.Offer
@@ -24,8 +25,7 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
     private lateinit var usersReference: DatabaseReference
     private lateinit var applicantsAdapter: ApplicantsAdapter
     private val applicantProfilesList = mutableListOf<User>()
-    // Para mapear userId a detalles de aplicación si es necesario (ej. estado)
-    // private val applicationDetailsMap = mutableMapOf<String, ApplicationDetails>()
+
 
     private val TAG = "CompanyOfferInfo"
 
@@ -54,29 +54,27 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
 
 
         loadOfferDetails(offerId)
-        loadOfferApplicantsUids() // Cambiado para primero obtener UIDs
+        loadOfferApplicantsUids()
     }
 
     private fun setupRecyclerView() {
         applicantsAdapter = ApplicantsAdapter(applicantProfilesList) { selectedUser ->
             Log.d(TAG, "Usuario seleccionado: ${selectedUser.name}")
-            val intent = Intent(this, UserProfileActivity::class.java) // Crea UserProfileActivity
+            val intent = Intent(this, UserProfileActivity::class.java)
             intent.putExtra("SELECTED_USER_PROFILE", selectedUser)
             startActivity(intent)
-            Toast.makeText(this, "Perfil de: ${selectedUser.name}", Toast.LENGTH_SHORT).show() // Temporal
+            Toast.makeText(this, "Perfil de: ${selectedUser.name}", Toast.LENGTH_SHORT).show()
         }
         binding.offersRecyclerViewApplicants.apply { // Usa el ID de tu RecyclerView en el XML
             layoutManager = LinearLayoutManager(this@CompanyOfferInfoActivity)
             adapter = applicantsAdapter
-            // Opcional: añadir un divisor
-            // addItemDecoration(DividerItemDecoration(this@CompanyOfferInfoActivity, LinearLayoutManager.VERTICAL))
+             addItemDecoration(DividerItemDecoration(this@CompanyOfferInfoActivity, LinearLayoutManager.VERTICAL))
         }
     }
 
     private fun loadOfferDetails(offerId: String) {
         offersReference.child(offerId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // binding.progressBarOfferDetails.visibility = View.GONE
 
                 if (snapshot.exists()) {
                     val offer = snapshot.getValue(Offer::class.java)
@@ -111,7 +109,7 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
             binding.textViewOfferSkillsInfo.text = "No hay habilidades requeridas."
         }        // binding.textViewOfferRequirementsInfo.text = offer.requirements ?: "No especificados" // Si tienes este campo
 
-        offer.fechaPublicacion?.let { timestamp -> // Asegúrate que tu clase Offer tenga 'fechaPublicacion'
+        offer.fechaPublicacion?.let { timestamp ->
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             binding.textViewOfferDateInfo.text = "Publicado el: " + sdf.format(Date(timestamp))
         } ?: run {
@@ -120,17 +118,14 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
     }
 
     private fun loadOfferApplicantsUids() {
-        // binding.progressBarApplicants.visibility = View.VISIBLE
         applicantProfilesList.clear() // Limpiar lista antes de cargar nuevos datos
-        // applicationDetailsMap.clear() // Limpiar si lo usas
 
         offerApplicationsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val applicantUids = mutableListOf<String>()
                 if (!snapshot.exists()) {
                     Log.d(TAG, "No hay aplicantes para esta oferta.")
-                    // binding.progressBarApplicants.visibility = View.GONE
-                    binding.textViewNoApplicantsMessage.visibility = View.VISIBLE // Añade un TextView para este mensaje
+                    binding.textViewNoApplicantsMessage.visibility = View.VISIBLE
                     applicantsAdapter.updateData(emptyList()) // Actualizar adaptador con lista vacía
                     return
                 }
@@ -139,7 +134,7 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
                 for (applicantSnapshot in snapshot.children) {
                     applicantSnapshot.key?.let { userId ->
                         applicantUids.add(userId)
-                        // Si guardas detalles de la aplicación como 'status' o 'appliedAt':
+                        // guardar detalles de la aplicación como 'status' o 'appliedAt':
                         // val details = applicantSnapshot.getValue(ApplicationDetails::class.java)
                         // details?.let { applicationDetailsMap[userId] = it }
                     }
@@ -147,32 +142,25 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
                 if (applicantUids.isNotEmpty()) {
                     loadApplicantProfiles(applicantUids)
                 } else {
-                    // binding.progressBarApplicants.visibility = View.GONE
                     applicantsAdapter.updateData(emptyList())
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // binding.progressBarApplicants.visibility = View.GONE
                 Log.e(TAG, "Error al cargar UIDs de aplicantes: ${error.message}")
                 Toast.makeText(this@CompanyOfferInfoActivity, "Error al cargar solicitantes.", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    // ... (código anterior de CompanyOfferInfoActivity.kt) ...
-
     private fun loadApplicantProfiles(uids: List<String>) {
-        // Esta función se llama después de obtener todos los UIDs de los aplicantes.
-        // Limpiamos la lista actual del adaptador antes de llenarla con nuevos perfiles.
+
         val tempList = mutableListOf<User>() // Lista temporal para acumular perfiles
         var lookupsRemaining = uids.size
 
         // Si no hay UIDs, no hay nada que cargar.
         if (lookupsRemaining == 0) {
-            // binding.progressBarApplicants.visibility = View.GONE
-            applicantsAdapter.updateData(tempList) // Actualiza con la lista vacía
-            // Considera mostrar un mensaje si la lista está vacía, aunque ya se maneja en loadOfferApplicantsUids
+            applicantsAdapter.updateData(tempList)
             return
         }
 
@@ -181,11 +169,6 @@ class CompanyOfferInfoActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userProfile = snapshot.getValue(User::class.java)
                     if (userProfile != null) {
-                        // Importante: Firebase no almacena el UID dentro del objeto User por defecto.
-                        // Si necesitas el UID dentro del objeto User (por ejemplo, para pasarlo al hacer clic),
-                        // y no lo estás guardando explícitamente al crear el usuario, debes asignarlo aquí.
-                        // Sin embargo, tu clase User ya tiene un campo 'uid' (si la definición que me pasaste antes es la actual)
-                        // Si tu clase User no tiene `uid` y lo necesitas: userProfile.uid = userId (necesitarías `var uid` en User)
 
                         // Si guardaste el uid al crear el usuario y tu clase User tiene un campo uid:
                         // userProfile.uid = snapshot.key // Esto es redundante si userId es el key y ya tienes un campo uid en User que se llena al deserializar.

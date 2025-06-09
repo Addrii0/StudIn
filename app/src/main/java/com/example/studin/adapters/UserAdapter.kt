@@ -27,8 +27,7 @@ class UserAdapter(private val userList: List<User>) : RecyclerView.Adapter<UserA
         holder.userDescriptionTextView.text = currentUser.description
         holder.userSkillsTextView.text = currentUser.skills.joinToString(", ")
 
-        // Aquí cargarías la imagen en holder.userImageView si tienes una URL
-        // Ejemplo con una librería como Glide o Coil:
+        // Cargar la imagen en holder.userImageView si tienes una URL
         // Glide.with(holder.itemView.context).load(currentUser.profileImageUrl).into(holder.userImageView)
     }
 

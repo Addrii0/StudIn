@@ -21,7 +21,7 @@ class ApplicantsAdapter(
                 "Habilidades: No especificadas"
             }
 
-            // Si añades un ImageView en item_applicant.xml con id "imageViewApplicantProfile":
+            // Por si añado un ImageView en item_applicant.xml con id "imageViewApplicantProfile":
             // user.profileImageUrl?.let { url ->
             //    Glide.with(itemView.context)
             //        .load(url)
@@ -30,7 +30,6 @@ class ApplicantsAdapter(
             //        .circleCrop()
             //        .into(binding.imageViewApplicantProfile)
             // } ?: run {
-            //    // Opcional: poner una imagen por defecto si no hay profileImageUrl
             //    binding.imageViewApplicantProfile.setImageResource(R.drawable.ic_profile_placeholder)
             // }
 

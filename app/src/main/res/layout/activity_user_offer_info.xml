@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".activities.UserOfferInfoActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -10,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="32dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:contentPadding="16dp"
@@ -22,75 +24,129 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/textViewOfferTitleInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/titulo"
-                android:textSize="36sp"
-                android:textAlignment="viewStart"
+                tools:text="Título de la Oferta de Empleo"
+                android:textAppearance="?attr/textAppearanceHeadline5"
                 android:textStyle="bold"
-                />
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/descripcion"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/textViewOfferDescriptionInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/descripcion"
-                android:textSize="18sp"
-                android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
-            <TextView
-                android:id="@+id/textViewOfferLocationInfo"
+                tools:text="Descripción detallada de la oferta de trabajo. Este texto puede ser largo y ocupar varias líneas para mostrar cómo se vería."
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/localizacion"
-                android:textSize="18sp"
-                android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/localizacion"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/textViewOfferLocationInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    tools:text="Ciudad, País"
+                    android:textAppearance="?attr/textAppearanceBody1"/>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/informacion"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/textViewOfferTypeInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    tools:text="Remoto"
+                    android:textAppearance="?attr/textAppearanceBody1"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/habilidades"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/textViewOfferSkillsInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/estudios"
-                android:textSize="18sp"
-                android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                tools:text="Grado en Ingeniería Informática, Java, Spring Boot, Kotlin, Android SDK"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/requisitos"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/textViewOfferRequirementsInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/requisitos"
-                android:textSize="18sp"
-                android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
-            <TextView
-                android:id="@+id/textViewOfferDateInfo"
+                tools:text="Experiencia mínima de 2 años. Nivel de inglés B2."
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="fecha"
-                android:textSize="18sp"
-                android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                android:orientation="horizontal"
+                android:layout_marginBottom="0dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fecha_de_publicaci_n"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/textViewOfferDateInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    tools:text="09/06/2025"
+                    android:textAppearance="?attr/textAppearanceBody1"/>
+            </LinearLayout>
 
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
+
     <Button
         android:id="@+id/buttonApplyToOffer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Aplicar a Oferta"
+        android:text="@string/button_apply_to_offer"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="24dp"
@@ -100,22 +156,7 @@
         android:backgroundTint="?attr/colorPrimary"
         android:textColor="?attr/colorOnPrimary" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewSomeOtherList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/buttonApplyToOffer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <!--
-    Si esta pantalla también fuera a mostrar algo debajo del botón, como
-    un RecyclerView para "ofertas similares" o "estado de tu aplicación", iría aquí.
-    Si no, puedes omitir lo siguiente.
-    -->
-
+    <!-- Implementación de ofertas parecidas (Sin hacer) -->
     <!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSomeOtherList"

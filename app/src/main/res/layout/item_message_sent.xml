@@ -20,9 +20,8 @@
     tools:text="Este es un mensaje de ejemplo enviado por el usuario. Puede ser bastante largo y ocupar múltiples líneas."
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintWidth_default="wrap" /> <!-- Para que se ajuste al contenido hasta el maxWidth -->
+    app:layout_constraintWidth_default="wrap" />
 
-    <!-- Opcional: TextView para el timestamp -->
     <TextView
         android:id="@+id/textView_message_timestamp_sent"
         android:layout_width="wrap_content"

@@ -117,7 +117,7 @@ class CompanyRegisterActivity : AppCompatActivity() {
 
         Toast.makeText(baseContext, "Registrando empresa...", Toast.LENGTH_SHORT).show()
 
-        // 1. Crear usuario en Firebase Authentication con Email y Contraseña
+        //  Crear usuario en Firebase Authentication con Email y Contraseña
         auth.createUserWithEmailAndPassword(email, contrasena)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -126,13 +126,13 @@ class CompanyRegisterActivity : AppCompatActivity() {
                     val uid = firebaseUser?.uid
 
                     if (uid != null) {
-                        // 2. Si la cuenta de Auth se creó correctamente, guardar información adicional en Realtime Database
-                        val company = Company(nombreEmpresa, localizacion) // Asumo que Company solo toma estos dos por ahora
+                        // Si la cuenta de Auth se creó correctamente, guarda información adicional en Realtime Database
+                        val company = Company(nombreEmpresa, localizacion)
 
                         // Guardar en el nodo 'companies' usando el UID como clave
                         companiesReference.child(uid).setValue(company)
                             .addOnSuccessListener {
-                                // 3. Información de empresa guardada exitosamente en RTDB, navegar a la pantalla de empresa
+                                //  Información de empresa guardada exitosamente en bbdd
                                 Log.d(TAG, "Perfil de empresa guardado en RTDB bajo UID: $uid")
                                 Toast.makeText(baseContext, "¡Empresa registrada con éxito!", Toast.LENGTH_SHORT).show()
 
@@ -158,7 +158,6 @@ class CompanyRegisterActivity : AppCompatActivity() {
                                 Toast.makeText(baseContext, "Registro fallido. Error al guardar datos de empresa.", Toast.LENGTH_LONG).show()
                             }
                     } else {
-                        // Esto no debería ocurrir si task.isSuccessful es true, pero por seguridad
                         Log.w(TAG, "createUserWithEmailAndPassword:success but UID is null")
                         Toast.makeText(baseContext, "Error inesperado al crear usuario de empresa.", Toast.LENGTH_LONG).show()
                     }

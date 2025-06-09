@@ -1,4 +1,4 @@
-package com.example.studin.ui.fragments // O el paquete donde lo tengas
+package com.example.studin.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.studin.adapters.OfferAdapter
-import com.example.studin.classes.Offer // Importa tu clase Offer (¡Debe ser Parcelable!)
-import com.example.studin.databinding.FragmentOffersListBinding // Asegúrate que el nombre coincida con tu XML
+import OfferAdapter
+import com.example.studin.classes.Offer
+import com.example.studin.databinding.FragmentOffersListBinding
 
 class OffersOverlayFragment : Fragment() {
 
@@ -19,9 +19,9 @@ class OffersOverlayFragment : Fragment() {
         fun onOfferSelected(offer: Offer)
     }
 
-    // Declara la variable de binding. Será nullable.
+
     private var _binding: FragmentOffersListBinding? = null
-    // Esta propiedad no es nullable y solo se puede acceder entre onCreateView y onDestroyView.
+
     private val binding get() = _binding!!
 
     private var offerList: List<Offer> = listOf()
@@ -60,11 +60,9 @@ class OffersOverlayFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View { // El tipo de retorno ahora es View, no View? ya que binding.root no será null
-        // Infla el layout usando la clase de binding generada
+    ): View {
         _binding = FragmentOffersListBinding.inflate(inflater, container, false)
-        // Ya no necesitas: val view = inflater.inflate(R.layout.fragment_offers_list, container, false)
-        return binding.root // Retorna la vista raíz del binding
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,12 +72,10 @@ class OffersOverlayFragment : Fragment() {
 
     private fun setupRecyclerView() {
         Log.d(TAG, "Configurando RecyclerView con ${offerList.size} elementos.")
-        // Accede a las vistas a través del objeto binding
         binding.recyclerViewOffers.layoutManager = LinearLayoutManager(context)
         val offerAdapter = OfferAdapter(offerList) { clickedOffer ->
-            // Esta lambda se ejecuta cuando el OfferAdapter notifica un clic en un ítem.
             Log.d(TAG, "Oferta clickeada en overlay: ${clickedOffer.title}. Notificando al listener.")
-            listener?.onOfferSelected(clickedOffer) // <--- ¡AQUÍ ESTÁ LA PARTE CLAVE!
+            listener?.onOfferSelected(clickedOffer)
         }
         binding.recyclerViewOffers.adapter = offerAdapter
     }
@@ -90,7 +86,7 @@ class OffersOverlayFragment : Fragment() {
         Log.d(TAG, "Listener desvinculado.")
     }
 
-    // Es crucial limpiar la referencia al binding en onDestroyView para evitar fugas de memoria.
+    // limpia la referencia al binding en onDestroyView para evitar fugas de memoria.
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null // Libera la referencia al binding

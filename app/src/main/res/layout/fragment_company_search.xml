@@ -1,0 +1,49 @@
+<!-- fragment_company_search.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.CompanySearchFragment">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchViewCompaniesFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:queryHint="Buscar por nombre de empresa..."
+        app:iconifiedByDefault="false"
+        android:layout_margin="8dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerCompanyIndustry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"/>
+
+
+    <ProgressBar
+        android:id="@+id/progressBarCompaniesFragment"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textViewNoCompaniesFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="No se encontraron empresas."
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/companiesRecyclerViewFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:listitem="@layout/list_item_company" />
+</LinearLayout>

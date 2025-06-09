@@ -6,7 +6,7 @@
     android:padding="16dp"
     android:layout_marginBottom="8dp"
     android:background="@android:color/white"
-    android:elevation="2dp"> <!-- Añade un poco de elevación para el efecto flotante -->
+    android:elevation="2dp">
 
     <TextView
         android:id="@+id/textViewOfferTitle"
@@ -26,6 +26,6 @@
         android:textColor="@android:color/darker_gray"
         android:text="@string/esta_es_una_descripci_n_corta_de_la_oferta" />
 
-    <!-- Puedes añadir más elementos aquí, como una imagen, fecha, etc. -->
+
 
 </LinearLayout>

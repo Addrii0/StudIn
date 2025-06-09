@@ -8,17 +8,17 @@ import com.example.studin.databinding.ItemOfferBinding // Generado desde item_of
 
 class OffersAdapter(
     private var offerList: List<Offer>,
-    private val onItemClicked: (Offer) -> Unit // Lambda para manejar clics en ítems
+    private val onItemClicked: (Offer) -> Unit
 ) : RecyclerView.Adapter<OffersAdapter.OfferViewHolder>() {
 
     inner class OfferViewHolder(val binding: ItemOfferBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(offer: Offer) {
             binding.textViewOfferTitle.text = offer.title ?: "N/A"
-            binding.textViewCompanyName.text = offer.companyId ?: "N/A"
+            binding.textViewCompanyName.text = offer.companyName ?: "N/A"
             binding.textViewOfferLocation.text = offer.location ?: "N/A"
             binding.textViewOfferDescription.text = offer.description ?: "Sin descripción"
 
-            // Configurar el clic para el ítem completo
+
             itemView.setOnClickListener {
                 onItemClicked(offer)
             }

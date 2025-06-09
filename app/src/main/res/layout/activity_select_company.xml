@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="Seleccionar Empresa" />
-        <!-- Puedes añadir app:navigationIcon="@drawable/ic_arrow_back" si quieres un icono de atrás estándar -->
 
     </com.google.android.material.appbar.AppBarLayout>
 

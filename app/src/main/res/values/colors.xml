@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#4CCDDC</color>
+    <color name="blue_high">#90E0EB</color>
     <color name="transparente">#00000000</color>"
     <color name="color_message_sent">#007AFF</color>
     <color name="color_message_received">#E5E5EA</color>"

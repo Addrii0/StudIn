@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    tools:context=".activities.UserProfileActivity"> <!-- Ajusta el contexto a tu actividad -->
+    tools:context=".activities.UserProfileActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
-            <!-- Botón para Editar Perfil (si es el perfil del usuario logueado) -->
+
             <Button
                 android:id="@+id/buttonEditProfile"
                 style="?attr/materialButtonOutlinedStyle"
@@ -104,7 +104,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
             />
-            <!-- visibility:gone se cambia si el perfil es el del usuario -->
+
             <TextView
                 android:id="@+id/textViewLabelAbout"
                 android:layout_width="0dp"
@@ -171,7 +171,6 @@
                 />
 
 
-            <!-- Sección "Experiencia Laboral" (Ejemplo, podrías tener un RecyclerView aquí) -->
             <TextView
                 android:id="@+id/textViewLabelExperience"
                 android:layout_width="0dp"
@@ -187,8 +186,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Para una lista de experiencias, un RecyclerView sería ideal.
-                 Aquí un placeholder de TextView simple. -->
+
             <TextView
                 android:id="@+id/textViewUserExperience"
                 android:layout_width="0dp"
@@ -205,8 +203,6 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
 
-
-            <!-- Sección "Educación" -->
             <TextView
                 android:id="@+id/textViewLabelEducation"
                 android:layout_width="0dp"
@@ -249,7 +245,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:visibility="visible"/>
 
-            <!-- Se puede añadir más secciones como "Proyectos", "Idiomas", "Certificaciones", etc. -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

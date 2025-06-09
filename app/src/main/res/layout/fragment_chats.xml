@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_chat"
-        android:visibility="gone" /> <!-- Inicialmente oculto hasta que haya datos -->
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar_chats"
@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="visible" /> <!-- Visible por defecto, se oculta cuando se cargan los datos o hay error -->
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textView_no_chats"
@@ -39,6 +39,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone" /> <!-- Inicialmente oculto, se muestra si no hay chats o hay error -->
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -95,7 +95,7 @@ class ChatMessageActivity : AppCompatActivity() {
             return // No enviar mensajes vacíos
         }
 
-        val currentUid = currentUser?.uid ?: return // No debería ser nulo aquí
+        val currentUid = currentUser?.uid ?: return
 
         // Crear el objeto mensaje
         val timestamp = System.currentTimeMillis()
@@ -106,7 +106,6 @@ class ChatMessageActivity : AppCompatActivity() {
             senderId = currentUid,
             text = messageText,
             timestamp = timestamp
-            // receiverId no es estrictamente necesario si solo tenemos 2 participantes por chatRoom
         )
 
         // 1. Guardar el mensaje en la lista de mensajes del chat room
@@ -118,7 +117,6 @@ class ChatMessageActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "Error al enviar mensaje a messages/$messageId: ${e.message}")
-                // Mostrar error al usuario si es necesario
             }
 
         // 2. Actualizar el lastMessage en el chat room
@@ -132,7 +130,7 @@ class ChatMessageActivity : AppCompatActivity() {
             .addOnFailureListener { e -> Log.e(TAG, "Error al actualizar lastMessage: ${e.message}") }
 
 
-        // 3. (Opcional pero recomendado) Actualizar los nodos userChats para ambos usuarios
+        // 3. Actualizar los nodos userChats para ambos usuarios
         // Esto es útil si quieres que la lista de chats se ordene/actualice en tiempo real
         // para el otro usuario también, o si muestras el lastMessage directamente desde userChats.
         val userChatUpdate = mapOf(
@@ -147,30 +145,23 @@ class ChatMessageActivity : AppCompatActivity() {
     }
 
     private fun loadMessages() {
-        binding.recyclerViewMessages.visibility = View.GONE // Ocultar mientras carga
-        // Podrías mostrar un ProgressBar aquí
+        binding.recyclerViewMessages.visibility = View.GONE
 
         messagesRef = database.getReference("chat_rooms").child(chatRoomId!!).child("messages")
 
-        // Limpiar listener anterior si existe
         messagesListener?.let { messagesRef.removeEventListener(it) }
-        messageList.clear() // Limpiar lista antes de cargar/escuchar
+        messageList.clear()
 
         messagesListener = object : ChildEventListener {
-            // ChatMessageActivity.kt
-// ... (código anterior en loadMessages y ChildEventListener) ...
+
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 try {
                     val message = snapshot.getValue(Message::class.java)
                     if (message != null) {
-                        // (Opcional) Evitar añadir mensajes duplicados si el listener se dispara varias veces
-                        // aunque ChildEventListener para "messages" debería ser bastante robusto.
                         if (!messageList.any { it.messageId == message.messageId }) {
                             messageList.add(message)
-                            // Ordenar por timestamp por si acaso llegan desordenados inicialmente (poco probable con push keys)
-                            // messageList.sortBy { it.timestamp }
-                            // messageAdapter.submitList(ArrayList(messageList)) // Si usas DiffUtil en el Adapter
+
                             messageAdapter.notifyItemInserted(messageList.size - 1)
                             binding.recyclerViewMessages.scrollToPosition(messageList.size - 1) // Auto-scroll
                         }
@@ -180,48 +171,42 @@ class ChatMessageActivity : AppCompatActivity() {
                     }
                 } catch (e: DatabaseException) {
                     Log.e(TAG, "Error al deserializar mensaje: ${snapshot.key}", e)
-                    // Puedes decidir si quieres mostrar un mensaje de error o ignorar el mensaje corrupto.
+                    //
                 }
-                // Mostrar RecyclerView una vez que al menos un mensaje se ha procesado (o después de un tiempo)
+
                 if (binding.recyclerViewMessages.visibility == View.GONE) {
                     binding.recyclerViewMessages.visibility = View.VISIBLE
-                    // Ocultar ProgressBar si tenías uno
                 }
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                // Implementar si los mensajes pueden ser editados o su estado cambia (ej. 'leído')
-                // y necesitas reflejarlo en la UI.
+
                 Log.d(TAG, "Mensaje cambiado: ${snapshot.key}")
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                // Implementar si los mensajes pueden ser eliminados.
                 Log.d(TAG, "Mensaje eliminado: ${snapshot.key}")
                 val messageKey = snapshot.key
                 val indexToRemove = messageList.indexOfFirst { it.messageId == messageKey }
                 if (indexToRemove != -1) {
                     messageList.removeAt(indexToRemove)
                     messageAdapter.notifyItemRemoved(indexToRemove)
-                    // Podrías necesitar actualizar los rangos de ítems si no estás al final
-                    // messageAdapter.notifyItemRangeChanged(indexToRemove, messageList.size);
+
                 }
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                // Generalmente no es relevante para una lista de chat ordenada por timestamp.
                 Log.d(TAG, "Mensaje movido: ${snapshot.key}")
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e(TAG, "Error al cargar mensajes: ${error.message}")
-                binding.recyclerViewMessages.visibility = View.VISIBLE // Aún mostrar lo que se haya cargado
+                binding.recyclerViewMessages.visibility = View.VISIBLE
                 // Mostrar error al usuario si es necesario
             }
         }
-        // Para asegurar que los mensajes se carguen en orden de creación (si usas push keys)
-        // y para limitar la cantidad de mensajes iniciales si la conversación es muy larga (paginación)
-        messagesRef.orderByChild("timestamp") //.limitToLast(50) // Ejemplo de paginación inicial
+
+        messagesRef.orderByChild("timestamp")
             .addChildEventListener(messagesListener!!)
     }
 

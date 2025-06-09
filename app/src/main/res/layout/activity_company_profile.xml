@@ -121,7 +121,7 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray">
-                <!-- Aquí iría el MapView de Google Maps o un ImageView con un mapa estático -->
+                <!-- Aquí iría el MapView de Google Maps  -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -167,12 +167,10 @@
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/list_item_offer"
                 tools:itemCount="3"/>
-            <!-- 'nestedScrollingEnabled="false"' es importante si el RecyclerView está
-                 dentro de un NestedScrollView para un desplazamiento suave. -->
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-    <!-- Opcional: FloatingActionButton para acciones rapidas (Seguir Empresa, Favoritos, etc.) -->
+    <!-- Para futuro : FloatingActionButton para acciones rapidas (Seguir Empresa, Favoritos, etc.) -->
     <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabFollowCompany"
         android:layout_width="wrap_content"

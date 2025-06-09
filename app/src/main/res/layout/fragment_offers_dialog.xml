@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"> <!-- Añade padding alrededor del contenido -->
+    android:padding="16dp">
 
-    <!-- El RecyclerView que mostrará la lista de ofertas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewOffers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    <!-- app:layoutManager indica que será una lista vertical por defecto -->
 
 </FrameLayout>

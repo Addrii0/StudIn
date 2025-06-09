@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.EditCompanyProfileActivity">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarEditCompanyProfile"
         android:layout_width="match_parent"
@@ -267,8 +266,7 @@
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Opcional: Campos para Latitud y Longitud si quieres que el usuario los ingrese manualmente -->
-            <!-- De lo contrario, podrías obtenerlos mediante geocodificación a partir de la dirección -->
+            <!-- Opcional: Campos para Latitud y Longitud  u obtenerlos mediante geocodificación a partir de la dirección  -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutCompanyLatitude"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -340,6 +338,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible"/> <!-- tools:visibility para verlo en el preview -->
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

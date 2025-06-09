@@ -7,8 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.studin.classes.Offer
 import com.example.studin.databinding.ActivityCompanyOfferFormBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class CreateOfferActivity: AppCompatActivity() {
 
@@ -37,23 +40,18 @@ class CreateOfferActivity: AppCompatActivity() {
 
 
     }
-    // En CreateOfferActivity.kt
-// Asegúrate de tener las importaciones necesarias, incluyendo tu clase Offer
-// import com.example.studin.classes.Offer // Si está en otro paquete
-// import android.widget.Toast // Para mostrar mensajes
 
     private fun saveOfferToDatabase() {
         val offerTitle = binding.editTextOfferTitle.text.toString().trim()
-        val offerDescription = binding.editTextOfferDescription.text.toString().trim() // También hacer trim
-        val offerLocation = binding.autoCompleteTextViewLocation.text.toString().trim() // También hacer trim
+        val offerDescription = binding.editTextOfferDescription.text.toString().trim()
+        val offerLocation = binding.autoCompleteTextViewLocation.text.toString().trim()
 
-        // --- Validación ---
         var isValid = true
         if (offerTitle.isEmpty()) {
             binding.editTextOfferTitle.error = "El título no puede estar vacío"
             isValid = false
         } else {
-            binding.editTextOfferTitle.error = null // Limpiar error si es válido
+            binding.editTextOfferTitle.error = null
         }
 
         if (offerDescription.isEmpty()) {
@@ -64,7 +62,7 @@ class CreateOfferActivity: AppCompatActivity() {
         }
 
         if (offerLocation.isEmpty()) {
-            binding.autoCompleteTextViewLocation.error = "La ubicación no puede estar vacía" // Asumiendo que es un EditText o similar
+            binding.autoCompleteTextViewLocation.error = "La ubicación no puede estar vacía"
             isValid = false
         } else {
             binding.autoCompleteTextViewLocation.error = null
@@ -74,31 +72,61 @@ class CreateOfferActivity: AppCompatActivity() {
         if (currentFirebaseUser == null) {
             Log.w(TAG, "Usuario no autenticado. No se puede guardar la oferta.")
             Toast.makeText(this, "Debes estar autenticado para crear una oferta.", Toast.LENGTH_LONG).show()
-            // Aquí podrías redirigir al login si es necesario
-            return // Salir de la función
+            return
         }
 
         if (!isValid) {
             Log.w(TAG, "Validación fallida. No se guardará la oferta.")
             Toast.makeText(this, "Por favor, completa todos los campos requeridos.", Toast.LENGTH_SHORT).show()
-            return // Salir de la función si la validación falla
+            return
         }
 
-        // --- Preparación de datos y guardado ---
-        Log.d(TAG, "Validación exitosa. Guardando oferta en la base de datos...")
-        // Opcional: Mostrar un ProgressBar mientras se guarda
-        // binding.progressBarSaveOffer.visibility = View.VISIBLE
-        // binding.buttonSaveOffer.isEnabled = false
+        //  Preparación de datos y guardado
+        Log.d(TAG, "Validación exitosa. Obteniendo nombre de la compañía...")
+
 
         val offerCompanyId = currentFirebaseUser.uid
+        val companyNameRef = database.getReference("companies").child(offerCompanyId).child("name")
+
+        // Obtener el nombre de la compañía de forma asíncrona
+        companyNameRef.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val offerCompanyName = dataSnapshot.getValue(String::class.java)
+
+                if (offerCompanyName == null) {
+                    Log.e(TAG, "No se pudo obtener el nombre de la compañía para ID: $offerCompanyId. Usando 'Nombre no disponible'.")
+                    // Decide cómo manejar esto: ¿usar un nombre por defecto? ¿Mostrar un error?
+                    // Aquí usamos un valor por defecto para continuar, pero podrías querer un manejo más robusto.
+                    proceedWithSavingOffer(offerTitle, offerDescription, offerLocation, offerCompanyId, "Nombre no disponible")
+                    return
+                }
+
+                Log.d(TAG, "Nombre de la compañía obtenido: $offerCompanyName. Procediendo a guardar la oferta...")
+                proceedWithSavingOffer(offerTitle, offerDescription, offerLocation, offerCompanyId, offerCompanyName)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(TAG, "Error al obtener el nombre de la compañía: ${databaseError.message}")
+                Toast.makeText(this@CreateOfferActivity, "Error al obtener datos de la compañía: ${databaseError.message}", Toast.LENGTH_LONG).show()
+
+            }
+        })
+    }
+
+    private fun proceedWithSavingOffer(
+        offerTitle: String,
+        offerDescription: String,
+        offerLocation: String,
+        offerCompanyId: String,
+        offerCompanyName: String
+    ) {
         val offerId = offersReference.push().key // Genera un ID único para la nueva oferta
 
         if (offerId == null) {
             Log.e(TAG, "No se pudo generar un ID para la oferta.")
             Toast.makeText(this, "Error al generar ID para la oferta. Intenta de nuevo.", Toast.LENGTH_SHORT).show()
-            // Opcional: Ocultar ProgressBar
-            // binding.progressBarSaveOffer.visibility = View.GONE
-            // binding.buttonSaveOffer.isEnabled = true
+
             return
         }
 
@@ -110,30 +138,21 @@ class CreateOfferActivity: AppCompatActivity() {
             description = offerDescription,
             location = offerLocation,
             companyId = offerCompanyId,
-            fechaPublicacion = offerDateTimestamp
+            fechaPublicacion = offerDateTimestamp,
+            companyName = offerCompanyName,
         )
 
-        // Guardar la oferta en Firebase Realtime Database bajo el nodo "offers" y el offerId generado
+        // Guardar la oferta en Firebase Realtime Database
         offersReference.child(offerId).setValue(newOffer)
             .addOnSuccessListener {
                 Log.d(TAG, "Oferta guardada exitosamente con ID: $offerId")
                 Toast.makeText(this, "Oferta guardada con éxito", Toast.LENGTH_SHORT).show()
-
-                // Opcional: Ocultar ProgressBar
-                // binding.progressBarSaveOffer.visibility = View.GONE
-                // binding.buttonSaveOffer.isEnabled = true
-
-                // Aquí puedes, por ejemplo, finalizar la actividad o limpiar los campos
-                finish() // Cierra CreateOfferActivity y vuelve a la anterior
-
+                finish()
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "Error al guardar la oferta en la base de datos", e)
                 Toast.makeText(this, "Error al guardar la oferta: ${e.message}", Toast.LENGTH_LONG).show()
 
-                // Opcional: Ocultar ProgressBar
-                // binding.progressBarSaveOffer.visibility = View.GONE
-                // binding.buttonSaveOffer.isEnabled = true
             }
     }
 }

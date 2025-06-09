@@ -1,5 +1,6 @@
 package com.example.studin.activities
 
+import OfferAdapter
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.studin.R
-import com.example.studin.adapters.OfferAdapter
 import com.example.studin.classes.Company
 import com.example.studin.classes.Offer
 import com.example.studin.databinding.ActivityCompanyProfileBinding
@@ -92,9 +92,7 @@ class CompanyProfileActivity : AppCompatActivity() {
             val intent = Intent(this, MainChatsActivity::class.java)
             intent.putExtra("ACTION_START_CHAT_WITH_USER_ID", companyIdFromProfile)
             intent.putExtra("ACTION_START_CHAT_WITH_USER_NAME", companyNameFromProfile)
-            intent.putExtra("ACTION_START_CHAT_WITH_USER_AVATAR_URL", companyProfileImageUrl) // Pasa la URL del avatar
-            // Opcional: flags para manejar el back stack si es necesario
-            // intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra("ACTION_START_CHAT_WITH_USER_AVATAR_URL", companyProfileImageUrl)
             startActivity(intent)
         }
 
@@ -172,14 +170,13 @@ class CompanyProfileActivity : AppCompatActivity() {
 
     private fun displayCompanyData(company: Company) {
         binding.collapsingToolbarCompany.title = company.name ?: "Nombre no disponible"
-        // También puedes poner el nombre en un TextView dentro del LinearLayout si lo prefieres
 
         if (!company.profileImageUrl.isNullOrEmpty()) {
             Glide.with(this)
                 .load(company.profileImageUrl)
                 .centerCrop()
-                .placeholder(R.drawable.default_header_placeholder) // Debes tener este drawable
-                .error(R.drawable.ic_company_photo) // Debes tener este drawable
+                .placeholder(R.drawable.default_header_placeholder)
+                .error(R.drawable.ic_company_photo)
                 .into(binding.imageViewCompanyProfileHeader)
         } else {
             // Imagen por defecto si no hay URL
@@ -207,11 +204,6 @@ class CompanyProfileActivity : AppCompatActivity() {
 
 
     private fun loadCompanyOffers() {
-        // Aquí asumimos que cada 'Offer' tiene un campo 'companyId' que coincide con el ID de esta empresa.
-        // También, si la empresa tuviera una lista de 'offerIds' en su objeto Company,
-        // podrías iterar sobre esos IDs y hacer N consultas individuales a la referencia "offers".
-        // Sin embargo, filtrar por 'companyId' en la colección "offers" suele ser más eficiente
-        // si tienes muchos offers por empresa.
 
         val query = offersReference.orderByChild("companyId").equalTo(companyId)
 
@@ -222,8 +214,7 @@ class CompanyProfileActivity : AppCompatActivity() {
                     for (offerSnapshot in snapshot.children) {
                         val offer = offerSnapshot.getValue(Offer::class.java)
                         if (offer != null) {
-                            // Opcional: podrías querer añadir el ID de la oferta al objeto si no está ya
-                            // offer.id = offerSnapshot.key
+
                             companyOffersList.add(offer)
                         }
                     }

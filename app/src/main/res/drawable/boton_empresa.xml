@@ -2,8 +2,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent" />  <!-- Fondo transparente -->
+            <solid android:color="@android:color/transparent" />
         </shape>
     </item>
-    <item android:drawable="@drawable/icono_empresa" android:gravity="center" />  <!-- icono -->
+    <item android:drawable="@drawable/icono_empresa" android:gravity="center" />  
 </layer-list>

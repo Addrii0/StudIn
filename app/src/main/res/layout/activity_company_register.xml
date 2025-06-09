@@ -49,7 +49,6 @@
         android:inputType="textPassword"
         android:minHeight="48dp" />
 
-    <!-- Agrega aquí EditText para otros campos de perfil de empresa si los tienes -->
     <EditText
         android:id="@+id/company_repetir_contrasena"
         android:layout_width="match_parent"

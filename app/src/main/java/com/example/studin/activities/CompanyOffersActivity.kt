@@ -8,10 +8,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.studin.R // Importa la clase R de tu proyecto para acceder a los recursos
+import com.example.studin.R
 import com.example.studin.adapters.OffersAdapter
-import com.example.studin.classes.Offer // Asegúrate de que esta es la ruta correcta a tu clase Offer
-import com.example.studin.databinding.ActivityCompanyOffersBinding // Importa la clase de ViewBinding
+import com.example.studin.classes.Offer
+import com.example.studin.databinding.ActivityCompanyOffersBinding
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -23,32 +23,18 @@ class CompanyOffersActivity : AppCompatActivity() {
     private lateinit var offersAdapter: OffersAdapter
     private val offerList = mutableListOf<Offer>()
 
-    // Firebase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var valueEventListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Inflar el layout usando ViewBinding
         binding = ActivityCompanyOffersBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inicializar Firebase Auth y Database Reference
         auth = FirebaseAuth.getInstance()
-        // Ajusta esta ruta según la estructura de tu base de datos Firebase
-        // Por ejemplo, si las ofertas están en un nodo global "offers":
+
         databaseReference = FirebaseDatabase.getInstance().getReference("offers")
-        // O si las ofertas están bajo un ID de compañía específico:
-        // val currentCompanyId = auth.currentUser?.uid
-        // if (currentCompanyId != null) {
-        //     databaseReference = FirebaseDatabase.getInstance().getReference("companyOffers").child(currentCompanyId)
-        // } else {
-        //     Toast.makeText(this, "Usuario no autenticado.", Toast.LENGTH_LONG).show()
-        //     // Considera finalizar la actividad o redirigir al login si el ID es crucial
-        //     finish()
-        //     return
-        // }
 
         setupRecyclerView()
         fetchOffers()
@@ -63,8 +49,6 @@ class CompanyOffersActivity : AppCompatActivity() {
             // Inicia una nueva Activity para mostrar los detalles de la oferta
              val intent = Intent(this, CompanyOfferInfoActivity::class.java).apply {
                  putExtra("SELECTED_OFFER_ID", selectedOffer.id) // Pasa el ID
-                 // o podrías pasar el objeto entero si es Parcelable:
-                 // putExtra("SELECTED_OFFER_OBJECT", selectedOffer)
              }
              startActivity(intent)
         }
@@ -88,12 +72,10 @@ class CompanyOffersActivity : AppCompatActivity() {
         binding.textViewNoOffers.visibility = View.GONE
         binding.offersRecyclerView.visibility = View.GONE
 
-        // Define la consulta a Firebase.
-        // Si necesitas filtrar (ej. por companyId dentro del objeto Offer):
+
         val companyIdToFilterBy = auth.currentUser?.uid
         val query = databaseReference.orderByChild("companyId").equalTo(companyIdToFilterBy)
-        // Si quieres obtener todas las ofertas del 'databaseReference' actual:
-        //val query: Query = databaseReference
+
 
         valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -102,10 +84,7 @@ class CompanyOffersActivity : AppCompatActivity() {
                     for (offerSnapshot in snapshot.children) {
                         val offer = offerSnapshot.getValue(Offer::class.java)
                         offer?.let {
-//                            // Si tu modelo Offer no incluye el 'id' de Firebase, puedes añadirlo aquí:
-//                            val offerWithId = it.copy(id = offerSnapshot.key)
-//                            offerList.add(offerWithId)
-                            // Si tu modelo Offer ya tiene un campo 'id' que se llena desde Firebase, usa:
+//
                              offerList.add(it)
                         }
                     }

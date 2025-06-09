@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.ChatMessageActivity">
 
-    <!-- Toolbar para mostrar el nombre del contacto y botón de atrás -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout_chat_message"
         android:layout_width="0dp"
@@ -20,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="Nombre del Contacto" />
-        <!-- El título se establecerá dinámicamente desde el código -->
-        <!-- Puedes añadir app:navigationIcon="@drawable/ic_arrow_back" si quieres un icono de atrás estándar -->
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,9 +35,8 @@
         app:layout_constraintBottom_toTopOf="@id/layout_message_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_message_sent" /> <!-- Ejemplo de cómo se vería un ítem -->
+        tools:listitem="@layout/item_message_sent" />
 
-    <!-- Layout para la entrada de texto y el botón de enviar -->
     <LinearLayout
         android:id="@+id/layout_message_input"
         android:layout_width="0dp"
@@ -75,7 +72,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
             android:layout_gravity="center_vertical"/>
-        <!-- Necesitarás crear el drawable ic_send -->
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

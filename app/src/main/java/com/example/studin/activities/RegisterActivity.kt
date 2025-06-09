@@ -83,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
                 var esValido = true
 
                 if (nombre.isEmpty()) {
-                    binding.registroNombre.error = "El nombre no puede estar vacío" // Deberías usar R.string...
+                    binding.registroNombre.error = "El nombre no puede estar vacío"
                     esValido = false
                     Log.w(TAG, "validarCampos: Nombre vacío")
                 } else {
@@ -91,7 +91,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 if (apellido.isEmpty()) {
-                    binding.registroApellido.error = "El apellido no puede estar vacío" // Deberías usar R.string...
+                    binding.registroApellido.error = "El apellido no puede estar vacío"
                     esValido = false
                     Log.w(TAG, "validarCampos: Apellido vacío")
                 } else {
@@ -99,11 +99,11 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 if (email.isEmpty()) {
-                    binding.registroEmail.error = "El correo electrónico no puede estar vacío" // Deberías usar R.string...
+                    binding.registroEmail.error = "El correo electrónico no puede estar vacío"
                     esValido = false
                     Log.w(TAG, "validarCampos: Email vacío")
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    binding.registroEmail.error = "Introduce un correo electrónico válido" // Deberías usar R.string...
+                    binding.registroEmail.error = "Introduce un correo electrónico válido"
                     esValido = false
                     Log.w(TAG, "validarCampos: Email inválido")
                 } else {
@@ -111,11 +111,11 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 if (telefono.isEmpty()) {
-                    binding.registroTelefono.error = "El teléfono no puede estar vacío" // Deberías usar R.string...
+                    binding.registroTelefono.error = "El teléfono no puede estar vacío"
                     esValido = false
                     Log.w(TAG, "validarCampos: Teléfono vacío")
-                } else if (telefono.length < 9) { // Validación muy básica, ajústala si es necesario
-                    binding.registroTelefono.error = "El teléfono debe tener al menos 9 dígitos" // Deberías usar R.string...
+                } else if (telefono.length < 9) {
+                    binding.registroTelefono.error = "El teléfono debe tener al menos 9 dígitos"
                     esValido = false
                     Log.w(TAG, "validarCampos: Teléfono corto")
                 } else {
@@ -123,11 +123,11 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 if (contrasena.isEmpty()) {
-                    binding.registroConstrasena.error = "La contraseña no puede estar vacía" // Deberías usar R.string...
+                    binding.registroConstrasena.error = "La contraseña no puede estar vacía"
                     esValido = false
                     Log.w(TAG, "validarCampos: Contraseña vacía")
                 } else if (contrasena.length < 6) {
-                    binding.registroConstrasena.error = "La contraseña debe tener al menos 6 caracteres" // Deberías usar R.string...
+                    binding.registroConstrasena.error = "La contraseña debe tener al menos 6 caracteres"
                     esValido = false
                     Log.w(TAG, "validarCampos: Contraseña corta")
                 } else {
@@ -142,12 +142,11 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d(TAG, "crearUsuarioYGuardarPerfil: Iniciando...")
                 if (!validarCampos()) {
                     Log.w(TAG, "crearUsuarioYGuardarPerfil: Validación fallida, retornando.")
-                    // No ocultamos ProgressBar aquí porque se muestra DESPUÉS de esta validación
                     return
                 }
 
                 Log.d(TAG, "crearUsuarioYGuardarPerfil: Validación exitosa.")
-                showLoading(true) // Muestra ProgressBar AHORA
+                showLoading(true)
 
                 val nombre = binding.registroNombre.text.toString().trim()
                 val apellido = binding.registroApellido.text.toString().trim()
@@ -200,7 +199,6 @@ class RegisterActivity : AppCompatActivity() {
         Log.d(TAG, "uploadProfileImage: Iniciando subida para UID: $uid")
         // Nombre del archivo en Storage (puedes usar "profile.jpg" o un ID único como uid + ".jpg")
         val imageFileName = "profile_${uid}.jpg" // Nombre de archivo único
-        // Ruta en Firebase Storage: profile_images/users/{UID}/profile_{UID}.jpg
         val imageRef = storage.reference.child("profile_images/users/$uid/$imageFileName")
 
         imageRef.putFile(imageUri)
@@ -209,13 +207,11 @@ class RegisterActivity : AppCompatActivity() {
                 uploadTask.storage.downloadUrl.addOnSuccessListener { downloadUri ->
                     val imageUrl = downloadUri.toString()
                     Log.d(TAG, "uploadProfileImage: URL de descarga obtenida: $imageUrl")
-                    // Guardar todos los detalles del usuario, incluyendo la URL de la imagen
                     saveUserDetailsToDatabase(uid, nombre, apellido, email, telefono, imageUrl)
                 }.addOnFailureListener { exception ->
                     showLoading(false)
                     Log.w(TAG, "Error al obtener URL de descarga de la imagen: ", exception)
                     Toast.makeText(baseContext, "Error al obtener URL de imagen. Perfil guardado sin imagen.", Toast.LENGTH_LONG).show()
-                    // Aún así, guardar el perfil sin la imagen si falla la obtención de URL
                     saveUserDetailsToDatabase(uid, nombre, apellido, email, telefono, null)
                 }
             }
@@ -223,14 +219,12 @@ class RegisterActivity : AppCompatActivity() {
                 showLoading(false)
                 Log.w(TAG, "Error al subir imagen: ", exception)
                 Toast.makeText(baseContext, "Error al subir imagen. Perfil guardado sin imagen.", Toast.LENGTH_LONG).show()
-                // Aún así, guardar el perfil sin la imagen si falla la subida
                 saveUserDetailsToDatabase(uid, nombre, apellido, email, telefono, null)
             }
             .addOnProgressListener { taskSnapshot -> // Opcional: para mostrar progreso
                 val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount)
                 Log.d(TAG, "Subida de imagen: $progress% completado")
-                // Aquí podrías actualizar un ProgressBar visual si lo deseas
-                // binding.imageUploadProgressBar.progress = progress.toInt() // Si tuvieras uno específico
+
             }
     }
 
@@ -259,22 +253,18 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d(TAG, "Perfil de usuario guardado en RTDB con éxito para UID: $uid")
                 Toast.makeText(baseContext, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
 
-                // Navegar a la actividad principal (por ejemplo, UserHomeActivity o la que corresponda)
-                // Es importante limpiar el stack para que el usuario no pueda volver a RegisterActivity con el botón "atrás"
-                val intent = Intent(this@RegisterActivity, UserHomeActivity::class.java) // Cambia UserHomeActivity si es otra
+
+                val intent = Intent(this@RegisterActivity, UserHomeActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
-                finish() // Cierra RegisterActivity
+                finish()
             }
             .addOnFailureListener { e ->
                 showLoading(false)
                 Log.w(TAG, "Error al guardar perfil en RTDB para UID: $uid", e)
                 Toast.makeText(baseContext, "Usuario creado, pero falló al guardar datos del perfil. Intenta editar tu perfil más tarde.", Toast.LENGTH_LONG).show()
-                // Aunque falle guardar en RTDB, el usuario de Auth ya está creado.
-                // Decide el flujo. Por ahora, navegaremos igualmente.
-                // Podrías considerar eliminar el usuario de Auth aquí si el guardado en DB es crítico
-                // o redirigir a una pantalla donde pueda reintentar guardar el perfil.
-                val intent = Intent(this@RegisterActivity, UserHomeActivity::class.java) // Cambia UserHomeActivity si es otra
+
+                val intent = Intent(this@RegisterActivity, UserHomeActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
@@ -286,7 +276,6 @@ class RegisterActivity : AppCompatActivity() {
         binding.progressBarRegistro.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.registroBoton.isEnabled = !isLoading
         binding.botonSeleccionarFoto.isEnabled = !isLoading
-        // También podrías deshabilitar los EditTexts si lo deseas
         binding.registroNombre.isEnabled = !isLoading
         binding.registroApellido.isEnabled = !isLoading
         binding.registroEmail.isEnabled = !isLoading

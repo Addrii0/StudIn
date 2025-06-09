@@ -7,56 +7,6 @@
     tools:context=".activities.UserHomeActivity">
 
     <ImageView
-        android:id="@+id/offerButtom"
-        android:layout_width="51dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="32dp"
-        android:contentDescription="@string/boton_empresa"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-
-        app:srcCompat="@drawable/boton_empresa" />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView2"-->
-<!--        android:layout_width="53dp"-->
-<!--        android:layout_height="33dp"-->
-<!--        android:contentDescription="@string/icono_home"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.948"-->
-<!--        app:srcCompat="@drawable/icono_home" />-->
-
-    <ImageView
-        android:id="@+id/chat"
-        android:layout_width="44dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="332dp"
-        android:layout_marginBottom="36dp"
-        android:contentDescription="@string/chat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/icono_chat" />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView4"-->
-<!--        android:layout_width="29dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_marginStart="356dp"-->
-<!--        android:contentDescription="@string/lupa"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.05"-->
-<!--        app:srcCompat="@drawable/icono_busqueda" />-->
-
-    <ImageView
         android:id="@+id/imageView5"
         android:layout_width="70dp"
         android:layout_height="60dp"
@@ -79,21 +29,54 @@
         android:background="@drawable/rounded_corners_background"
         android:elevation="8dp"
         android:visibility="gone"
-    app:layout_constraintBottom_toTopOf="@id/buttonLogout"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/imageView5" />
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView5" />
 
-    <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:text="@string/cerrar_sesi_n"
+        android:orientation="horizontal"
+        android:background="?attr/colorSecondary"
+        android:elevation="4dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/offerButtom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/boton_empresa"
+            android:contentDescription="@string/boton_empresa"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"/>
+
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="@string/cerrar_sesi_n"
+            android:background="@color/transparente"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+        <ImageButton
+            android:id="@+id/chat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/icono_chat"
+            android:contentDescription="@string/chat"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"/>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -154,7 +154,7 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "checkUserTypeAndNavigate:users:onCancelled", error.toException())
-                Toast.makeText(this@LoginActivity, "Error al verificar tipo de usuario: ${error.message}", Toast.LENGTH_LONG).show()// Decide qué hacer si hay un error en la DB. Quizás mostrar un error y no navegar.
+                Toast.makeText(this@LoginActivity, "Error al verificar tipo de usuario: ${error.message}", Toast.LENGTH_LONG).show()
             }
         })
     }

@@ -50,5 +50,14 @@
     <string name="apellido">Apellido</string>
     <string name="cerrar_sesi_n">cerrar sesión</string>
     <string name="perfil_empresa">perfil_empresa</string>
-
+    <string name="tab_offers">Ofertas</string>
+    <string name="tab_companies">Empresas</string>
+    <string name="tab_news">Noticias</string>
+    <string name="label_location">Localización:</string>
+    <string name="label_type">Tipo:</string>
+    <string name="label_description">Descripción:</string>
+    <string name="informacion">informacion</string>
+    <string name="habilidades">habilidades</string>
+    <string name="fecha_de_publicaci_n">fecha de publicación:</string>
+    <string name="button_apply_to_offer">Aplicar a Oferta</string>
 </resources>

@@ -19,10 +19,9 @@ import com.google.firebase.database.*
 
 class ChatsFragment : Fragment() {
 
-    // Declarar una variable para el binding. Debe ser nullable y gestionada
-    // cuidadosamente durante el ciclo de vida del fragment.
+
     private var _binding: FragmentChatsBinding? = null
-    private val binding get() = _binding!! // !! es seguro aquí debido al ciclo de vida
+    private val binding get() = _binding!!
 
     private lateinit var chatAdapter: ChatAdapter
 
@@ -225,8 +224,7 @@ class ChatsFragment : Fragment() {
         } else {
             binding.textViewNoChats.visibility = View.GONE
             binding.chatsRecyclerView.visibility = View.VISIBLE
-            // Es buena práctica pasar una nueva lista al adaptador para que DiffUtil (si lo usaras) funcione correctamente
-            // y para evitar modificaciones concurrentes si el adapter trabaja en otro hilo (aunque aquí no es el caso).
+
             chatAdapter.submitList(ArrayList(chatList))
         }
         binding.progressBarChats.visibility = View.GONE
@@ -245,7 +243,7 @@ class ChatsFragment : Fragment() {
         super.onDestroyView()
         // Limpiar todos los listeners de Firebase para evitar fugas de memoria
         userChatRoomsListener?.let {
-            if (::userChatRoomsRef.isInitialized) { // Comprobar si userChatRoomsRef fue inicializado
+            if (::userChatRoomsRef.isInitialized) {
                 userChatRoomsRef.removeEventListener(it)
             }
         }
@@ -253,6 +251,6 @@ class ChatsFragment : Fragment() {
         clearChatRoomListeners()
         Log.d(TAG, "Todos los listeners de Firebase en ChatsFragment limpiados.")
 
-        _binding = null // Muy importante: Limpiar la referencia al binding para evitar memory leaks
+        _binding = null
     }
 }

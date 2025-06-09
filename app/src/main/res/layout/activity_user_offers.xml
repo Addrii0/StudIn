@@ -1,41 +1,36 @@
-<!-- activity_user_offers.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activities.UserOfferActivity">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchViewOffers"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutUserOffer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:queryHint="Buscar por título de oferta..."
-        app:iconifiedByDefault="true"
-        android:layout_margin="8dp"/>
+        android:layout_height="wrap_content">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarUserOffer"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="Explorar"
+            app:titleTextColor="@android:color/white" />
 
-    <TextView
-        android:id="@+id/textViewNoOffers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="No se encontraron ofertas."
-        android:visibility="gone" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutUserOffer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/offersRecyclerView"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerUserOffer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:listitem="@layout/list_item_offer" /> <!-- Asume que tienes este layout de item -->
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

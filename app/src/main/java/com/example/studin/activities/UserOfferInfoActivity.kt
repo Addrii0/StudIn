@@ -56,7 +56,7 @@ class UserOfferInfoActivity: AppCompatActivity() {
 
 
         }
-        //  Verificar si el usuario ya aplicó y deshabilitar/cambiar el texto del botón
+        //  Verificar si el usuario ya aplicó y deshabilitar el texto del botón
         checkIfUserAlreadyApplied()
     }
 
@@ -64,36 +64,31 @@ class UserOfferInfoActivity: AppCompatActivity() {
         val currentUser = auth.currentUser
         if (currentUser == null) {
             Toast.makeText(this, "Debes iniciar sesión para aplicar.", Toast.LENGTH_SHORT).show()
-            // Podrías redirigir al login
             return
         }
         val userId = currentUser.uid
 
         // Deshabilitar el botón para evitar múltiples clics mientras se procesa
         binding.buttonApplyToOffer.isEnabled = false
-        binding.buttonApplyToOffer.text = "Aplicando..." // Opcional: cambiar texto
+        binding.buttonApplyToOffer.text = "Aplicando..."
 
         // 1. Crear el objeto de la solicitud
         val applicationData = hashMapOf(
-            "appliedAt" to ServerValue.TIMESTAMP, // Firebase se encargará de poner el timestamp del servidor
+            "appliedAt" to ServerValue.TIMESTAMP,
             "status" to "pending" // Estado inicial
         )
 
-        // Preparamos las múltiples escrituras para hacerlas todas o ninguna(atomicas)
         val childUpdates = hashMapOf<String, Any?>()
         val applicationPath = "$offerId/$userId" // Ruta en offerApplications
         val userAppliedPath = "$userId/$offerId"  // Ruta en userAppliedOffers
 
         childUpdates["/offerApplications/$applicationPath"] = applicationData
-        childUpdates["/userAppliedOffers/$userAppliedPath"] = true // O ServerValue.TIMESTAMP si quieres guardar cuándo
+        childUpdates["/userAppliedOffers/$userAppliedPath"] = true
 
-        // Realizar la escritura atómica
         FirebaseDatabase.getInstance().reference.updateChildren(childUpdates)
             .addOnSuccessListener {
                 Toast.makeText(this, "¡Has aplicado a la oferta!", Toast.LENGTH_SHORT).show()
                 binding.buttonApplyToOffer.text = "Aplicado" // Cambiar texto del botón
-                // El botón ya está deshabilitado, lo cual es bueno.
-                // Podrías querer deshabilitarlo permanentemente o cambiar su funcionalidad.
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error al aplicar: ${e.message}", Toast.LENGTH_LONG).show()
@@ -105,9 +100,8 @@ class UserOfferInfoActivity: AppCompatActivity() {
     private fun checkIfUserAlreadyApplied() {
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            // El usuario no está logueado, el botón debería permitir aplicar (y luego pedir login)
-            // o estar deshabilitado hasta que inicie sesión.
-            binding.buttonApplyToOffer.isEnabled = true // O false, según tu flujo de login
+
+            binding.buttonApplyToOffer.isEnabled = true
             return
         }
         val userId = currentUser.uid
@@ -128,7 +122,7 @@ class UserOfferInfoActivity: AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w("CheckApplied", "Error al verificar si ya aplicó: ${error.message}")
-                // En caso de error, es seguro permitir que intenten aplicar,
+                // En caso de error, es seguro permitir que intente aplicar,
                 binding.buttonApplyToOffer.isEnabled = true
                 binding.buttonApplyToOffer.text = "Aplicar a Oferta"
             }
@@ -137,7 +131,6 @@ class UserOfferInfoActivity: AppCompatActivity() {
     private fun loadOfferDetails(offerId: String) {
         offersReference.child(offerId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // binding.progressBarOfferDetails.visibility = View.GONE
 
                 if (snapshot.exists()) {
                     val offer = snapshot.getValue(Offer::class.java)
@@ -154,7 +147,6 @@ class UserOfferInfoActivity: AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // binding.progressBarOfferDetails.visibility = View.GONE
                 Log.e(TAG, "Error al leer datos de la oferta: ${error.message}")
                 Toast.makeText(this@UserOfferInfoActivity, "Error al cargar oferta: ${error.message}", Toast.LENGTH_LONG).show()
             }
@@ -171,9 +163,9 @@ class UserOfferInfoActivity: AppCompatActivity() {
         } else {
             binding.textViewOfferSkillsInfo.text = "No hay habilidades requeridas."
         }
-        // binding.textViewOfferRequirementsInfo.text = offer.requirements ?: "No especificados" // Si tienes este campo
+        // binding.textViewOfferRequirementsInfo.text = offer.requirements ?: "No especificados"
 
-        offer.fechaPublicacion?.let { timestamp -> // Asegúrate que tu clase Offer tenga 'fechaPublicacion'
+        offer.fechaPublicacion?.let { timestamp ->
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             binding.textViewOfferDateInfo.text = "Publicado el: " + sdf.format(Date(timestamp))
         } ?: run {

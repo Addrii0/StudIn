@@ -78,21 +78,20 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
                     Log.d(TAG, "URL de imagen de perfil obtenida: ${user.profileImageUrl}")
                     Glide.with(this@UserHomeActivity)
                         .load(user.profileImageUrl)
-                        .placeholder(R.drawable.icono_persona) // imagen mientras carga
-                        .error(R.drawable.icono_persona) //  imagen si hay error al cargar
-                        .circleCrop() // para hacer la imagen circular
+                        .placeholder(R.drawable.icono_persona)
+                        .error(R.drawable.icono_persona)
+                        .circleCrop()
                         .into(binding.imageView5)
                 } else {
                     Log.w(TAG, "No se encontró URL de imagen de perfil o está vacía.")
-                    // Establecer una imagen por defecto si no hay URL
+
                     binding.imageView5.setImageResource(R.drawable.icono_persona)
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "Error al cargar datos del usuario para imagen: ", error.toException())
-                // Establecer una imagen por defecto en caso de error
-                binding.imageView5.setImageResource(R.drawable.ic_profile_person) // Asume que tienes un drawable 'icono_error_imagen'
+                binding.imageView5.setImageResource(R.drawable.ic_profile_person) //
             }
         })
     }

@@ -40,29 +40,76 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
+            android:id="@+id/textViewLocationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_location"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewCompanyName" />
+
+        <TextView
             android:id="@+id/textViewOfferLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="4dp"
             android:textAppearance="?attr/textAppearanceBody2"
             tools:text="Ubicación de la Oferta"
-            app:layout_constraintTop_toBottomOf="@id/textViewCompanyName"
+            app:layout_constraintStart_toEndOf="@id/textViewLocationLabel"
+            app:layout_constraintTop_toTopOf="@id/textViewLocationLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/textViewLocationLabel"/>
+
+        <TextView
+            android:id="@+id/textViewTypeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/label_type"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/textViewLocationLabel" />
+
+        <TextView
+            android:id="@+id/textViewOfferType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="?attr/textAppearanceBody2"
+            tools:text="Tipo de Oferta"
+            app:layout_constraintStart_toEndOf="@id/textViewTypeLabel"
+            app:layout_constraintTop_toTopOf="@id/textViewTypeLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/textViewTypeLabel"/>
+
+        <TextView
+            android:id="@+id/textViewDescriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_description"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewTypeLabel" />
 
         <TextView
             android:id="@+id/textViewOfferDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:textAppearance="?attr/textAppearanceBody2"
             android:maxLines="3"
             android:ellipsize="end"
             tools:text="Descripción breve de la oferta de trabajo que puede ser un poco larga para probar el ellipsize..."
-            app:layout_constraintTop_toBottomOf="@id/textViewOfferLocation"
+            app:layout_constraintTop_toBottomOf="@id/textViewDescriptionLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="0dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

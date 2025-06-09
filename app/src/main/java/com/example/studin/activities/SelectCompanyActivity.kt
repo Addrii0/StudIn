@@ -63,7 +63,7 @@ class SelectCompanyActivity : AppCompatActivity() {
                 finish() // Cierra esta actividad y vuelve a MainChatsActivity
             } else {
                 Log.w(TAG, "Empresa seleccionada con datos nulos: $selectedCompany")
-                // Manejar el error, aunque no debería ocurrir si los datos se cargan correctamente.
+
             }
         }
         binding.recyclerViewCompanies.apply {
@@ -83,14 +83,14 @@ class SelectCompanyActivity : AppCompatActivity() {
                 companyList.clear()
                 if (snapshot.exists()) {
                     for (companySnapshot in snapshot.children) {
-                        // Asumimos que la clave del snapshot es el UID de la empresa
+                        // snapshot es el UID de la empresa
                         val companyUid = companySnapshot.key
                         val companyData = companySnapshot.getValue(Company::class.java)
 
                         if (companyData != null && companyUid != null) {
                             companyData.uid = companyUid // Asignar el UID desde la clave del snapshot
 
-                            // IMPORTANTE: Evitar que el usuario se seleccione a sí mismo si las "empresas" son también usuarios.
+                            //  Evitar que el usuario se seleccione a sí mismo si las "empresas" son también usuarios.
                             if (companyUid != currentUserId) {
                                 companyList.add(companyData)
                             }
@@ -116,16 +116,13 @@ class SelectCompanyActivity : AppCompatActivity() {
                 binding.textViewNoCompanies.text = "Error al cargar empresas."
                 binding.textViewNoCompanies.visibility = View.VISIBLE
                 binding.recyclerViewCompanies.visibility = View.GONE
-                // Podrías mostrar un Toast o un Snackbar con el error
             }
         }
-        // Usar addValueEventListener para carga inicial y actualizaciones en tiempo real.
-        // Si solo necesitas una carga única, usa addListenerForSingleValueEvent.
+
         databaseRef.addValueEventListener(companiesListener!!)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Manejar el clic en el botón de atrás de la Toolbar
         if (item.itemId == android.R.id.home) {
             onBackPressedDispatcher.onBackPressed()
             return true

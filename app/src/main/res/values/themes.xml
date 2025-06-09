@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.StudIn" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/my_app_blue_container</item>
         <item name="colorOnPrimaryContainer">@color/my_app_on_blue_container</item>
-
+        <item name="colorSecondary">@color/blue_high</item>
+        <item name="colorOnSecondary">@color/black</item>
     </style>
 
     <style name="Theme.StudIn" parent="Base.Theme.StudIn" />
