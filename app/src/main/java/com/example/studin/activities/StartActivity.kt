@@ -25,7 +25,7 @@ class StartActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish() // Cierra la MainActivity para que el usuario no pueda volver atrás fácilmente
+            finish() // Cierra la MainActivitye
         }, 5000) //  5 segundos
     }
 }

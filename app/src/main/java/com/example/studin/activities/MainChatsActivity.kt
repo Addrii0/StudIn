@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,10 @@ class MainChatsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
     private val TAG = "MainChatsActivity"
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+    private lateinit var companiesRef: DatabaseReference
+
 
     private val selectCompanyLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -45,12 +50,16 @@ class MainChatsActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+        companiesRef = database.getReference("companies")
+
 
         binding.fab.setOnClickListener {
             val intent = Intent(this, SelectCompanyActivity::class.java)
             selectCompanyLauncher.launch(intent)
         }
+        checkUserExistsInDatabase(companiesRef.key.toString())
         handleIntentToStartChat()
     }
 
@@ -207,6 +216,26 @@ class MainChatsActivity : AppCompatActivity() {
                     "Error al obtener tus datos para el chat.",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        })
+    }
+    private fun checkUserExistsInDatabase(companyId: String) {
+        if (companyId.isEmpty()) {
+            Log.e(TAG, "checkUserExistsInDatabase: userId está vacío.")
+            binding.fab.visibility = View.GONE
+            return
+        }
+        companiesRef.child(companyId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val parentNode : String? = snapshot.ref.parent?.key
+                if (parentNode.equals("companies")) {
+                    binding.fab.visibility = View.GONE
+                }else{
+                    binding.fab.visibility = View.VISIBLE
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Error.")
             }
         })
     }

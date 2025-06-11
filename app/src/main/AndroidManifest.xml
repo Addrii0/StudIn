@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <!-- Configuración de la aplicación, junto con el logo -->
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -14,6 +14,9 @@
         android:theme="@style/Theme.StudIn"
         tools:targetApi="31">
 
+        <!-- Configuración de las actividades -->
+
+        <!-- Configuración de la actividad inicial (La que primero se lanza) -->
         <activity
             android:name=".activities.StartActivity" android:exported="true">
             <intent-filter>
@@ -72,6 +75,12 @@
         </activity>
 
         <activity android:name=".activities.SelectCompanyActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.CreateEditNewsActivity" android:exported="true">
+        </activity>
+
+        <activity android:name=".activities.NewsDetailActivity" android:exported="true">
         </activity>
 
     </application>

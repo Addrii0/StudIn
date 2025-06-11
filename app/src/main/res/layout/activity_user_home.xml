@@ -7,11 +7,11 @@
     tools:context=".activities.UserHomeActivity">
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/user_profile"
         android:layout_width="70dp"
         android:layout_height="60dp"
         android:layout_marginStart="28dp"
-        android:contentDescription="@string/persona"
+        android:contentDescription="@string/person"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,54 +29,121 @@
         android:background="@drawable/rounded_corners_background"
         android:elevation="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@id/linearLayoutBottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView5" />
+        app:layout_constraintTop_toBottomOf="@id/user_profile" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="?attr/colorSecondary"
-        android:elevation="4dp"
+    android:id="@+id/linearLayoutBottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?attr/colorSurface"
+    android:elevation="4dp"
+    android:gravity="center_vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
+    <!-- Item de Navegación: Ofertas/Empresa -->
+    <LinearLayout
+        android:id="@+id/nav_item_offers"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
 
-        <ImageButton
-            android:id="@+id/offerButtom"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+        <ImageView
+            android:id="@+id/icon_offers"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/boton_empresa"
-            android:contentDescription="@string/boton_empresa"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"/>
+            android:contentDescription="@string/button_company_description" />
+        <!-- Define boton_empresa_description -->
 
-        <Button
-            android:id="@+id/buttonLogout"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/label_offers"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="@string/cerrar_sesi_n"
-            android:background="@color/transparente"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
-
-        <ImageButton
-            android:id="@+id/chat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/icono_chat"
-            android:contentDescription="@string/chat"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"/>
-
+            android:text="@string/label_offers"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorControlNormal"/>
+        <!-- Define label_offers, ej: "Ofertas" -->
     </LinearLayout>
+
+    <!-- Item de Navegación: Logout -->
+    <LinearLayout
+        android:id="@+id/nav_item_logout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/icon_logout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_logout"
+            app:tint="?attr/colorControlNormal"
+            android:contentDescription="@string/logout_description" />
+        <!-- Define logout_description -->
+
+        <TextView
+            android:id="@+id/label_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_logout"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorControlNormal"/>
+        <!-- Define label_logout, ej: "Salir" -->
+    </LinearLayout>
+
+    <!-- Item de Navegación: Chat -->
+    <LinearLayout
+        android:id="@+id/nav_item_chat"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/icon_chat"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icono_chat"
+            android:contentDescription="@string/chat_description" />
+        <!-- Define chat_description -->
+
+        <TextView
+            android:id="@+id/label_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_chat"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/colorControlNormal"/>
+    </LinearLayout>
+
+</LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

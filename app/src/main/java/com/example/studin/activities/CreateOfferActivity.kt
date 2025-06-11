@@ -2,6 +2,7 @@ package com.example.studin.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studin.classes.Offer
@@ -12,7 +13,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-
+import com.example.studin.R
 class CreateOfferActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityCompanyOfferFormBinding
@@ -20,7 +21,7 @@ class CreateOfferActivity: AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
     private lateinit var offersReference: DatabaseReference
-
+    private var selectedType: String? = null
     private val TAG = "CreateOfferActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,14 +38,23 @@ class CreateOfferActivity: AppCompatActivity() {
 
         }
 
+        val offerTypes = resources.getStringArray(R.array.offer_types)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, offerTypes)
+        val autoCompleteTextView = binding.autoCompleteTextViewOfferType
+        autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
+            selectedType = parent.getItemAtPosition(position).toString()
 
-
+        }
     }
 
     private fun saveOfferToDatabase() {
         val offerTitle = binding.editTextOfferTitle.text.toString().trim()
         val offerDescription = binding.editTextOfferDescription.text.toString().trim()
         val offerLocation = binding.autoCompleteTextViewLocation.text.toString().trim()
+        val offerSkills = binding.editTextOfferSkills.text.toString().trim()
+        val offerRequirements = binding.editTextOfferRequirements.text.toString().trim()
+        val offerType = selectedType
 
         var isValid = true
         if (offerTitle.isEmpty()) {
@@ -67,6 +77,24 @@ class CreateOfferActivity: AppCompatActivity() {
         } else {
             binding.autoCompleteTextViewLocation.error = null
         }
+        if (offerSkills.isEmpty()) {
+            binding.editTextOfferSkills.error = "Las habilidades no pueden estar vacías"
+            isValid = false
+        } else {
+            binding.editTextOfferSkills.error = null
+        }
+        if (offerRequirements.isEmpty()) {
+            binding.editTextOfferRequirements.error = "Los requisitos no pueden estar vacíos"
+            isValid = false
+        } else {
+            binding.editTextOfferRequirements.error = null
+            }
+        if (offerType!!.isEmpty()) {
+            binding.autoCompleteTextViewOfferType.error = "El tipo de oferta no puede estar vacío"
+            isValid = false
+        } else {
+            binding.autoCompleteTextViewOfferType.error = null
+        }
 
         val currentFirebaseUser = auth.currentUser
         if (currentFirebaseUser == null) {
@@ -88,7 +116,7 @@ class CreateOfferActivity: AppCompatActivity() {
         val offerCompanyId = currentFirebaseUser.uid
         val companyNameRef = database.getReference("companies").child(offerCompanyId).child("name")
 
-        // Obtener el nombre de la compañía de forma asíncrona
+        // Obtener el nombre de la compañía
         companyNameRef.addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -96,14 +124,12 @@ class CreateOfferActivity: AppCompatActivity() {
 
                 if (offerCompanyName == null) {
                     Log.e(TAG, "No se pudo obtener el nombre de la compañía para ID: $offerCompanyId. Usando 'Nombre no disponible'.")
-                    // Decide cómo manejar esto: ¿usar un nombre por defecto? ¿Mostrar un error?
-                    // Aquí usamos un valor por defecto para continuar, pero podrías querer un manejo más robusto.
-                    proceedWithSavingOffer(offerTitle, offerDescription, offerLocation, offerCompanyId, "Nombre no disponible")
+                      proceedWithSavingOffer(offerTitle, offerDescription, offerLocation, offerCompanyId, "Nombre no disponible", offerSkills, offerRequirements, offerType)
                     return
                 }
 
                 Log.d(TAG, "Nombre de la compañía obtenido: $offerCompanyName. Procediendo a guardar la oferta...")
-                proceedWithSavingOffer(offerTitle, offerDescription, offerLocation, offerCompanyId, offerCompanyName)
+                proceedWithSavingOffer(offerTitle, offerDescription, offerLocation, offerCompanyId, offerCompanyName, offerSkills, offerRequirements, offerType)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -119,7 +145,10 @@ class CreateOfferActivity: AppCompatActivity() {
         offerDescription: String,
         offerLocation: String,
         offerCompanyId: String,
-        offerCompanyName: String
+        offerCompanyName: String,
+        offerSkills: String,
+        offerRequirements: String,
+        offerType: String
     ) {
         val offerId = offersReference.push().key // Genera un ID único para la nueva oferta
 
@@ -138,8 +167,11 @@ class CreateOfferActivity: AppCompatActivity() {
             description = offerDescription,
             location = offerLocation,
             companyId = offerCompanyId,
-            fechaPublicacion = offerDateTimestamp,
+            datePosted = offerDateTimestamp,
             companyName = offerCompanyName,
+            skills = offerSkills.split(",").map { it.trim() },
+            requirements = offerRequirements.split(",").map { it.trim() },
+            type = offerType
         )
 
         // Guardar la oferta en Firebase Realtime Database

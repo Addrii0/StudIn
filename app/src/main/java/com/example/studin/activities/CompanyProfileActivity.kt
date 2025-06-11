@@ -2,7 +2,6 @@ package com.example.studin.activities
 
 import OfferAdapter
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -80,7 +79,6 @@ class CompanyProfileActivity : AppCompatActivity() {
 
             val companyIdFromProfile = companyId // ID de la empresa actual
             val companyNameFromProfile = binding.collapsingToolbarCompany.title.toString()
-            // companyProfileImageUrl ya lo tienes de cuando cargaste los datos de la empresa
 
             if (companyIdFromProfile == null || companyIdFromProfile.isEmpty()) {
                 Toast.makeText(this, "ID de empresa no disponible.", Toast.LENGTH_SHORT).show()
@@ -88,7 +86,7 @@ class CompanyProfileActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Iniciar MainChatsActivity para que maneje la creación/navegación del chat
+            // Iniciar MainChatsActivity para que maneje la creación del chat
             val intent = Intent(this, MainChatsActivity::class.java)
             intent.putExtra("ACTION_START_CHAT_WITH_USER_ID", companyIdFromProfile)
             intent.putExtra("ACTION_START_CHAT_WITH_USER_NAME", companyNameFromProfile)
@@ -101,26 +99,27 @@ class CompanyProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Placeholder para la sección del mapa
-        binding.mapViewContainer.setOnClickListener {
-            val companyAddress = binding.textViewCompanyAddress.text.toString()
-            if (companyAddress.isNotEmpty()) {
-                // Intenta abrir la dirección en Google Maps
-                // Necesito lat/lon para una integración de mapa en la app
-                val gmmIntentUri = Uri.parse("geo:0,0?q=${Uri.encode(companyAddress)}")
-                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                mapIntent.setPackage("com.google.android.apps.maps")
-                if (mapIntent.resolveActivity(packageManager) != null) {
-                    startActivity(mapIntent)
-                } else {
-                    Toast.makeText(
-                        this,
-                        "No se encontró una aplicación de mapas.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
+        //Implementación de mapa(futuro desarrollo)
+//        // Placeholder para la sección del mapa
+//        binding.mapViewContainer.setOnClickListener {
+//            val companyAddress = binding.textViewCompanyAddress.text.toString()
+//            if (companyAddress.isNotEmpty()) {
+//                // Intenta abrir la dirección en Google Maps
+//                // Necesito lat/lon para una integración de mapa en la app
+//                val gmmIntentUri = Uri.parse("geo:0,0?q=${Uri.encode(companyAddress)}")
+//                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+//                mapIntent.setPackage("com.google.android.apps.maps")
+//                if (mapIntent.resolveActivity(packageManager) != null) {
+//                    startActivity(mapIntent)
+//                } else {
+//                    Toast.makeText(
+//                        this,
+//                        "No se encontró una aplicación de mapas.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        }
     }
 
     private fun setupRecyclerView() {
@@ -128,6 +127,7 @@ class CompanyProfileActivity : AppCompatActivity() {
             val intent = Intent(this, UserOfferInfoActivity::class.java)
             if (offer.id.isNullOrEmpty()) {
                 Toast.makeText(this, "ID de la oferta no disponible.", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "Intento de abrir oferta sin ID. Objeto oferta completo: $offer")
                 return@OfferAdapter // Sale de la lambda del adaptador
             }
             intent.putExtra(UserOfferInfoActivity.EXTRA_OFFER_ID, offer.id)
@@ -142,7 +142,6 @@ class CompanyProfileActivity : AppCompatActivity() {
     private fun loadCompanyData() {
         companyReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // binding.progressBarCompany.visibility = View.GONE
                 val company = snapshot.getValue(Company::class.java)
                 if (company != null) {
                     displayCompanyData(company)
@@ -190,21 +189,11 @@ class CompanyProfileActivity : AppCompatActivity() {
         binding.textViewCompanyEmail.text = company.email ?: "Email no disponible"
         binding.textViewCompanyPhone.text = company.phone ?: "Teléfono no disponible"
 
-//        val address = company.address
-//        if (address != null) {
-//            val fullAddress = listOfNotNull(address.street, address.city, address.state, address.postalCode, address.country)
-//                .joinToString(", ")
-//                .ifEmpty { "Dirección no disponible" }
-//            binding.textViewCompanyAddress.text = fullAddress
-//        } else {
-//            binding.textViewCompanyAddress.text = "Dirección no disponible"
-//        }
         Log.d(TAG, "Datos de la empresa '${company.name}' mostrados.")
     }
 
 
     private fun loadCompanyOffers() {
-
         val query = offersReference.orderByChild("companyId").equalTo(companyId)
 
         query.addValueEventListener(object : ValueEventListener {
@@ -214,20 +203,21 @@ class CompanyProfileActivity : AppCompatActivity() {
                     for (offerSnapshot in snapshot.children) {
                         val offer = offerSnapshot.getValue(Offer::class.java)
                         if (offer != null) {
-
+                            offer.id = offerSnapshot.key
                             companyOffersList.add(offer)
+                            Log.d(TAG, "Oferta añadida: ${offer.title}, ID asignado: ${offer.id}") // Log para confirmar
+                        } else {
+                            Log.w(TAG, "No se pudo deserializar la oferta desde snapshot con clave: ${offerSnapshot.key}")
                         }
                     }
                     Log.d(TAG, "Se encontraron ${companyOffersList.size} ofertas para la empresa $companyId.")
                 } else {
                     Log.d(TAG, "No se encontraron ofertas para la empresa $companyId.")
-
                 }
                 offerAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
-
                 Toast.makeText(this@CompanyProfileActivity, "Error al cargar ofertas: ${error.message}", Toast.LENGTH_LONG).show()
                 Log.e(TAG, "Error al cargar ofertas de la empresa: ", error.toException())
             }

@@ -15,12 +15,13 @@
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:menu="@menu/menu_principal"/>
+            app:menu="@menu/menu_principal"
+            android:visibility="gone"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/chatsFragmentContainer"
-        android:name="com.example.studin.ChatsFragment"
+        android:name="com.example.studin.fragments.ChatsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

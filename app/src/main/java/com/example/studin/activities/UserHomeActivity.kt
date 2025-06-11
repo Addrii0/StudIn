@@ -14,7 +14,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.example.studin.classes.Offer
-import com.example.studin.ui.fragments.OffersOverlayFragment
+import com.example.studin.fragments.OffersOverlayFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.Glide
 import com.example.studin.R
@@ -48,19 +48,19 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
             loadUserProfileImage()
         }
 
-        binding.chat.setOnClickListener {
+        binding.navItemChat.setOnClickListener {
             val chatIntent = Intent(this, MainChatsActivity::class.java)
             startActivity(chatIntent)
         }
-        binding.offerButtom.setOnClickListener {
+        binding.navItemOffers.setOnClickListener {
             val offerIntent = Intent(this, UserOfferActivity::class.java)
             startActivity(offerIntent)
         }
 
-        binding.buttonLogout.setOnClickListener {
+        binding.navItemLogout.setOnClickListener {
             logoutUser()
         }
-        binding.imageView5.setOnClickListener {
+        binding.userProfile.setOnClickListener {
             val profileIntent = Intent(this, UserProfileActivity::class.java)
             startActivity(profileIntent)
         }
@@ -81,17 +81,17 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
                         .placeholder(R.drawable.icono_persona)
                         .error(R.drawable.icono_persona)
                         .circleCrop()
-                        .into(binding.imageView5)
+                        .into(binding.userProfile)
                 } else {
                     Log.w(TAG, "No se encontró URL de imagen de perfil o está vacía.")
 
-                    binding.imageView5.setImageResource(R.drawable.icono_persona)
+                    binding.userProfile.setImageResource(R.drawable.icono_persona)
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "Error al cargar datos del usuario para imagen: ", error.toException())
-                binding.imageView5.setImageResource(R.drawable.ic_profile_person) //
+                binding.userProfile.setImageResource(R.drawable.ic_profile_person) //
             }
         })
     }
@@ -102,7 +102,7 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
                 loadedOffersList.clear()
                 for (offerSnapshot in snapshot.children) {
                     val offer = offerSnapshot.getValue(Offer::class.java)
-                    if (offer != null) {
+                    if (offer != null && offer.active) {
                         val offerWithId = offer.copy(id = offerSnapshot.key)
                         loadedOffersList.add(offerWithId)
                         Log.d(TAG, "Oferta cargada: ${offerWithId.title}")
@@ -121,7 +121,6 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "loadOffers:onCancelled", error.toException())
-                Toast.makeText(baseContext, "Error al cargar ofertas: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }

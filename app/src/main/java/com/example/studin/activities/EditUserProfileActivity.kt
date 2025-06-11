@@ -10,8 +10,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.studin.R // Asegúrate de importar tu clase R
-import com.example.studin.classes.User // Tu clase User
+import com.example.studin.R
+import com.example.studin.classes.User
 import com.example.studin.databinding.ActivityUserProfileEditBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -58,7 +58,7 @@ class EditUserProfileActivity : AppCompatActivity() {
         currentUserUid = auth.currentUser?.uid
         if (currentUserUid == null) {
             Toast.makeText(this, "Error: Usuario no encontrado.", Toast.LENGTH_LONG).show()
-            finish() // Cierra la actividad si no hay usuario
+            finish()
             return
         }
         userDatabaseReference = database.getReference("users").child(currentUserUid!!)
@@ -70,17 +70,15 @@ class EditUserProfileActivity : AppCompatActivity() {
                     selectedImageUri = it
                     Glide.with(this)
                         .load(it)
-                        .circleCrop() // Para que la vista previa sea circular si quieres
-                        .placeholder(R.drawable.icono_persona) // Reemplaza con tu placeholder
+                        .circleCrop()
+                        .placeholder(R.drawable.icono_persona)
                         .into(binding.imageViewEditProfilePicture)
                     Log.d(TAG, "Nueva imagen seleccionada: $it")
                 }
             }
 
-        // Cargar datos actuales del usuario
         loadCurrentUserData()
 
-        // Configurar listeners de botones
         binding.buttonChangeProfilePicture.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
@@ -96,28 +94,32 @@ class EditUserProfileActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
                 if (user != null) {
-                    binding.editTextProfileName.setText(user.name)
-                    binding.editTextProfileSurname.setText(user.surName)
-                    binding.editTextProfileEmail.setText(user.email) // Email generalmente no editable
+                    binding.editTextProfileName.setText(user.name ?: "")
+                    binding.editTextProfileSurname.setText(user.surName ?: "")
+                    binding.editTextProfileEmail.setText(user.email ?: "")
                     binding.editTextProfilePhone.setText(user.phone ?: "")
                     binding.editTextProfileDescription.setText(user.description ?: "")
                     binding.editTextProfileSkills.setText(user.skills.joinToString(", "))
+                    binding.editTextProfileExperience.setText(user.experience ?: "")
+                    binding.editTextProfileEducation.setText(user.education ?: "")
+
 
                     currentProfileImageUrl = user.profileImageUrl
                     if (!currentProfileImageUrl.isNullOrEmpty()) {
                         Glide.with(this@EditUserProfileActivity)
                             .load(currentProfileImageUrl)
                             .circleCrop()
-                            .placeholder(R.drawable.default_header_placeholder) // Reemplaza con tu placeholder
-                            .error(R.drawable.ic_profile_person)   // Reemplaza con tu imagen de error
+                            .placeholder(R.drawable.default_header_placeholder)
+                            .error(R.drawable.ic_profile_person)
                             .into(binding.imageViewEditProfilePicture)
                     } else {
-                        binding.imageViewEditProfilePicture.setImageResource(R.drawable.icono_persona) // Placeholder si no hay imagen
+                        // Si no hay imagen de perfil, puedes usar un placeholder
+                        binding.imageViewEditProfilePicture.setImageResource(R.drawable.icono_persona)
                     }
-                    Log.d(TAG, "Datos del usuario cargados.")
+                    Log.d(TAG, "Datos del usuario cargados: ${user.name}")
                 } else {
                     Toast.makeText(this@EditUserProfileActivity, "No se pudieron cargar los datos del perfil.", Toast.LENGTH_SHORT).show()
-                    Log.w(TAG, "Datos del usuario no encontrados en la base de datos.")
+                    Log.w(TAG, "Datos del usuario no encontrados en la base de datos para UID: $currentUserUid")
                 }
                 showLoading(false)
             }
@@ -133,11 +135,14 @@ class EditUserProfileActivity : AppCompatActivity() {
     private fun validateAndSaveChanges() {
         val name = binding.editTextProfileName.text.toString().trim()
         val surname = binding.editTextProfileSurname.text.toString().trim()
-        // val email = binding.editTextProfileEmail.text.toString().trim() // Email no se suele editar
         val phone = binding.editTextProfilePhone.text.toString().trim()
         val description = binding.editTextProfileDescription.text.toString().trim()
         val skillsString = binding.editTextProfileSkills.text.toString().trim()
         val skillsList = skillsString.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        // --- NUEVOS CAMPOS ---
+        val experience = binding.editTextProfileExperience.text.toString().trim()
+        val education = binding.editTextProfileEducation.text.toString().trim()
+        // --- FIN NUEVOS CAMPOS ---
 
         if (name.isEmpty()) {
             binding.textInputLayoutProfileName.error = "El nombre no puede estar vacío"
@@ -153,16 +158,12 @@ class EditUserProfileActivity : AppCompatActivity() {
             binding.textInputLayoutProfileSurname.error = null
         }
 
-        // Añade más validaciones si son necesarias (teléfono, etc.)
-
         showLoading(true)
 
         if (selectedImageUri != null) {
-            // Si se seleccionó una nueva imagen, subirla primero
-            uploadNewProfileImageAndThenUpdateUserDetails(name, surname, phone, description, skillsList)
+            uploadNewProfileImageAndThenUpdateUserDetails(name, surname, phone, description, skillsList, experience, education)
         } else {
-            // Si no se cambió la imagen, solo actualizar los detalles de texto
-            updateUserDetailsInDatabase(name, surname, phone, description, skillsList, currentProfileImageUrl)
+            updateUserDetailsInDatabase(name, surname, phone, description, skillsList, experience, education, currentProfileImageUrl)
         }
     }
 
@@ -171,7 +172,9 @@ class EditUserProfileActivity : AppCompatActivity() {
         surname: String,
         phone: String,
         description: String,
-        skills: List<String>
+        skills: List<String>,
+        experience: String,
+        education: String
     ) {
         val imageFileName = "profile_${currentUserUid}.jpg" // Nombre de archivo consistente
         val imageRef = storage.reference.child("profile_images/users/$currentUserUid/$imageFileName")
@@ -182,24 +185,19 @@ class EditUserProfileActivity : AppCompatActivity() {
                     uploadTask.storage.downloadUrl.addOnSuccessListener { downloadUri ->
                         val newImageUrl = downloadUri.toString()
                         Log.d(TAG, "Nueva imagen subida, URL: $newImageUrl")
-                        updateUserDetailsInDatabase(name, surname, phone, description, skills, newImageUrl)
+                        updateUserDetailsInDatabase(name, surname, phone, description, skills, experience, education, newImageUrl)
                     }.addOnFailureListener { e ->
                         showLoading(false)
                         Log.w(TAG, "Error al obtener URL de descarga de la nueva imagen: ", e)
                         Toast.makeText(baseContext, "Error al obtener URL de imagen. Se guardaron otros datos.", Toast.LENGTH_LONG).show()
-                        // Aún así, guardar los otros datos con la imagen anterior (o sin imagen si no había)
-                        // ... (código anterior de addOnFailureListener para obtener downloadUrl)
-                        updateUserDetailsInDatabase(name, surname, phone, description, skills, currentProfileImageUrl)
+                        updateUserDetailsInDatabase(name, surname, phone, description, skills, experience, education, currentProfileImageUrl)
                     }
                 }
                 .addOnFailureListener { e ->
                     showLoading(false)
                     Log.w(TAG, "Error al subir nueva imagen de perfil: ", e)
                     Toast.makeText(baseContext, "Error al subir imagen: ${e.message}", Toast.LENGTH_LONG).show()
-                    // Opcional: podrías decidir no guardar ningún cambio si la subida de imagen falla,
-                    // o guardar solo los datos de texto como en el caso anterior.
-                    // Por ahora, no haremos nada más aquí, el usuario deberá intentarlo de nuevo.
-                }
+                      }
         }
     }
 
@@ -209,25 +207,31 @@ class EditUserProfileActivity : AppCompatActivity() {
         phone: String,
         description: String,
         skills: List<String>,
+        experience: String,
+        education: String,
         imageUrl: String? // Puede ser la nueva URL o la anterior
     ) {
         val userUpdates = mutableMapOf<String, Any>()
         userUpdates["name"] = name
-        userUpdates["surName"] = surname // Asumo que el campo en tu clase User es surName
-        userUpdates["telefono"] = phone
+        userUpdates["surName"] = surname
+        userUpdates["phone"] = phone
         userUpdates["description"] = description
         userUpdates["skills"] = skills
+        userUpdates["experience"] = experience
+        userUpdates["education"] = education
+        // Solo actualizar la imagen si se proporciona una nueva
         imageUrl?.let {
             userUpdates["profileImageUrl"] = it
-        }
+        } ?: run {
+            }
+
 
         userDatabaseReference.updateChildren(userUpdates)
             .addOnSuccessListener {
                 showLoading(false)
                 Toast.makeText(this, "Perfil actualizado correctamente.", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "Datos del usuario actualizados en la base de datos.")
-                // Opcional: setResult(Activity.RESULT_OK) si iniciaste esta actividad con startActivityForResult
-                finish() // Cierra la actividad de edición
+                finish()
             }
             .addOnFailureListener { e ->
                 showLoading(false)
@@ -240,13 +244,18 @@ class EditUserProfileActivity : AppCompatActivity() {
         binding.progressBarEditProfile.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.buttonSaveProfileChanges.isEnabled = !isLoading
         binding.buttonChangeProfilePicture.isEnabled = !isLoading
-        // Puedes deshabilitar otros campos de entrada también si lo deseas
+        binding.editTextProfileName.isEnabled = !isLoading
+        binding.editTextProfileSurname.isEnabled = !isLoading
+        binding.editTextProfilePhone.isEnabled = !isLoading
+        binding.editTextProfileDescription.isEnabled = !isLoading
+        binding.editTextProfileSkills.isEnabled = !isLoading
+        binding.editTextProfileExperience.isEnabled = !isLoading
+        binding.editTextProfileEducation.isEnabled = !isLoading
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Manejar el botón de atrás en la Toolbar
         if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed() // o finish()
+            onBackPressedDispatcher.onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)

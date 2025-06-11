@@ -14,4 +14,5 @@ data class User(
     val phone: String? = null,
     val experience: String? = null,
     var profileImageUrl: String? = null,
+    val education: String? = null,
 ): Parcelable

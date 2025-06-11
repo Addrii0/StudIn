@@ -11,7 +11,7 @@
         android:id="@+id/searchViewOffersFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:queryHint="Buscar por título de oferta..."
+        app:queryHint="Buscar por título de oferta"
         app:iconifiedByDefault="false"
         android:layout_margin="8dp"/>
 
@@ -30,21 +30,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textViewNoOffersFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="No se encontraron ofertas."
-        android:visibility="gone" />
+        android:text="@string/offers_not_found"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/offersRecyclerViewFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        tools:listitem="@layout/list_item_offer" />
+        tools:listitem="@layout/list_item_offer"/>
 
 </LinearLayout>

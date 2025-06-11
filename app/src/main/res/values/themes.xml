@@ -1,12 +1,13 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources >
+    <!-- El Material3 es el diseño reciente de Google Material -->
     <style name="Base.Theme.StudIn" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/my_app_blue_container</item>
-        <item name="colorOnPrimaryContainer">@color/my_app_on_blue_container</item>
-        <item name="colorSecondary">@color/blue_high</item>
+        <item name="colorPrimaryContainer">@color/light_blue_container</item>
+        <item name="colorOnPrimaryContainer">@color/blue_container</item>
+        <item name="colorSecondary">@color/light_blue</item>
         <item name="colorOnSecondary">@color/black</item>
     </style>
-
+    <!-- Crea el tema principal de la aplicación usando el estilo anterior -->
     <style name="Theme.StudIn" parent="Base.Theme.StudIn" />
 </resources>

@@ -29,7 +29,7 @@ class UserOfferInfoActivity: AppCompatActivity() {
 
     private val TAG = "UserOfferInfoActivity"
     companion object {
-        const val EXTRA_OFFER_ID = "extra_offer_id"
+        const val EXTRA_OFFER_ID = "SELECTED_OFFER_ID"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class UserOfferInfoActivity: AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
         offersReference = database.getReference("offers")
         offerAplicantReference = database.getReference("offerApplications")
-        userAplicantReference = database.getReference("userAppliedOffers") // Para el índice
+        userAplicantReference = database.getReference("userAppliedOffers")
 
         // Obtener el ID de la oferta del Intent
         offerId = intent.getStringExtra("SELECTED_OFFER_ID") ?: run {
@@ -53,10 +53,7 @@ class UserOfferInfoActivity: AppCompatActivity() {
 
         binding.buttonApplyToOffer.setOnClickListener {
             applyToOffer()
-
-
         }
-        //  Verificar si el usuario ya aplicó y deshabilitar el texto del botón
         checkIfUserAlreadyApplied()
     }
 
@@ -68,11 +65,11 @@ class UserOfferInfoActivity: AppCompatActivity() {
         }
         val userId = currentUser.uid
 
-        // Deshabilitar el botón para evitar múltiples clics mientras se procesa
+        // Deshabilitar el botón para evitar múltiples clics
         binding.buttonApplyToOffer.isEnabled = false
         binding.buttonApplyToOffer.text = "Aplicando..."
 
-        // 1. Crear el objeto de la solicitud
+        // Crear el objeto de la solicitud
         val applicationData = hashMapOf(
             "appliedAt" to ServerValue.TIMESTAMP,
             "status" to "pending" // Estado inicial
@@ -92,7 +89,7 @@ class UserOfferInfoActivity: AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error al aplicar: ${e.message}", Toast.LENGTH_LONG).show()
-                binding.buttonApplyToOffer.isEnabled = true // Rehabilitar el botón en caso de error
+                binding.buttonApplyToOffer.isEnabled = true // Si hay error, vuelve a mostrar botón
                 binding.buttonApplyToOffer.text = "Aplicar a Oferta"
                 Log.e("ApplyToOffer", "Error al escribir en Firebase", e)
             }
@@ -157,15 +154,15 @@ class UserOfferInfoActivity: AppCompatActivity() {
         binding.textViewOfferTitleInfo.text = offer.title ?: "N/A"
         binding.textViewOfferDescriptionInfo.text = offer.description ?: "No hay descripción disponible."
         binding.textViewOfferLocationInfo.text = offer.location ?: "Ubicación no especificada."
-
+        binding.textViewOfferTypeInfo.text = offer.type ?: "Tipo de oferta no especificado."
         if (offer.skills.isNotEmpty()) {
             binding.textViewOfferSkillsInfo.text = offer.skills.joinToString(separator = ", ")
         } else {
             binding.textViewOfferSkillsInfo.text = "No hay habilidades requeridas."
         }
-        // binding.textViewOfferRequirementsInfo.text = offer.requirements ?: "No especificados"
+         binding.textViewOfferRequirementsInfo.text = offer.requirements.joinToString(separator = ", ")
 
-        offer.fechaPublicacion?.let { timestamp ->
+        offer.datePosted?.let { timestamp ->
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             binding.textViewOfferDateInfo.text = "Publicado el: " + sdf.format(Date(timestamp))
         } ?: run {

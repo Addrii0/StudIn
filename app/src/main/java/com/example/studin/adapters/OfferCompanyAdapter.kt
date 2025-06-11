@@ -3,8 +3,8 @@ package com.example.studin.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.studin.classes.Offer // Reemplaza con la ruta a tu clase Offer
-import com.example.studin.databinding.ItemOfferBinding // Generado desde item_offer.xml
+import com.example.studin.classes.Offer
+import com.example.studin.databinding.ItemOfferBinding
 
 class OffersAdapter(
     private var offerList: List<Offer>,
@@ -36,9 +36,5 @@ class OffersAdapter(
 
     override fun getItemCount(): Int = offerList.size
 
-    // Función para actualizar la lista desde fuera del adaptador
-    fun updateOffers(newOffers: List<Offer>) {
-        offerList = newOffers
-        notifyDataSetChanged() // Notificación básica. Para mejor rendimiento, usa DiffUtil.
-    }
+
 }

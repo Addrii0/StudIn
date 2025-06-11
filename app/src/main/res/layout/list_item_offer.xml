@@ -8,6 +8,8 @@
     android:background="@android:color/white"
     android:elevation="2dp">
 
+    <!--listar ofertas para usuarios-->
+
     <TextView
         android:id="@+id/textViewOfferTitle"
         android:layout_width="match_parent"
@@ -24,7 +26,7 @@
         android:layout_marginTop="4dp"
         android:textSize="14sp"
         android:textColor="@android:color/darker_gray"
-        android:text="@string/esta_es_una_descripci_n_corta_de_la_oferta" />
+        android:text="@string/offer_description" />
 
 
 

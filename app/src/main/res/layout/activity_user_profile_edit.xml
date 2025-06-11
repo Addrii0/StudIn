@@ -42,18 +42,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:srcCompat="@tools:sample/avatars"
-                android:contentDescription="Foto de perfil" />
+                android:contentDescription="Foto de perfil"/>
 
             <Button
                 android:id="@+id/buttonChangeProfilePicture"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="Cambiar Foto"
-                style="?attr/materialButtonOutlinedStyle"
-                app:layout_constraintTop_toBottomOf="@id/imageViewEditProfilePicture"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewEditProfilePicture"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutProfileName"
@@ -61,16 +61,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/buttonChangeProfilePicture"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Nombre"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:hint="Nombre">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonChangeProfilePicture">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProfileName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -79,18 +79,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileName"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="@string/surname"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:hint="Apellidos">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProfileSurname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutProfileEmail"
@@ -98,17 +97,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileSurname"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Correo Electrónico"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:hint="Correo Electrónico">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileSurname">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProfileEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
                     android:enabled="false"
+                    android:inputType="textEmailAddress"
                     tools:text="usuario@example.com"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,16 +117,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileEmail"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Teléfono"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:hint="Teléfono">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileEmail">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProfilePhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone" />
+                    android:inputType="phone"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -136,18 +135,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfilePhone"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Descripción"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:hint="Descripción">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfilePhone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProfileDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="top"
                     android:inputType="textMultiLine"
-                    android:minLines="3"
-                    android:gravity="top"/>
+                    android:minLines="3"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -156,31 +155,72 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileDescription"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Habilidades (separadas por coma)"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:hint="Habilidades (separadas por coma)">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileDescription">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProfileSkills"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutProfileExperience"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Experiencia Laboral"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileSkills">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextProfileExperience"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:minLines="3"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutProfileEducation"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Educación"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProfileExperience">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextProfileEducation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"/>
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
     <Button
         android:id="@+id/buttonSaveProfileChanges"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Guardar Cambios"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:text="Guardar Cambios"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressBarEditProfile"
@@ -188,10 +228,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

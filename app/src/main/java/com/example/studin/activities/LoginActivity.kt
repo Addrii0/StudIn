@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studin.databinding.ActivityLoginBinding
+import com.example.studin.databinding.DialogForgotPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -29,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = Firebase.auth // o FirebaseAuth.getInstance()
+        auth = Firebase.auth
 
         binding.InicioBoton.setOnClickListener {
             if (validarEmail() && validarContrasena()) {
@@ -44,6 +46,9 @@ class LoginActivity : AppCompatActivity() {
         binding.RegistroEmpresaTexto.setOnClickListener {
             val intent = Intent(this, CompanyRegisterActivity::class.java)
             startActivity(intent)
+        }
+        binding.textViewForgotPassword.setOnClickListener {
+            showForgotPasswordDialog()
         }
 
         val currentUser = auth.currentUser
@@ -129,7 +134,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // No encontrado en users, busca en companies
                     usersRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(companySnapshot: DataSnapshot) { // Renombrado snapshot para claridad
+                        override fun onDataChange(companySnapshot: DataSnapshot) {
                             if (companySnapshot.exists()) {
                                 Log.d(TAG, "Usuario $uid es un usuario normal.")
                                 Toast.makeText(this@LoginActivity, "Bienvenida Usuario.", Toast.LENGTH_SHORT).show()
@@ -138,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(intent)
                                 finish()
                             } else {
-                                // El UID existe en Auth pero no en nuestros nodos de perfil
+                                // El UID existe en Auth pero no en el nodo perfil
                                 Log.w(TAG, "UID $uid autenticado pero no encontrado en nodos 'users' o 'companies'.")
                                 Toast.makeText(this@LoginActivity, "Error: Perfil de usuario no encontrado. Contacta soporte.", Toast.LENGTH_LONG).show()
                             }
@@ -152,10 +157,57 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onCancelled(error: DatabaseError) {
+            override fun onCancelled(error: DatabaseError) {-
                 Log.w(TAG, "checkUserTypeAndNavigate:users:onCancelled", error.toException())
                 Toast.makeText(this@LoginActivity, "Error al verificar tipo de usuario: ${error.message}", Toast.LENGTH_LONG).show()
             }
         })
+    }
+    private fun showForgotPasswordDialog() {
+        val dialogBinding = DialogForgotPasswordBinding.inflate(layoutInflater) // Infla usando View Binding
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("restablecer contraseña")
+
+
+        val currentLoginEmail = binding.usuario.text.toString()
+        if (currentLoginEmail.isNotEmpty() &&
+            android.util.Patterns.EMAIL_ADDRESS.matcher(currentLoginEmail).matches()) {
+            dialogBinding.editTextEmailDialog.setText(currentLoginEmail)
+        }
+
+        builder.setView(dialogBinding.root) // Establece la vista  del diálogo
+
+        builder.setPositiveButton("enviar") { dialog, _ ->
+            val email = dialogBinding.editTextEmailDialog.text.toString().trim()
+            if (email.isNotEmpty()) {
+                if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    sendPasswordResetEmail(email)
+                } else {
+                    Toast.makeText(this, "Ingresa un correo valido", Toast.LENGTH_SHORT).show()
+
+                }
+            } else {
+                Toast.makeText(this, "Ingresa un correo valido", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNegativeButton("cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    private fun sendPasswordResetEmail(email: String) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "correo enviado exitosamente", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "error, correo no enviado", Toast.LENGTH_LONG).show()
+                    Log.e("ForgotPassword", "Error al enviar correo: ${task.exception?.message}", task.exception)
+                }
+            }
     }
 }

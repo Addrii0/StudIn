@@ -23,8 +23,11 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var userReference: DatabaseReference
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
-    private var userIdToLoad: String? = null
+    private var userIdToLoad: String? = null // El UID del perfil que se va a mostrar
+    private var currentUserUID: String? = null // El UID del usuario actualmente logueado
     private val TAG = "UserProfileActivity"
+    private var userProfileImageUrl: String? = null
+    private var userNameFromProfile: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,35 +36,62 @@ class UserProfileActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+        currentUserUID = auth.currentUser?.uid
 
-
-        userIdToLoad = intent.getStringExtra("USER_ID")
-        if (userIdToLoad == null) {
-            userIdToLoad = auth.currentUser?.uid
+        // Determinar qué perfil cargar
+        val selectedUserIdFromIntent = intent.getStringExtra("SELECTED_USER_ID")
+        if (selectedUserIdFromIntent != null) {
+            userIdToLoad = selectedUserIdFromIntent
+            Log.d(TAG, "Cargando perfil del usuario seleccionado: $userIdToLoad")
+        } else {
+            // Si no se pasa un ID, por defecto se carga el perfil del usuario actual
+            userIdToLoad = currentUserUID
+            Log.d(TAG, "No se recibió SELECTED_USER_ID, cargando perfil del usuario actual: $userIdToLoad")
         }
 
         if (userIdToLoad == null) {
             Toast.makeText(this, "No se pudo identificar al usuario.", Toast.LENGTH_LONG).show()
-            Log.e(TAG, "USER_ID es nulo y no hay usuario logueado.")
+            Log.e(TAG, "userIdToLoad es nulo. No se puede cargar el perfil.")
             finish()
             return
         }
 
         userReference = database.getReference("users").child(userIdToLoad!!)
+        userNameFromProfile = database.getReference("users").child(userIdToLoad!!).child("name").toString()
+        userProfileImageUrl = database.getReference("users").child(userIdToLoad!!).child("profileImageUrl").toString()
 
-        // Ocultar/mostrar botón de editar perfil
-        if (userIdToLoad == auth.currentUser?.uid) {
+        setupButtons()
+        loadUserProfile()
+    }
+
+    private fun setupButtons() {
+        if (userIdToLoad == currentUserUID) {
+            // Es el perfil del usuario actual
             binding.buttonEditProfile.visibility = View.VISIBLE
+            binding.buttonSendMessage.visibility = View.GONE // Ocultar "Enviar Mensaje" para el propio usuario
+
             binding.buttonEditProfile.setOnClickListener {
                 val intent = Intent(this, EditUserProfileActivity::class.java)
+
                 startActivity(intent)
-                Toast.makeText(this, "Ir a editar perfil", Toast.LENGTH_SHORT).show()
             }
         } else {
+            // Es el perfil de otro usuario
             binding.buttonEditProfile.visibility = View.GONE
-        }
+            binding.buttonSendMessage.visibility = View.VISIBLE
 
-        loadUserProfile()
+            binding.buttonSendMessage.setOnClickListener {
+
+                Log.d(TAG, "Botón 'Enviar Mensaje' clickeado para el usuario: $userIdToLoad")
+
+                val intent = Intent(this, MainChatsActivity::class.java)
+                intent.putExtra("ACTION_START_CHAT_WITH_USER_ID", userIdToLoad)
+                intent.putExtra("ACTION_START_CHAT_WITH_USER_NAME", userNameFromProfile)
+                intent.putExtra("ACTION_START_CHAT_WITH_USER_AVATAR_URL", userProfileImageUrl)
+                startActivity(intent)
+                Toast.makeText(this, "Iniciando chat con el usuario...", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun loadUserProfile() {
@@ -73,32 +103,34 @@ class UserProfileActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     val user = snapshot.getValue(User::class.java)
                     if (user != null) {
+                        // Rellenar los datos de la UI
                         binding.textViewUserName.text = "${user.name ?: ""} ${user.surName ?: "N/A"}"
                         binding.textViewUserEmail.text = user.email ?: "Email no disponible"
-                        binding.textViewUserDescription.text = user.description ?: "Sin descripción."
-                        binding.textViewUserSkills.text = user.skills?.joinToString(", ") ?: "Habilidades no especificadas."
-                        binding.textViewUserExperience.text = user.experience ?: "Experiencia no especificada."
                         binding.textViewUserPhone.text = user.phone ?: "Teléfono no disponible"
-                        // Cargar imagen de perfil usando Glide
-                        if (!user.profileImageUrl.isNullOrEmpty()) {
-                            Glide.with(this@UserProfileActivity)
-                                .load(user.profileImageUrl)
-                                .placeholder(R.drawable.ic_profile_person)
-                                .error(R.drawable.ic_profile_person)
-                                .circleCrop() // Para hacerla redonda
-                                .into(binding.imageViewUserProfile)
-                        } else {
-                            binding.imageViewUserProfile.setImageResource(R.drawable.ic_profile_person)
-                        }
+                        binding.textViewUserDescription.text = user.description ?: "Sin descripción."
+                        binding.textViewUserExperience.text = user.experience ?: "Experiencia no especificada."
+                        binding.textViewUserEducation.text = user.education ?: "Educación no especificada." // Campo añadido
 
-                        if (user.skills != null && user.skills.isNotEmpty()) {
+                        // Habilidades
+                        if (user.skills.isNotEmpty()) {
                             binding.textViewUserSkills.text = user.skills.joinToString(", ")
                         } else {
                             binding.textViewUserSkills.text = "Habilidades no especificadas."
                         }
 
+                        if (!user.profileImageUrl.isNullOrEmpty()) {
+                            Glide.with(this@UserProfileActivity)
+                                .load(user.profileImageUrl)
+                                .placeholder(R.drawable.ic_profile_person)
+                                .error(R.drawable.ic_profile_person)
+                                .circleCrop()
+                                .into(binding.imageViewUserProfile)
+                        } else {
+                            binding.imageViewUserProfile.setImageResource(R.drawable.ic_profile_person)
+                        }
+
                     } else {
-                        Log.e(TAG, "Error al deserializar el objeto User desde Firebase.")
+                        Log.e(TAG, "Error al deserializar el objeto User desde Firebase para ID: $userIdToLoad")
                         Toast.makeText(this@UserProfileActivity, "No se pudo cargar el perfil.", Toast.LENGTH_LONG).show()
                     }
                 } else {
@@ -108,8 +140,8 @@ class UserProfileActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                binding.progressBarUserProfile?.visibility = View.GONE
-                Log.e(TAG, "Error al leer datos del perfil: ${error.message}")
+                binding.progressBarUserProfile.visibility = View.GONE // Asegúrate de ocultar el ProgressBar también en caso de error
+                Log.e(TAG, "Error al leer datos del perfil para ID $userIdToLoad: ${error.message}")
                 Toast.makeText(this@UserProfileActivity, "Error al cargar perfil: ${error.message}", Toast.LENGTH_LONG).show()
             }
         })

@@ -22,56 +22,74 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/textViewOfferTitleInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/titulo"
+                android:text="@string/title"
                 android:textSize="36sp"
                 android:textAlignment="viewStart"
-                android:textStyle="bold"
-            />
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textViewCompanyName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/company_name"
+                android:textSize="18sp"
+                android:textAlignment="viewStart"
+                android:layout_marginVertical="20dp"/>
+
             <TextView
                 android:id="@+id/textViewOfferDescriptionInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/descripcion"
+                android:text="@string/description"
                 android:textSize="18sp"
                 android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                android:layout_marginVertical="20dp"/>
+
+            <TextView
+                android:id="@+id/textViewOfferTypeInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/job_type"
+                android:textSize="18sp"
+                android:textAlignment="viewStart"
+                android:layout_marginVertical="20dp"/>
+
             <TextView
                 android:id="@+id/textViewOfferLocationInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/localizacion"
+                android:text="@string/location_a"
                 android:textSize="18sp"
                 android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                android:layout_marginVertical="20dp"/>
 
             <TextView
                 android:id="@+id/textViewOfferSkillsInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/estudios"
+                android:text="@string/studies"
                 android:textSize="18sp"
                 android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                android:layout_marginVertical="20dp"/>
             <TextView
                 android:id="@+id/textViewOfferRequirementsInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/requisitos"
+                android:text="@string/requirement"
                 android:textSize="18sp"
                 android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                android:layout_marginVertical="20dp"/>
             <TextView
                 android:id="@+id/textViewOfferDateInfo"
                 android:layout_width="match_parent"
@@ -80,8 +98,7 @@
                 android:text="fecha"
                 android:textSize="18sp"
                 android:textAlignment="viewStart"
-                android:layout_marginVertical="20dp"
-                />
+                android:layout_marginVertical="20dp"/>
 
         </LinearLayout>
 
@@ -113,6 +130,6 @@
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/offersRecyclerViewApplicants"
-        app:layout_constraintVertical_bias="0.0"
-    />
+        app:layout_constraintVertical_bias="0.0"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

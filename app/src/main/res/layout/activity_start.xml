@@ -16,14 +16,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/bienvenido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/bienvenido"
+        android:text="@string/welcome"
         android:textSize="20sp"
         android:textColor="@android:color/black"
     android:shadowColor="@android:color/black"
@@ -34,6 +34,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.745" />
+    app:layout_constraintVertical_bias="0.745"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

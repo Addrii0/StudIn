@@ -119,21 +119,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         binding.editTextCompanyPhone.setText(company.phone ?: "")
 
 
-//        company.address?.let { addr ->
-//            binding.editTextCompanyAddressStreet.setText(addr.street ?: "")
-//            binding.editTextCompanyAddressCity.setText(addr.city ?: "")
-//            binding.editTextCompanyAddressState.setText(addr.state ?: "")
-//            binding.editTextCompanyAddressPostalCode.setText(addr.postalCode ?: "")
-//            binding.editTextCompanyAddressCountry.setText(addr.country ?: "")
-//        }
-        // Si son campos directos en Company:
-        // binding.editTextCompanyAddressStreet.setText(company.street ?: "")
-        // binding.editTextCompanyAddressCity.setText(company.city ?: "")
-        // ...y así sucesivamente...
-
-//        binding.editTextCompanyLatitude.setText(company.latitude?.toString() ?: "")
-//        binding.editTextCompanyLongitude.setText(company.longitude?.toString() ?: "")
-
         if (!company.profileImageUrl.isNullOrEmpty()) {
             Glide.with(this)
                 .load(company.profileImageUrl)
@@ -154,26 +139,17 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         if (currentUser == null) {
             Log.e(TAG, "saveCompanyProfileChanges: Usuario no autenticado. No se pueden guardar cambios.")
             Toast.makeText(this, "Sesión expirada. Por favor, inicia sesión de nuevo.", Toast.LENGTH_LONG).show()
-            // Habilitar botón y ocultar progreso si se interrumpe
             binding.buttonSaveCompanyProfileChanges.isEnabled = true
             binding.progressBarEditCompanyProfile.visibility = View.GONE
             return
         }
-        companyId = currentUser.uid // Re-asignar por si acaso, aunque no
-        // --- RECOGER DATOS DE LOS EDITTEXT ---
+        companyId = currentUser.uid
         val companyName = binding.editTextCompanyName.text.toString().trim()
         val industry = binding.editTextCompanyIndustry.text.toString().trim()
         val description = binding.editTextCompanyDescription.text.toString().trim()
         val website = binding.editTextCompanyWebsite.text.toString().trim()
         val email = binding.editTextCompanyEmail.text.toString().trim()
         val phone = binding.editTextCompanyPhone.text.toString().trim()
-//        val street = binding.editTextCompanyAddressStreet.text.toString().trim()
-//        val city = binding.editTextCompanyAddressCity.text.toString().trim()
-//        val state = binding.editTextCompanyAddressState.text.toString().trim()
-//        val postalCode = binding.editTextCompanyAddressPostalCode.text.toString().trim()
-//        val country = binding.editTextCompanyAddressCountry.text.toString().trim()
-//        val latitudeStr = binding.editTextCompanyLatitude.text.toString().trim()
-//        val longitudeStr = binding.editTextCompanyLongitude.text.toString().trim()
 
         var isValid = true
         if (companyName.isEmpty()) {
@@ -198,24 +174,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
             binding.textInputLayoutCompanyWebsite.error = null
         }
 
-//        val latitude = if (latitudeStr.isNotEmpty()) latitudeStr.toDoubleOrNull() else null
-//        val longitude = if (longitudeStr.isNotEmpty()) longitudeStr.toDoubleOrNull() else null
-//
-//        if (latitudeStr.isNotEmpty() && latitude == null) {
-//            binding.textInputLayoutCompanyLatitude.error = "Latitud inválida"
-//            isValid = false
-//        } else {
-//            binding.textInputLayoutCompanyLatitude.error = null
-//        }
-//
-//        if (longitudeStr.isNotEmpty() && longitude == null) {
-//            binding.textInputLayoutCompanyLongitude.error = "Longitud inválida"
-//            isValid = false
-//        } else {
-//            binding.textInputLayoutCompanyLongitude.error = null
-//        }
-
-
         if (!isValid) {
             Toast.makeText(this, "Por favor, corrige los errores.", Toast.LENGTH_SHORT).show()
             return // Detener si hay errores de validación
@@ -224,19 +182,7 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         binding.progressBarEditCompanyProfile.visibility = View.VISIBLE
         binding.buttonSaveCompanyProfileChanges.isEnabled = false
 
-
-
-//        val addressData = Company.Address( // Asumiendo que Company.Address es una data class
-//            street = street.ifEmpty { null },
-//            city = city.ifEmpty { null },
-//            state = state.ifEmpty { null },
-//            postalCode = postalCode.ifEmpty { null },
-//            country = country.ifEmpty { null }
-//        )
-
-
         if (imageUri != null) {
-            // UID del company ya verificado y no nulo
             val currentUid = companyId!!
             val fileName = "profile_pic.jpg" // Nombre fijo para la imagen de perfil
             val storagePath = "profile_images/companies/$currentUid/$fileName"
@@ -257,9 +203,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
                             website = website.ifEmpty { null },
                             email = email.ifEmpty { null },
                             phone = phone.ifEmpty { null },
-//                            address = addressData, // Pasa el objeto Address
-//                            latitude = latitude,
-//                            longitude = longitude,
                             profileImageUrl = imageUrl,
                         )
                     }.addOnFailureListener { e ->
@@ -280,7 +223,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
                     Log.d(TAG, "Progreso de subida: $progress%")
                 }
         } else {
-            // Si no se cambió la imagen, usa la URL existente
             updateCompanyData(
                 name = companyName,
                 industry = industry.ifEmpty { null },
@@ -288,15 +230,11 @@ class EditCompanyProfileActivity : AppCompatActivity() {
                 website = website.ifEmpty { null },
                 email = email.ifEmpty { null },
                 phone = phone.ifEmpty { null },
-//                address = addressData,
-//                latitude = latitude,
-//                longitude = longitude,
                 profileImageUrl = currentCompany?.profileImageUrl // Usa la URL existente si no se cambió la imagen
             )
         }
     }
 
-    // Modifica la firma de updateCompanyData para aceptar todos los campos
     private fun updateCompanyData(
         name: String,
         industry: String?,
@@ -304,9 +242,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         website: String?,
         email: String?,
         phone: String?,
-//        address: Company.Address?, // Asumiendo que Company.Address es tu clase para dirección
-//        latitude: Double?,
-//        longitude: Double?,
         profileImageUrl: String?
     ) {
         val currentUid = companyId ?: run {
@@ -324,10 +259,7 @@ class EditCompanyProfileActivity : AppCompatActivity() {
         companyUpdates["website"] = website
         companyUpdates["email"] = email
         companyUpdates["phone"] = phone
-        //companyUpdates["address"] = address // Guarda el objeto Address directamente
-        //companyUpdates["latitude"] = latitude
-        //companyUpdates["longitude"] = longitude
-        // profileImageUrl ya se maneja (nueva o existente, o null si se borra)
+
         companyUpdates["profileImageUrl"] = profileImageUrl
         companyUpdates["lastUpdatedTimestamp"] = System.currentTimeMillis() // Útil
 
@@ -340,8 +272,6 @@ class EditCompanyProfileActivity : AppCompatActivity() {
                 binding.buttonSaveCompanyProfileChanges.isEnabled = true
                 Toast.makeText(this, "Perfil de empresa actualizado.", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "Perfil de empresa actualizado exitosamente para $currentUid")
-                // Considera pasar datos actualizados a la actividad anterior si es necesario
-                // setResult(Activity.RESULT_OK) // Si la actividad anterior espera un resultado
                 finish()
             }
             .addOnFailureListener {

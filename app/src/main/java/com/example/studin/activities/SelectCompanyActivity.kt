@@ -8,22 +8,20 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.studin.R
-import com.example.studin.adapters.SelectCompanyAdapter
+import com.example.studin.adapters.CompanySearchAdapter
 import com.example.studin.classes.Company
-import com.example.studin.databinding.ActivitySelectCompanyBinding // Importar ViewBinding
+import com.example.studin.databinding.ActivitySelectCompanyBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class SelectCompanyActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySelectCompanyBinding
-    private lateinit var companyAdapter: SelectCompanyAdapter
+    private lateinit var companyAdapter: CompanySearchAdapter
     private val companyList = ArrayList<Company>()
     private lateinit var databaseRef: DatabaseReference
     private var companiesListener: ValueEventListener? = null
     private var currentUserId: String? = null
-
 
     companion object {
         private const val TAG = "SelectCompanyActivity"
@@ -39,9 +37,8 @@ class SelectCompanyActivity : AppCompatActivity() {
         setupToolbar()
         setupRecyclerView()
 
-        databaseRef = FirebaseDatabase.getInstance().getReference("companies") // MODIFICA ESTA RUTA SEGÚN TU ESTRUCTURA
-
-        loadCompanies()
+        databaseRef = FirebaseDatabase.getInstance().getReference("companies")
+        loadCompanies() // Carga los datos y los envía al adaptador
     }
 
     private fun setupToolbar() {
@@ -51,7 +48,7 @@ class SelectCompanyActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        companyAdapter = SelectCompanyAdapter(companyList) { selectedCompany ->
+        companyAdapter = CompanySearchAdapter { selectedCompany ->
             // Cuando se hace clic en una empresa
             if (selectedCompany.uid != null && selectedCompany.name != null) {
                 val resultIntent = Intent()
@@ -63,13 +60,12 @@ class SelectCompanyActivity : AppCompatActivity() {
                 finish() // Cierra esta actividad y vuelve a MainChatsActivity
             } else {
                 Log.w(TAG, "Empresa seleccionada con datos nulos: $selectedCompany")
-
             }
         }
+
         binding.recyclerViewCompanies.apply {
             layoutManager = LinearLayoutManager(this@SelectCompanyActivity)
             adapter = companyAdapter
-            // addItemDecoration(...) // Opcional: para divisores
         }
     }
 
@@ -80,26 +76,26 @@ class SelectCompanyActivity : AppCompatActivity() {
 
         companiesListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                companyList.clear()
+                val tempList = ArrayList<Company>() // Lista temporal para construir datos nuevos
                 if (snapshot.exists()) {
                     for (companySnapshot in snapshot.children) {
-                        // snapshot es el UID de la empresa
                         val companyUid = companySnapshot.key
                         val companyData = companySnapshot.getValue(Company::class.java)
 
                         if (companyData != null && companyUid != null) {
                             companyData.uid = companyUid // Asignar el UID desde la clave del snapshot
-
-                            //  Evitar que el usuario se seleccione a sí mismo si las "empresas" son también usuarios.
-                            if (companyUid != currentUserId) {
-                                companyList.add(companyData)
+                            if (companyUid != currentUserId) { // Evitar que el usuario se seleccione a sí mismo
+                                tempList.add(companyData)
                             }
                         }
                     }
                 }
 
-                companyAdapter.notifyDataSetChanged() // Notificar al adaptador sobre los nuevos datos
+                companyList.clear()
+                companyList.addAll(tempList)
+                companyAdapter.submitList(companyList.toList())
 
+                // Actualizar visibilidad de UI
                 if (companyList.isEmpty()) {
                     binding.textViewNoCompanies.visibility = View.VISIBLE
                     binding.recyclerViewCompanies.visibility = View.GONE
@@ -118,13 +114,12 @@ class SelectCompanyActivity : AppCompatActivity() {
                 binding.recyclerViewCompanies.visibility = View.GONE
             }
         }
-
         databaseRef.addValueEventListener(companiesListener!!)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed()
+            onBackPressedDispatcher.onBackPressed() // Forma moderna de manejar el botón de atrás
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -132,7 +127,6 @@ class SelectCompanyActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Limpiar el listener de Firebase para evitar fugas de memoria
         companiesListener?.let {
             databaseRef.removeEventListener(it)
         }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Array de sugerencias para la sección de Empresas -->
+
+<resources>
+    <string-array name="quick_company_tips">
+        <item>Revisa tu sección de Solicitudes diariamente para no perder talento.</item>
+        <item>Una descripción clara y concisa de la oferta atrae a los candidatos adecuados.</item>
+        <item>Mantén tu perfil de empresa actualizado con tus últimos logros y cultura.</item>
+        <item>Responde rápidamente a las solicitudes para mejorar la experiencia del candidato.</item>
+        <item>Utiliza palabras clave relevantes en tus ofertas para mejorar su visibilidad.</item>
+        <item>Destaca los beneficios y oportunidades de crecimiento que ofrece tu empresa.</item>
+        <item>Pide feedback a los candidatos sobre el proceso de selección para mejorarlo.</item>
+    </string-array>
+
+    <string-array name="offer_types">
+        <item>Remoto</item>
+        <item>Presencial</item>
+        <item>Híbrido</item>
+        <item>Todos</item>
+    </string-array>
+</resources>

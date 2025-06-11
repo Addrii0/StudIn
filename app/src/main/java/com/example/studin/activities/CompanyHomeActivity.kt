@@ -2,6 +2,7 @@ package com.example.studin.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -37,23 +38,24 @@ class CompanyHomeActivity : AppCompatActivity() {
             loadUserProfileImage()
         }
 
-        binding.textViewLogout.setOnClickListener {
+        binding.layoutButtonLogout.setOnClickListener {
             logoutUser()
         }
-        binding.buttonLogout.setOnClickListener {
+        binding.buttonCreateNewOffer.setOnClickListener {
             val intent = Intent(this, CompanyOffersActivity::class.java)
             startActivity(intent)
         }
 
-        binding.chat.setOnClickListener {
+        binding.layoutButtonChat.setOnClickListener {
             val intent = Intent(this, MainChatsActivity::class.java)
             startActivity(intent)
         }
-        binding.companyProfile.setOnClickListener {
+        binding.companyProfileIcon.setOnClickListener {
             val intent = Intent(this, CompanyProfileActivity::class.java)
             startActivity(intent)
         }
-
+    loadCompanyStats()
+    setupQuickTip()
     }
 
     private fun logoutUser() {
@@ -76,17 +78,120 @@ class CompanyHomeActivity : AppCompatActivity() {
                         .placeholder(R.drawable.icono_empresa)
                         .error(R.drawable.icono_empresa)
                         .circleCrop()
-                        .into(binding.companyProfile)
+                        .into(binding.companyProfileIcon)
                 } else {
                     Log.w(TAG, "No se encontró URL de imagen de perfil o está vacía.")
-                    binding.companyProfile.setImageResource(R.drawable.icono_persona)
+                    binding.companyProfileIcon.setImageResource(R.drawable.icono_persona)
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "Error al cargar datos del usuario para imagen: ", error.toException())
-                binding.companyProfile.setImageResource(R.drawable.ic_profile_person)
+                binding.companyProfileIcon.setImageResource(R.drawable.ic_profile_person)
             }
         })
     }
+    private fun loadCompanyStats() {
+        val companyId = auth.currentUser?.uid
+        if (companyId == null) {
+            binding.textViewActiveOffersCount.text = "N/A"
+            binding.textViewNewApplicantsCount.text = "N/A"
+            return
+        }
+
+        val offersRef = database.getReference("offers")
+        offersRef.orderByChild("companyId").equalTo(companyId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                         var activeOfferCount = 0
+                         for (offerSnapshot in snapshot.children) {
+                             val status = offerSnapshot.child("active").getValue(Boolean::class.java)
+                             if (status == true) {
+                                 activeOfferCount++
+                             }
+                         }
+                         binding.textViewActiveOffersCount.text = activeOfferCount.toString()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    binding.textViewActiveOffersCount.text = "Error"
+                    Log.w("CompanyHome", "Error al cargar contador de ofertas: ", error.toException())
+                }
+            })
+        loadNewApplicantsCount(companyId)
+    }
+    private fun loadNewApplicantsCount(companyId: String) {
+        val offersRef = database.getReference("offers")
+        val applicationsRef = database.getReference("offerApplications")
+        var totalNewApplicants = 0
+        val offerIdsForCompany = mutableListOf<String>()
+
+        offersRef.orderByChild("companyId").equalTo(companyId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(offersSnapshot: DataSnapshot) {
+                    if (!offersSnapshot.exists()) {
+                        binding.textViewNewApplicantsCount.text = "0"
+                        return
+                    }
+
+                    offersSnapshot.children.forEach { offerData ->
+                        offerData.key?.let { offerIdsForCompany.add(it) }
+                    }
+
+                    if (offerIdsForCompany.isEmpty()) {
+                        binding.textViewNewApplicantsCount.text = "0"
+                        return
+                    }
+
+                    var queriesCompleted = 0
+
+                    offerIdsForCompany.forEach { offerId ->
+                        applicationsRef.child(offerId).orderByChild("status").equalTo("pending")
+                            .addValueEventListener(object : ValueEventListener {
+                                override fun onDataChange(appsSnapshot: DataSnapshot) {
+
+                                    updateApplicantCountForOffer(offerId, appsSnapshot.childrenCount.toInt())
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    Log.w("CompanyHome", "Error al cargar aplicaciones para oferta $offerId: ", error.toException())
+                                    updateApplicantCountForOffer(offerId, 0)
+                                }
+                            })
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    binding.textViewNewApplicantsCount.text = "Error"
+                    Log.w("CompanyHome", "Error al cargar ofertas de la empresa: ", error.toException())
+                }
+            })
+    }
+    private val newApplicantsPerOffer = mutableMapOf<String, Int>()
+
+    private fun updateApplicantCountForOffer(offerId: String, count: Int) {
+        newApplicantsPerOffer[offerId] = count
+        recalculateTotalNewApplicants()
+    }
+
+    private fun recalculateTotalNewApplicants() {
+        var total = 0
+        newApplicantsPerOffer.values.forEach { count ->
+            total += count
+        }
+        binding.textViewNewApplicantsCount.text = total.toString()
+    }
+    private fun setupQuickTip() {
+        val tipsArray = resources.getStringArray(R.array.quick_company_tips)
+        if (tipsArray.isNotEmpty()) {
+            val randomTip = tipsArray.random()
+            binding.textViewQuickTip.text = randomTip
+            binding.cardViewQuickTip.visibility = View.VISIBLE
+        } else {
+            binding.cardViewQuickTip.visibility = View.GONE
+        }
+    }
+
 }

@@ -18,7 +18,7 @@
             android:id="@+id/toolbar_select_company"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Seleccionar Empresa" />
+            app:title="Seleccionar Empresa"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -30,7 +30,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_company_selectable" />
+        tools:listitem="@layout/item_company_selectable"/>
 
     <ProgressBar
         android:id="@+id/progressBar_select_company"
@@ -48,11 +48,11 @@
         android:id="@+id/textView_no_companies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No hay empresas disponibles."
+        android:text="@string/no_companies_available"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

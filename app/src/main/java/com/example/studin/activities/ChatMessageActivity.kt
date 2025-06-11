@@ -16,7 +16,6 @@ import java.util.*
 
 class ChatMessageActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityChatMessageBinding
     private lateinit var messageAdapter: MessageAdapter
     private val messageList = ArrayList<Message>()
@@ -29,7 +28,6 @@ class ChatMessageActivity : AppCompatActivity() {
     private var chatRoomId: String? = null
     private var otherUserId: String? = null
     private var otherUserName: String? = null
-    // private var otherUserAvatarUrl: String? = null // Si lo necesitas para algo más que el título
 
     private lateinit var messagesRef: DatabaseReference
     private var messagesListener: ChildEventListener? = null
@@ -48,11 +46,10 @@ class ChatMessageActivity : AppCompatActivity() {
         chatRoomId = intent.getStringExtra("CHAT_ROOM_ID")
         otherUserId = intent.getStringExtra("OTHER_USER_ID")
         otherUserName = intent.getStringExtra("OTHER_USER_NAME")
-        // otherUserAvatarUrl = intent.getStringExtra("OTHER_USER_AVATAR_URL")
 
         if (currentUser == null) {
             Log.e(TAG, "Usuario no autenticado, cerrando actividad de chat.")
-            finish() // O redirigir al login
+            finish()
             return
         }
 
@@ -79,25 +76,23 @@ class ChatMessageActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        messageAdapter = MessageAdapter(messageList, currentUser!!.uid) // Pasamos el UID del usuario actual
+        messageAdapter = MessageAdapter(messageList, currentUser!!.uid) // Se pasa el UID del usuario actual
         val linearLayoutManager = LinearLayoutManager(this)
-        // Para que el RecyclerView se desplace automáticamente al último mensaje
         linearLayoutManager.stackFromEnd = true
         binding.recyclerViewMessages.layoutManager = linearLayoutManager
         binding.recyclerViewMessages.adapter = messageAdapter
-        // (Opcional) Para mejorar rendimiento si los items no cambian de tamaño
-        // binding.recyclerViewMessages.setHasFixedSize(true)
+
     }
 
     private fun sendMessage() {
         val messageText = binding.editTextMessageInput.text.toString().trim()
         if (messageText.isEmpty()) {
-            return // No enviar mensajes vacíos
+            return
         }
 
         val currentUid = currentUser?.uid ?: return
 
-        // Crear el objeto mensaje
+        // Crear mensaje
         val timestamp = System.currentTimeMillis()
         val messageId = database.getReference("chat_rooms").child(chatRoomId!!).child("messages").push().key ?: ""
 
@@ -108,12 +103,11 @@ class ChatMessageActivity : AppCompatActivity() {
             timestamp = timestamp
         )
 
-        // 1. Guardar el mensaje en la lista de mensajes del chat room
+        // Guardar el mensaje en la lista de mensajes del chat room
         database.getReference("chat_rooms").child(chatRoomId!!).child("messages").child(messageId).setValue(message)
             .addOnSuccessListener {
                 Log.d(TAG, "Mensaje enviado correctamente a messages/$messageId")
                 binding.editTextMessageInput.setText("") // Limpiar el campo de texto
-                // El RecyclerView se actualizará a través del ChildEventListener
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "Error al enviar mensaje a messages/$messageId: ${e.message}")
@@ -129,10 +123,6 @@ class ChatMessageActivity : AppCompatActivity() {
             .addOnSuccessListener { Log.d(TAG, "lastMessage actualizado para $chatRoomId") }
             .addOnFailureListener { e -> Log.e(TAG, "Error al actualizar lastMessage: ${e.message}") }
 
-
-        // 3. Actualizar los nodos userChats para ambos usuarios
-        // Esto es útil si quieres que la lista de chats se ordene/actualice en tiempo real
-        // para el otro usuario también, o si muestras el lastMessage directamente desde userChats.
         val userChatUpdate = mapOf(
             "lastMessageText" to messageText,
             "lastMessageTimestamp" to timestamp
@@ -163,7 +153,7 @@ class ChatMessageActivity : AppCompatActivity() {
                             messageList.add(message)
 
                             messageAdapter.notifyItemInserted(messageList.size - 1)
-                            binding.recyclerViewMessages.scrollToPosition(messageList.size - 1) // Auto-scroll
+                            binding.recyclerViewMessages.scrollToPosition(messageList.size - 1)
                         }
                         Log.d(TAG, "Mensaje añadido: ${message.text}")
                     } else {
@@ -202,7 +192,6 @@ class ChatMessageActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
                 Log.e(TAG, "Error al cargar mensajes: ${error.message}")
                 binding.recyclerViewMessages.visibility = View.VISIBLE
-                // Mostrar error al usuario si es necesario
             }
         }
 
@@ -213,7 +202,7 @@ class ChatMessageActivity : AppCompatActivity() {
     // Manejar el botón de atrás en la Toolbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed() // Manera moderna de manejar el botón de atrás
+            onBackPressedDispatcher.onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -221,9 +210,9 @@ class ChatMessageActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Limpiar el listener de Firebase para evitar fugas de memoria
+
         messagesListener?.let {
-            if (::messagesRef.isInitialized) { // Comprobar si messagesRef fue inicializado
+            if (::messagesRef.isInitialized) {
                 messagesRef.removeEventListener(it)
             }
         }

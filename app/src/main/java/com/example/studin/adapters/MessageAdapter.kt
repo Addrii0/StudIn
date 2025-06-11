@@ -12,7 +12,7 @@ import java.util.*
 
 class MessageAdapter(
     private val messageList: List<Message>,
-    private val currentUserId: String // UID del usuario actual para determinar si el mensaje es enviado o recibido
+    private val currentUserId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -40,7 +40,6 @@ class MessageAdapter(
     inner class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageBody: TextView = itemView.findViewById(R.id.textView_message_body_received)
         val messageTimestamp: TextView = itemView.findViewById(R.id.textView_message_timestamp_received)
-        // val userAvatar: ImageView = itemView.findViewById(R.id.imageView_avatar_received)
 
         fun bind(message: Message) {
             messageBody.text = message.text
@@ -50,8 +49,7 @@ class MessageAdapter(
             } else {
                 messageTimestamp.visibility = View.GONE
             }
-            //  Cargar el avatar del remitente si lo incluyes en el layout
-            // Glide.with(itemView.context).load(senderAvatarUrl).into(userAvatar)
+
         }
     }
 
@@ -70,7 +68,7 @@ class MessageAdapter(
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_message_sent, parent, false)
             SentMessageViewHolder(view)
-        } else { // VIEW_TYPE_MESSAGE_RECEIVED
+        } else {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_message_received, parent, false)
             ReceivedMessageViewHolder(view)
@@ -91,11 +89,9 @@ class MessageAdapter(
         return messageList.size
     }
 
-
     private fun formatTimestamp(timestamp: Long): String {
-        // Se puede personalizar el formato según necesidades
         val sdf = SimpleDateFormat("h:mm a", Locale.getDefault()) // ejemplo: 10:30 AM
-         // incluir la fecha para mensajes más antiguos:
+         // incluir la fecha para mensajes de más de un día:
          val messageDate = Calendar.getInstance()
          messageDate.timeInMillis = timestamp
          val today = Calendar.getInstance()

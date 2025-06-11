@@ -18,7 +18,7 @@ class UserOfferActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbarUserOffer)
 
-        // Configurar el ViewPager2 y el TabLayout
+        // Configurar el ViewPager2 y el TabLayout para cargar los fragmets
         val adapter = UserOfferPagerAdapter(this)
         binding.viewPagerUserOffer.adapter = adapter
 

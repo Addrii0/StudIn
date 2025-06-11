@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Colores personalizados necesarios para el diseño (muchas cosas no se pueden poner el #)-->
+
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#4CCDDC</color>
-    <color name="blue_high">#90E0EB</color>
-    <color name="transparente">#00000000</color>"
+    <color name="light_blue">#90E0EB</color>
+    <color name="transparent">#00000000</color>"
     <color name="color_message_sent">#007AFF</color>
     <color name="color_message_received">#E5E5EA</color>"
-    <color name="my_app_blue_container">#D4E3FB</color>
-    <color name="my_app_on_blue_container">#001C3B</color>
+    <color name="light_blue_container">#D4E3FB</color>
+    <color name="blue_container">#001C3B</color>
+    <color name="placeholder">#AAF6EE</color>
 </resources>

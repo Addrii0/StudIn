@@ -13,7 +13,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@mipmap/ic_launcher_round"/>
 
     <TextView
         android:id="@+id/textView_company_name_selectable"
@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textAppearance="?attr/textAppearanceListItem"
-        tools:text="Nombre de la Empresa" />
+        tools:text="Nombre de la Empresa"/>
 
 </LinearLayout>

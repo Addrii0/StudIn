@@ -11,9 +11,7 @@ data class Message(
     var senderId: String? = null,
     var text: String? = null,
     var timestamp: Long = 0L,
-    // var imageUrl: String? = null,
-    // var status: String? = null
+
 ) : Parcelable {
-    // Constructor vacío requerido por Firebase
     constructor() : this(null, null, null, 0L)
 }

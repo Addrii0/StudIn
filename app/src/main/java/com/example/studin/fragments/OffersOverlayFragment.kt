@@ -1,5 +1,6 @@
-package com.example.studin.ui.fragments
+package com.example.studin.fragments
 
+import OfferAdapter
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import OfferAdapter
 import com.example.studin.classes.Offer
 import com.example.studin.databinding.FragmentOffersListBinding
 
@@ -18,7 +18,6 @@ class OffersOverlayFragment : Fragment() {
         fun onOffersOverlayClose()
         fun onOfferSelected(offer: Offer)
     }
-
 
     private var _binding: FragmentOffersListBinding? = null
 
@@ -89,7 +88,7 @@ class OffersOverlayFragment : Fragment() {
     // limpia la referencia al binding en onDestroyView para evitar fugas de memoria.
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Libera la referencia al binding
+        _binding = null // Libera la referencia del binding
         Log.d(TAG, "Binding de OffersOverlayFragment limpiado en onDestroyView.")
     }
 }

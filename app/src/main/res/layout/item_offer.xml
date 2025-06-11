@@ -26,7 +26,7 @@
             tools:text="Título de la Oferta de Trabajo"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/textViewCompanyName"
@@ -37,7 +37,7 @@
             tools:text="Nombre de la Empresa"
             app:layout_constraintTop_toBottomOf="@id/textViewOfferTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/textViewLocationLabel"
@@ -48,7 +48,7 @@
             android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewCompanyName" />
+            app:layout_constraintTop_toBottomOf="@id/textViewCompanyName"/>
 
         <TextView
             android:id="@+id/textViewOfferLocation"
@@ -71,7 +71,7 @@
             android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewLocationLabel" />
+            app:layout_constraintTop_toBottomOf="@id/textViewLocationLabel"/>
 
         <TextView
             android:id="@+id/textViewOfferType"
@@ -94,7 +94,7 @@
             android:textAppearance="?attr/textAppearanceBody2"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewTypeLabel" />
+            app:layout_constraintTop_toBottomOf="@id/textViewTypeLabel"/>
 
         <TextView
             android:id="@+id/textViewOfferDescription"
@@ -104,7 +104,7 @@
             android:textAppearance="?attr/textAppearanceBody2"
             android:maxLines="3"
             android:ellipsize="end"
-            tools:text="Descripción breve de la oferta de trabajo que puede ser un poco larga para probar el ellipsize..."
+            tools:text="Descripción breve"
             app:layout_constraintTop_toBottomOf="@id/textViewDescriptionLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

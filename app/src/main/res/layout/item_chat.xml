@@ -1,35 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    app:cardElevation="2dp"
+    app:cardCornerRadius="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    app:cardUseCompatPadding="false">
 
-    <ImageView
-        android:id="@+id/chat_avatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:contentDescription="@string/persona"
-        android:src="@drawable/icono_persona" />
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="8dp">
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/chat_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/chat_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/chat_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/nombre_del_chat"
-            android:textStyle="bold" />
+            android:layout_marginStart="12dp"
+            tools:text="Nombre del Contacto"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/chat_avatar"
+            app:layout_constraintTop_toTopOf="@id/chat_avatar"
+            app:layout_constraintEnd_toStartOf="@id/chat_time"
+            app:layout_constraintBottom_toTopOf="@id/chat_last_message"/>
 
         <TextView
             android:id="@+id/chat_last_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="Este es el último mensaje del chat..."
+            android:textAppearance="?attr/textAppearanceListItemSecondary"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="@id/chat_name"
+            app:layout_constraintTop_toBottomOf="@id/chat_name"
+            app:layout_constraintEnd_toEndOf="@id/chat_name"
+            app:layout_constraintBottom_toBottomOf="@id/chat_avatar"/>
+
+        <TextView
+            android:id="@+id/chat_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ultimo_mensaje" />
-    </LinearLayout>
+            tools:text="10:30 AM"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/chat_name"/>
 
-</LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

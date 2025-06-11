@@ -11,7 +11,7 @@
     <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/ofertas_especiales"
+    android:text="@string/special_offers"
     android:textSize="20sp"
     android:textStyle="bold"
     android:padding="16dp"
@@ -26,6 +26,6 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:clipToPadding="false"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>

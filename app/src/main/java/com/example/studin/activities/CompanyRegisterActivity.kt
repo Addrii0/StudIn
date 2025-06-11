@@ -85,7 +85,7 @@ class CompanyRegisterActivity : AppCompatActivity() {
         if (contrasena.isEmpty()) {
             binding.companyRegistroContrasena.error = "La contraseña no puede estar vacía"
             esValido = false
-        } else if (contrasena.length < 6) { // Firebase Auth requiere un mínimo de 6 caracteres por defecto
+        } else if (contrasena.length < 6) {
             binding.companyRegistroContrasena.error = "La contraseña debe tener al menos 6 caracteres"
             esValido = false
         } else {
@@ -126,17 +126,17 @@ class CompanyRegisterActivity : AppCompatActivity() {
                     val uid = firebaseUser?.uid
 
                     if (uid != null) {
-                        // Si la cuenta de Auth se creó correctamente, guarda información adicional en Realtime Database
+                        // Si la cuenta de Auth se creó correctamente, guarda la información en Realtime Database
                         val company = Company(nombreEmpresa, localizacion)
 
                         // Guardar en el nodo 'companies' usando el UID como clave
                         companiesReference.child(uid).setValue(company)
                             .addOnSuccessListener {
-                                //  Información de empresa guardada exitosamente en bbdd
+                                // Información de empresa guardada exitosamente en bbdd
                                 Log.d(TAG, "Perfil de empresa guardado en RTDB bajo UID: $uid")
                                 Toast.makeText(baseContext, "¡Empresa registrada con éxito!", Toast.LENGTH_SHORT).show()
 
-                                // Navegar a la actividad principal de la empresa (CompanyHomeActivity)
+                                // Navega a la actividad principal de la empresa (CompanyHomeActivity)
                                 val intent = Intent(this@CompanyRegisterActivity, CompanyHomeActivity::class.java)
                                 intent.putExtra("COMPANY_UID", uid)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -147,7 +147,7 @@ class CompanyRegisterActivity : AppCompatActivity() {
                                 // Error al guardar en la base de datos.
                                 Log.w(TAG, "Error al guardar perfil de empresa en RTDB", e)
 
-                                // Intenta eliminar la cuenta de Auth para mantener la consistencia
+                                // Intenta eliminar la cuenta de Auth para evitar fallos
                                 firebaseUser?.delete()?.addOnCompleteListener { authDeleteTask ->
                                     if (authDeleteTask.isSuccessful) {
                                         Log.d(TAG, "Cuenta de Auth eliminada después de fallo en DB.")

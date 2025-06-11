@@ -47,10 +47,10 @@ class OfferSearchFragment : Fragment() {
 
     private fun setupRecyclerView() {
         offerAdapter = OfferAdapter(offerList) { clickedOffer ->
-            // Esta es la lambda que se ejecuta cuando se hace clic en una oferta
+            // lambda que se ejecuta cuando se hace clic en una oferta
             Log.d("OfferSearchFragment", "Oferta clickeada: ${clickedOffer.title} , ID: [${clickedOffer.id}]")
 
-            // Lógica para abrir la pantalla de detalles de la oferta:
+            // Abrir la pantalla de detalles de la oferta
             val intent = Intent(requireContext(), UserOfferInfoActivity::class.java)
             intent.putExtra("SELECTED_OFFER_ID", clickedOffer.id)
             startActivity(intent)
@@ -66,7 +66,6 @@ class OfferSearchFragment : Fragment() {
         binding.searchViewOffersFragment.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    // searchOffers(it)
                     Log.d("OfferSearchFragment", "Search submitted: $it")
                 }
                 return true
@@ -74,7 +73,7 @@ class OfferSearchFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    // Realizar búsqueda en tiempo real
+                    // Búsqueda en tiempo real
                      searchOffers(it)
                     Log.d("OfferSearchFragment", "Search text changed: $it")
                 }
@@ -84,7 +83,7 @@ class OfferSearchFragment : Fragment() {
     }
 
     private fun setupFilters() {
-        // Filtro (todavia a probat)
+        // Filtro de tipos de offer
         val offerTypes = arrayOf("Todos", "Remoto", "Presencial", "Híbrido")
         val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, offerTypes)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -118,7 +117,7 @@ class OfferSearchFragment : Fragment() {
                 if (snapshot.exists()) {
                     for (offerSnapshot in snapshot.children) {
                         val offer = offerSnapshot.getValue(Offer::class.java)
-                        if (offer != null) {
+                        if (offer != null && offer.active) {
 
                             offer.id = offerSnapshot.key
 
@@ -162,6 +161,6 @@ class OfferSearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Evitar memory leaks
+        _binding = null
     }
 }
