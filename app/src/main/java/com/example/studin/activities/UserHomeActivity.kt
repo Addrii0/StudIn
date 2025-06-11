@@ -69,6 +69,7 @@ class UserHomeActivity : AppCompatActivity(), OffersOverlayFragment.OffersOverla
             loadOffersFromDatabase()
         }
     }
+
     private fun loadUserProfileImage() {
         userReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
